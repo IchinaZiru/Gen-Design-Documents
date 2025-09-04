@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygenindex xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="index.xsd" version="1.9.8" xml:lang="en-US">
+  <compound refid="squirrel3__squirrel__sqvm__v1_8cpp" kind="file"><name>squirrel3_squirrel_sqvm_v1.cpp</name>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a609a4645111a9e6fc4af0e187add8743" kind="define"><name>TOP</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a9fec70a17d0bcef23cf03c45a7b7caba" kind="define"><name>TARGET</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a9c163b637e2902bd486baa006cbc2f23" kind="define"><name>STK</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a9abe2a6c71ffa0a41cafaf17611594e9" kind="define"><name>_ARITH_</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1aeb811009f133d36bf80608886654a7c9" kind="define"><name>_ARITH_NOZERO</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a67df0924b4adecf314425793a1265771" kind="define"><name>_RET_SUCCEED</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a818ff08691acea4e58145323e516657a" kind="define"><name>_RET_ON_FAIL</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a4d8f94d47a736d70ada8c5afbe26b248" kind="define"><name>arg0</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1ada170621776efc3c8c7147836e22fcb2" kind="define"><name>sarg0</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a489500f7b5cfd21fa6730e3a56f1c1f7" kind="define"><name>arg1</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a7457715fe5054d8c823bf7e7e94d250e" kind="define"><name>sarg1</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a3ad2018792b545e1b82249aeb6a16d43" kind="define"><name>arg2</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1aef6bcb582f07be1d1cd5cded3e96e6ac" kind="define"><name>arg3</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a8f34b170b6a53862771e2c0b1a3ea75c" kind="define"><name>sarg3</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1ad5d5a60f1c18cdf63db7e5b3e5795d10" kind="define"><name>_FINISH</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a9698daa44505cb4aa44fa652c2100491" kind="define"><name>COND_LITERAL</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1ae241cc25397c88d316f46b47d4517602" kind="define"><name>SQ_THROW</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1aa93f0084c2ba1f34003981bb6b615e5d" kind="define"><name>_GUARD</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a393657b8f0f59e62e7658483f632642d" kind="define"><name>FALLBACK_OK</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a897cde8359407de2c9fed9a78df325d2" kind="define"><name>FALLBACK_NO_MATCH</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1aa8ad481d762c026c2b73b805a1469317" kind="define"><name>FALLBACK_ERROR</name></member>
+    <member refid="squirrel3__squirrel__sqvm__v1_8cpp_1a0c049adecd4aa7cdd48d711980f94d72" kind="variable"><name>g_InstrDesc</name></member>
+  </compound>
+</doxygenindex>

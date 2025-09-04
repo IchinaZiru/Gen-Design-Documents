@@ -1,0 +1,7 @@
+<map id="__getcallstackinfos" name="__getcallstackinfos">
+<area shape="rect" id="Node000001" title="指定されたレベルのコールスタック情報を取得します。" alt="" coords="212,31,359,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#aa10c72ac9b1f81b30a57ccf27ea9e272" title="getstackinfos 関数のSquirrel APIラッパー。" alt="" coords="11,5,159,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,35,159,30,159,25,199,30"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#a679c07cf0eed5b2453b0328b8a0528eb" title="指定されたスレッドのコールスタック情報を取得します。" alt="" coords="5,55,164,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,56,164,61,164,55,198,51"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="sq_pop" name="sq_pop">
+<area shape="rect" id="Node000001" title="スタックのトップから指定数の要素をポップする。" alt="" coords="139,5,207,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a8c96d68880eac465d517d314f21e78a6" title="スタックのトップを新しい位置に設定する。" alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,21,91,21,91,15,125,15"/>
+</map>

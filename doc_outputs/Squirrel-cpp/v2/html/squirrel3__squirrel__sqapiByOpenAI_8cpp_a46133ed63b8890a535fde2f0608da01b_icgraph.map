@@ -1,0 +1,7 @@
+<map id="_getmemberbyhandle" name="_getmemberbyhandle">
+<area shape="rect" id="Node000001" title="メンバーのハンドル情報から実体を取得する。" alt="" coords="179,31,344,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a72b4c8f516e2d9cf5e65bc86182a3067" title="メンバーのハンドル情報から値を取得する。" alt="" coords="5,5,131,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,33,131,29,131,24,165,28"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#aa9563b0be2a82c09bc5be4edbb0d272f" title="メンバーのハンドル情報を使って値を設定する。" alt="" coords="6,55,130,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,58,131,62,130,57,165,53"/>
+</map>

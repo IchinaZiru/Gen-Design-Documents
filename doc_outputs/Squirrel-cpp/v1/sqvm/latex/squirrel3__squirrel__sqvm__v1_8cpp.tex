@@ -1,0 +1,478 @@
+\doxysection{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp File Reference}
+\hypertarget{squirrel3__squirrel__sqvm__v1_8cpp}{}\label{squirrel3__squirrel__sqvm__v1_8cpp}\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+{\ttfamily \#include "{}sqpcheader.\+h"{}}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include "{}sqopcodes.\+h"{}}\newline
+{\ttfamily \#include "{}sqvm.\+h"{}}\newline
+{\ttfamily \#include "{}sqfuncproto.\+h"{}}\newline
+{\ttfamily \#include "{}sqclosure.\+h"{}}\newline
+{\ttfamily \#include "{}sqstring.\+h"{}}\newline
+{\ttfamily \#include "{}sqtable.\+h"{}}\newline
+{\ttfamily \#include "{}squserdata.\+h"{}}\newline
+{\ttfamily \#include "{}sqarray.\+h"{}}\newline
+{\ttfamily \#include "{}sqclass.\+h"{}}\newline
+Include dependency graph for squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{squirrel3__squirrel__sqvm__v1_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a609a4645111a9e6fc4af0e187add8743}{TOP}}()~(\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+top-\/1\mbox{]})
+\begin{DoxyCompactList}\small\item\em スタックのトップにある値を取得します。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9fec70a17d0bcef23cf03c45a7b7caba}{TARGET}}~\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+stackbase+\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a4d8f94d47a736d70ada8c5afbe26b248}{arg0}}\mbox{]}
+\begin{DoxyCompactList}\small\item\em 命令のターゲットレジスタ（スタック上の特定の場所）を取得します。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9c163b637e2902bd486baa006cbc2f23}{STK}}(a)~\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+stackbase+(a)\mbox{]}
+\begin{DoxyCompactList}\small\item\em 現在のスタックベースからの相対位置でスタック上の値を取得します。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9abe2a6c71ffa0a41cafaf17611594e9}{\+\_\+\+ARITH\+\_\+}}(op,  trg,  o1,  o2)
+\begin{DoxyCompactList}\small\item\em 算術演算を実行するためのマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aeb811009f133d36bf80608886654a7c9}{\+\_\+\+ARITH\+\_\+\+NOZERO}}(op,  trg,  o1,  o2,  err)
+\begin{DoxyCompactList}\small\item\em ゼロ除算チェック付きの算術演算を実行するためのマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a67df0924b4adecf314425793a1265771}{\+\_\+\+RET\+\_\+\+SUCCEED}}(exp)~\{ result = (exp); return true; \}
+\begin{DoxyCompactList}\small\item\em 比較結果を設定してtrueを返すマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a818ff08691acea4e58145323e516657a}{\+\_\+\+RET\+\_\+\+ON\+\_\+\+FAIL}}(exp)~\{ if(!exp) return false; \}
+\begin{DoxyCompactList}\small\item\em 式の評価が失敗した場合にfalseを返すマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a4d8f94d47a736d70ada8c5afbe26b248}{arg0}}~(\+\_\+i\+\_\+.\+\_\+arg0)
+\begin{DoxyCompactList}\small\item\em 現在の命令の0番目の引数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ada170621776efc3c8c7147836e22fcb2}{sarg0}}~((SQInteger)\texorpdfstring{$\ast$}{*}((const signed char \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg0))
+\begin{DoxyCompactList}\small\item\em 現在の命令の0番目の引数（符号付き）。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}{arg1}}~(\+\_\+i\+\_\+.\+\_\+arg1)
+\begin{DoxyCompactList}\small\item\em 現在の命令の1番目の引数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a7457715fe5054d8c823bf7e7e94d250e}{sarg1}}~(\texorpdfstring{$\ast$}{*}((const SQInt32 \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg1))
+\begin{DoxyCompactList}\small\item\em 現在の命令の1番目の引数（符号付き）。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a3ad2018792b545e1b82249aeb6a16d43}{arg2}}~(\+\_\+i\+\_\+.\+\_\+arg2)
+\begin{DoxyCompactList}\small\item\em 現在の命令の2番目の引数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aef6bcb582f07be1d1cd5cded3e96e6ac}{arg3}}~(\+\_\+i\+\_\+.\+\_\+arg3)
+\begin{DoxyCompactList}\small\item\em 現在の命令の3番目の引数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a8f34b170b6a53862771e2c0b1a3ea75c}{sarg3}}~((SQInteger)\texorpdfstring{$\ast$}{*}((const signed char \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg3))
+\begin{DoxyCompactList}\small\item\em 現在の命令の3番目の引数（符号付き）。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ad5d5a60f1c18cdf63db7e5b3e5795d10}{\+\_\+\+FINISH}}(howmuchtojump)~\{jump = howmuchtojump; return true; \}
+\begin{DoxyCompactList}\small\item\em foreachループの反復処理を終了し、ジャンプオフセットを設定するマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9698daa44505cb4aa44fa652c2100491}{COND\+\_\+\+LITERAL}}~(arg3!=0?ci-\/$>$\+\_\+literals\mbox{[}\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}{arg1}}\mbox{]}\+:\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9c163b637e2902bd486baa006cbc2f23}{STK}}(\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}{arg1}}))
+\begin{DoxyCompactList}\small\item\em 条件付きでリテラルまたはスタック上の値を取得するマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}{SQ\+\_\+\+THROW}}()~\{ goto exception\+\_\+trap; \}
+\begin{DoxyCompactList}\small\item\em 例外トラップへジャンプするマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}{\+\_\+\+GUARD}}(exp)~\{ if(!exp) \{ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}{SQ\+\_\+\+THROW}}();\} \}
+\begin{DoxyCompactList}\small\item\em 式を評価し、失敗した場合に例外をスローするマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a393657b8f0f59e62e7658483f632642d}{FALLBACK\+\_\+\+OK}}~0
+\begin{DoxyCompactList}\small\item\em フォールバック\+Get/\+Set操作が成功したことを示す定数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a897cde8359407de2c9fed9a78df325d2}{FALLBACK\+\_\+\+NO\+\_\+\+MATCH}}~1
+\begin{DoxyCompactList}\small\item\em フォールバック\+Get/\+Set操作で一致するものがなかったことを示す定数。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa8ad481d762c026c2b73b805a1469317}{FALLBACK\+\_\+\+ERROR}}~2
+\begin{DoxyCompactList}\small\item\em フォールバック\+Get/\+Set操作中にエラーが発生したことを示す定数。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+SQInstruction\+Desc \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a0c049adecd4aa7cdd48d711980f94d72}{g\+\_\+\+Instr\+Desc}} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em 命令セットのディスクリプション配列（外部リンケージ）。デバッグ用。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a9abe2a6c71ffa0a41cafaf17611594e9}\label{squirrel3__squirrel__sqvm__v1_8cpp_a9abe2a6c71ffa0a41cafaf17611594e9} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_ARITH\_@{\_ARITH\_}}
+\index{\_ARITH\_@{\_ARITH\_}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_ARITH\_}{\_ARITH\_}}
+{\footnotesize\ttfamily \#define \+\_\+\+ARITH\+\_\+(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{trg,  }\item[{}]{o1,  }\item[{}]{o2 }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ SQInteger\ tmask\ =\ sq\_type(o1)|sq\_type(o2);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ switch(tmask)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_INTEGER:\ trg\ =\ \_integer(o1)\ op\ \_integer(o2);\textcolor{keywordflow}{break};\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ case\ (OT\_FLOAT|OT\_INTEGER):\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ case\ (OT\_FLOAT):\ trg\ =\ tofloat(o1)\ op\ tofloat(o2);\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}{\_GUARD}}(ARITH\_OP((\#op)[0],trg,o1,o2));\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+算術演算を実行するためのマクロ。 
+
+オブジェクトの型に応じて整数または浮動小数点数の演算を高速に実行します。 それ以外の型の場合は\+ARITH\+\_\+\+OP関数にフォールバックします。 
+\begin{DoxyParams}{Parameters}
+{\em op} & 算術演算子。 \\
+\hline
+{\em trg} & 結果を格納する\+SQObject\+Ptr。 \\
+\hline
+{\em o1} & 最初のオペランド。 \\
+\hline
+{\em o2} & 2番目のオペランド。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00073}{73}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00074\ \{\ \(\backslash\)}
+\DoxyCodeLine{00075\ \ \ \ \ SQInteger\ tmask\ =\ sq\_type(o1)|sq\_type(o2);\ \(\backslash\) }
+\DoxyCodeLine{00076\ \ \ \ \ switch(tmask)\ \{\ \(\backslash\)}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_INTEGER:\ trg\ =\ \_integer(o1)\ op\ \_integer(o2);\textcolor{keywordflow}{break};\ \(\backslash\) }
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ case\ (OT\_FLOAT|OT\_INTEGER):\ \(\backslash\)}
+\DoxyCodeLine{00079\ \ \ \ \ \ \ \ \ case\ (OT\_FLOAT):\ trg\ =\ tofloat(o1)\ op\ tofloat(o2);\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}{\_GUARD}}(ARITH\_OP((\#op)[0],trg,o1,o2));\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{00081\ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00082\ \}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_aeb811009f133d36bf80608886654a7c9}\label{squirrel3__squirrel__sqvm__v1_8cpp_aeb811009f133d36bf80608886654a7c9} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_ARITH\_NOZERO@{\_ARITH\_NOZERO}}
+\index{\_ARITH\_NOZERO@{\_ARITH\_NOZERO}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_ARITH\_NOZERO}{\_ARITH\_NOZERO}}
+{\footnotesize\ttfamily \#define \+\_\+\+ARITH\+\_\+\+NOZERO(\begin{DoxyParamCaption}\item[{}]{op,  }\item[{}]{trg,  }\item[{}]{o1,  }\item[{}]{o2,  }\item[{}]{err }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ SQInteger\ tmask\ =\ sq\_type(o1)|sq\_type(o2);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ switch(tmask)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_INTEGER:\ \{\ SQInteger\ i2\ =\ \_integer(o2);\ \textcolor{keywordflow}{if}(i2\ ==\ 0)\ \{\ Raise\_Error(err);\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}{SQ\_THROW}}();\ \}\ trg\ =\ \_integer(o1)\ op\ i2;\ \}\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ case\ (OT\_FLOAT|OT\_INTEGER):\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ case\ (OT\_FLOAT):\ trg\ =\ tofloat(o1)\ op\ tofloat(o2);\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}{\_GUARD}}(ARITH\_OP((\#op)[0],trg,o1,o2));\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}
+
+
+ゼロ除算チェック付きの算術演算を実行するためのマクロ。 
+
+\+\_\+\+ARITH\+\_\+マクロに似ていますが、整数除算の際にゼロ除算をチェックし、エラーを発生させます。 
+\begin{DoxyParams}{Parameters}
+{\em op} & 算術演算子。 \\
+\hline
+{\em trg} & 結果を格納する\+SQObject\+Ptr。 \\
+\hline
+{\em o1} & 最初のオペランド。 \\
+\hline
+{\em o2} & 2番目のオペランド。 \\
+\hline
+{\em err} & ゼロ除算の場合のエラーメッセージ。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00093}{93}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00094\ \{\ \(\backslash\)}
+\DoxyCodeLine{00095\ \ \ \ \ SQInteger\ tmask\ =\ sq\_type(o1)|sq\_type(o2);\ \(\backslash\) }
+\DoxyCodeLine{00096\ \ \ \ \ switch(tmask)\ \{\ \(\backslash\)}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_INTEGER:\ \{\ SQInteger\ i2\ =\ \_integer(o2);\ \textcolor{keywordflow}{if}(i2\ ==\ 0)\ \{\ Raise\_Error(err);\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}{SQ\_THROW}}();\ \}\ trg\ =\ \_integer(o1)\ op\ i2;\ \}\ \textcolor{keywordflow}{break};\(\backslash\) }
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ case\ (OT\_FLOAT|OT\_INTEGER):\ \(\backslash\)}
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ case\ (OT\_FLOAT):\ trg\ =\ tofloat(o1)\ op\ tofloat(o2);\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}{\_GUARD}}(ARITH\_OP((\#op)[0],trg,o1,o2));\ \textcolor{keywordflow}{break};\(\backslash\)}
+\DoxyCodeLine{00101\ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00102\ \}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_ad5d5a60f1c18cdf63db7e5b3e5795d10}\label{squirrel3__squirrel__sqvm__v1_8cpp_ad5d5a60f1c18cdf63db7e5b3e5795d10} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_FINISH@{\_FINISH}}
+\index{\_FINISH@{\_FINISH}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_FINISH}{\_FINISH}}
+{\footnotesize\ttfamily \#define \+\_\+\+FINISH(\begin{DoxyParamCaption}\item[{}]{howmuchtojump }\end{DoxyParamCaption})~\{jump = howmuchtojump; return true; \}}
+
+
+
+foreachループの反復処理を終了し、ジャンプオフセットを設定するマクロ。 
+
+
+\begin{DoxyParams}{Parameters}
+{\em howmuchtojump} & IPを進めるオフセット値。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00721}{721}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d}\label{squirrel3__squirrel__sqvm__v1_8cpp_aa93f0084c2ba1f34003981bb6b615e5d} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_GUARD@{\_GUARD}}
+\index{\_GUARD@{\_GUARD}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_GUARD}{\_GUARD}}
+{\footnotesize\ttfamily \#define \+\_\+\+GUARD(\begin{DoxyParamCaption}\item[{}]{exp }\end{DoxyParamCaption})~\{ if(!exp) \{ \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}{SQ\+\_\+\+THROW}}();\} \}}
+
+
+
+式を評価し、失敗した場合に例外をスローするマクロ。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00802}{802}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a818ff08691acea4e58145323e516657a}\label{squirrel3__squirrel__sqvm__v1_8cpp_a818ff08691acea4e58145323e516657a} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_RET\_ON\_FAIL@{\_RET\_ON\_FAIL}}
+\index{\_RET\_ON\_FAIL@{\_RET\_ON\_FAIL}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_RET\_ON\_FAIL}{\_RET\_ON\_FAIL}}
+{\footnotesize\ttfamily \#define \+\_\+\+RET\+\_\+\+ON\+\_\+\+FAIL(\begin{DoxyParamCaption}\item[{}]{exp }\end{DoxyParamCaption})~\{ if(!exp) return false; \}}
+
+
+
+式の評価が失敗した場合にfalseを返すマクロ。 
+
+
+\begin{DoxyParams}{Parameters}
+{\em exp} & 評価する式。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00644}{644}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a67df0924b4adecf314425793a1265771}\label{squirrel3__squirrel__sqvm__v1_8cpp_a67df0924b4adecf314425793a1265771} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!\_RET\_SUCCEED@{\_RET\_SUCCEED}}
+\index{\_RET\_SUCCEED@{\_RET\_SUCCEED}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{\_RET\_SUCCEED}{\_RET\_SUCCEED}}
+{\footnotesize\ttfamily \#define \+\_\+\+RET\+\_\+\+SUCCEED(\begin{DoxyParamCaption}\item[{}]{exp }\end{DoxyParamCaption})~\{ result = (exp); return true; \}}
+
+
+
+比較結果を設定してtrueを返すマクロ。 
+
+Obj\+Cmp関数内で使用され、コードを簡潔にします。 
+\begin{DoxyParams}{Parameters}
+{\em exp} & 比較結果の式。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00291}{291}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a4d8f94d47a736d70ada8c5afbe26b248}\label{squirrel3__squirrel__sqvm__v1_8cpp_a4d8f94d47a736d70ada8c5afbe26b248} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!arg0@{arg0}}
+\index{arg0@{arg0}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{arg0}{arg0}}
+{\footnotesize\ttfamily \#define arg0~(\+\_\+i\+\_\+.\+\_\+arg0)}
+
+
+
+現在の命令の0番目の引数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00688}{688}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}\label{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!arg1@{arg1}}
+\index{arg1@{arg1}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{arg1}{arg1}}
+{\footnotesize\ttfamily \#define arg1~(\+\_\+i\+\_\+.\+\_\+arg1)}
+
+
+
+現在の命令の1番目の引数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00692}{692}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a3ad2018792b545e1b82249aeb6a16d43}\label{squirrel3__squirrel__sqvm__v1_8cpp_a3ad2018792b545e1b82249aeb6a16d43} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!arg2@{arg2}}
+\index{arg2@{arg2}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{arg2}{arg2}}
+{\footnotesize\ttfamily \#define arg2~(\+\_\+i\+\_\+.\+\_\+arg2)}
+
+
+
+現在の命令の2番目の引数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00696}{696}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_aef6bcb582f07be1d1cd5cded3e96e6ac}\label{squirrel3__squirrel__sqvm__v1_8cpp_aef6bcb582f07be1d1cd5cded3e96e6ac} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!arg3@{arg3}}
+\index{arg3@{arg3}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{arg3}{arg3}}
+{\footnotesize\ttfamily \#define arg3~(\+\_\+i\+\_\+.\+\_\+arg3)}
+
+
+
+現在の命令の3番目の引数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00698}{698}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a9698daa44505cb4aa44fa652c2100491}\label{squirrel3__squirrel__sqvm__v1_8cpp_a9698daa44505cb4aa44fa652c2100491} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!COND\_LITERAL@{COND\_LITERAL}}
+\index{COND\_LITERAL@{COND\_LITERAL}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{COND\_LITERAL}{COND\_LITERAL}}
+{\footnotesize\ttfamily \#define COND\+\_\+\+LITERAL~(arg3!=0?ci-\/$>$\+\_\+literals\mbox{[}\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}{arg1}}\mbox{]}\+:\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a9c163b637e2902bd486baa006cbc2f23}{STK}}(\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a489500f7b5cfd21fa6730e3a56f1c1f7}{arg1}}))}
+
+
+
+条件付きでリテラルまたはスタック上の値を取得するマクロ。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00796}{796}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_aa8ad481d762c026c2b73b805a1469317}\label{squirrel3__squirrel__sqvm__v1_8cpp_aa8ad481d762c026c2b73b805a1469317} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!FALLBACK\_ERROR@{FALLBACK\_ERROR}}
+\index{FALLBACK\_ERROR@{FALLBACK\_ERROR}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{FALLBACK\_ERROR}{FALLBACK\_ERROR}}
+{\footnotesize\ttfamily \#define FALLBACK\+\_\+\+ERROR~2}
+
+
+
+フォールバック\+Get/\+Set操作中にエラーが発生したことを示す定数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l01573}{1573}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a897cde8359407de2c9fed9a78df325d2}\label{squirrel3__squirrel__sqvm__v1_8cpp_a897cde8359407de2c9fed9a78df325d2} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!FALLBACK\_NO\_MATCH@{FALLBACK\_NO\_MATCH}}
+\index{FALLBACK\_NO\_MATCH@{FALLBACK\_NO\_MATCH}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{FALLBACK\_NO\_MATCH}{FALLBACK\_NO\_MATCH}}
+{\footnotesize\ttfamily \#define FALLBACK\+\_\+\+NO\+\_\+\+MATCH~1}
+
+
+
+フォールバック\+Get/\+Set操作で一致するものがなかったことを示す定数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l01571}{1571}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a393657b8f0f59e62e7658483f632642d}\label{squirrel3__squirrel__sqvm__v1_8cpp_a393657b8f0f59e62e7658483f632642d} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!FALLBACK\_OK@{FALLBACK\_OK}}
+\index{FALLBACK\_OK@{FALLBACK\_OK}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{FALLBACK\_OK}{FALLBACK\_OK}}
+{\footnotesize\ttfamily \#define FALLBACK\+\_\+\+OK~0}
+
+
+
+フォールバック\+Get/\+Set操作が成功したことを示す定数。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l01569}{1569}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_ada170621776efc3c8c7147836e22fcb2}\label{squirrel3__squirrel__sqvm__v1_8cpp_ada170621776efc3c8c7147836e22fcb2} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!sarg0@{sarg0}}
+\index{sarg0@{sarg0}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{sarg0}{sarg0}}
+{\footnotesize\ttfamily \#define sarg0~((SQInteger)\texorpdfstring{$\ast$}{*}((const signed char \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg0))}
+
+
+
+現在の命令の0番目の引数（符号付き）。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00690}{690}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a7457715fe5054d8c823bf7e7e94d250e}\label{squirrel3__squirrel__sqvm__v1_8cpp_a7457715fe5054d8c823bf7e7e94d250e} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!sarg1@{sarg1}}
+\index{sarg1@{sarg1}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{sarg1}{sarg1}}
+{\footnotesize\ttfamily \#define sarg1~(\texorpdfstring{$\ast$}{*}((const SQInt32 \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg1))}
+
+
+
+現在の命令の1番目の引数（符号付き）。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00694}{694}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a8f34b170b6a53862771e2c0b1a3ea75c}\label{squirrel3__squirrel__sqvm__v1_8cpp_a8f34b170b6a53862771e2c0b1a3ea75c} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!sarg3@{sarg3}}
+\index{sarg3@{sarg3}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{sarg3}{sarg3}}
+{\footnotesize\ttfamily \#define sarg3~((SQInteger)\texorpdfstring{$\ast$}{*}((const signed char \texorpdfstring{$\ast$}{*})\&\+\_\+i\+\_\+.\+\_\+arg3))}
+
+
+
+現在の命令の3番目の引数（符号付き）。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00700}{700}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602}\label{squirrel3__squirrel__sqvm__v1_8cpp_ae241cc25397c88d316f46b47d4517602} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!SQ\_THROW@{SQ\_THROW}}
+\index{SQ\_THROW@{SQ\_THROW}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{SQ\_THROW}{SQ\_THROW}}
+{\footnotesize\ttfamily \#define SQ\+\_\+\+THROW(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~\{ goto exception\+\_\+trap; \}}
+
+
+
+例外トラップへジャンプするマクロ。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00799}{799}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a9c163b637e2902bd486baa006cbc2f23}\label{squirrel3__squirrel__sqvm__v1_8cpp_a9c163b637e2902bd486baa006cbc2f23} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!STK@{STK}}
+\index{STK@{STK}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{STK}{STK}}
+{\footnotesize\ttfamily \#define STK(\begin{DoxyParamCaption}\item[{}]{a }\end{DoxyParamCaption})~\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+stackbase+(a)\mbox{]}}
+
+
+
+現在のスタックベースからの相対位置でスタック上の値を取得します。 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & スタックベースからのオフセット。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00031}{31}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a9fec70a17d0bcef23cf03c45a7b7caba}\label{squirrel3__squirrel__sqvm__v1_8cpp_a9fec70a17d0bcef23cf03c45a7b7caba} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!TARGET@{TARGET}}
+\index{TARGET@{TARGET}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{TARGET}{TARGET}}
+{\footnotesize\ttfamily \#define TARGET~\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+stackbase+\mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_a4d8f94d47a736d70ada8c5afbe26b248}{arg0}}\mbox{]}}
+
+
+
+命令のターゲットレジスタ（スタック上の特定の場所）を取得します。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00026}{26}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a609a4645111a9e6fc4af0e187add8743}\label{squirrel3__squirrel__sqvm__v1_8cpp_a609a4645111a9e6fc4af0e187add8743} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!TOP@{TOP}}
+\index{TOP@{TOP}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{TOP}{TOP}}
+{\footnotesize\ttfamily \#define TOP(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})~(\+\_\+stack.\+\_\+vals\mbox{[}\+\_\+top-\/1\mbox{]})}
+
+
+
+スタックのトップにある値を取得します。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source_l00022}{22}} of file \mbox{\hyperlink{squirrel3__squirrel__sqvm__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqvm\+\_\+v1.\+cpp}}.
+
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{squirrel3__squirrel__sqvm__v1_8cpp_a0c049adecd4aa7cdd48d711980f94d72}\label{squirrel3__squirrel__sqvm__v1_8cpp_a0c049adecd4aa7cdd48d711980f94d72} 
+\index{squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}!g\_InstrDesc@{g\_InstrDesc}}
+\index{g\_InstrDesc@{g\_InstrDesc}!squirrel3\_squirrel\_sqvm\_v1.cpp@{squirrel3\_squirrel\_sqvm\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{g\_InstrDesc}{g\_InstrDesc}}
+{\footnotesize\ttfamily SQInstruction\+Desc g\+\_\+\+Instr\+Desc\mbox{[}$\,$\mbox{]}\hspace{0.3cm}{\ttfamily [extern]}}
+
+
+
+命令セットのディスクリプション配列（外部リンケージ）。デバッグ用。 
+

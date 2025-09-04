@@ -1,0 +1,24 @@
+<map id="ShowDeleteClientScreen" name="ShowDeleteClientScreen">
+<area shape="rect" id="Node000001" title="すべてのクライアントの画面を表示する" alt="" coords="5,99,188,124"/>
+<area shape="rect" id="Node000002" href="$Bank__System_8cpp.html#a0cccd194bd08f8e66cd9ceee6825df42" title="アカウント番号によってクライアントを削除マークします。" alt="" coords="236,99,460,124"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,109,222,109,222,114,188,114"/>
+<area shape="rect" id="Node000004" href="$Bank__System_8cpp.html#ad99d195652a19541f80836d4dbbf7f59" title="ファイルからクライアントのデータを読み込み、それをsClient型のベクタとして返す関数" alt="" coords="528,5,713,31"/>
+<area shape="poly" id="edge10_Node000001_Node000004" title=" " alt="" coords="166,96,236,83,533,30,534,36,236,89,167,101"/>
+<area shape="rect" id="Node000011" href="$Bank__System_8cpp.html#a206ec9506112ed1defc47e33cc103362" title="クライアントのアカウント番号を読み取る" alt="" coords="249,148,447,173"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="163,121,270,143,269,148,162,127"/>
+<area shape="rect" id="Node000003" href="$Bank__System_8cpp.html#a48a0cfcfea0d62c42f36df92c3b976ed" title="アカウント番号を用いてクライアントを検索する関数" alt="" coords="517,55,725,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="427,96,527,80,528,85,427,101"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="373,96,434,68,507,39,536,31,537,36,509,45,436,73,376,101"/>
+<area shape="rect" id="Node000007" href="$Bank__System_8cpp.html#af1800f03db86caf07df8644b22c89f05" title="アカウント番号によってクライアントを削除マークします。" alt="" coords="508,105,733,145"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="460,114,495,116,494,121,460,119"/>
+<area shape="rect" id="Node000008" href="$Bank__System_8cpp.html#ae124ace8856102e48e1e27f68185265a" title="クライアントのレコードを一行で出力する" alt="" coords="561,169,681,195"/>
+<area shape="poly" id="edge7_Node000002_Node000008" title=" " alt="" coords="414,122,461,134,509,154,548,165,547,170,507,159,459,139,413,127"/>
+<area shape="rect" id="Node000009" href="$Bank__System_8cpp.html#a50ccee11889f724e11e05edfd7247c0d" title="クライアントデータを指定のファイルに保存する関数" alt="" coords="537,219,704,244"/>
+<area shape="poly" id="edge8_Node000002_Node000009" title=" " alt="" coords="437,122,462,135,479,152,486,171,494,189,510,205,526,214,523,219,506,209,489,192,481,173,474,155,458,139,434,127"/>
+<area shape="rect" id="Node000005" href="$Bank__System_8cpp.html#a37e8e2e0847aec9a9b8f3ec9f0340de9" title="文字列をレコードに変換する関数" alt="" coords="781,5,940,31"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="713,15,768,15,768,21,713,21"/>
+<area shape="rect" id="Node000006" href="$Bank__System_8cpp.html#aa9e62d8303527878176504e333cc318f" title="文字列を指定した区切り文字で分割する" alt="" coords="988,5,1077,31"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="940,15,974,15,974,21,940,21"/>
+<area shape="rect" id="Node000010" href="$Bank__System_8cpp.html#a9f7641480ce98b89c09206f33a423f35" title="クライアントのレコードを一行の文字列に変換する" alt="" coords="781,219,940,244"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="704,229,768,229,768,234,704,234"/>
+</map>

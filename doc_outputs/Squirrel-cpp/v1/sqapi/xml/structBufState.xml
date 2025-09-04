@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structBufState" kind="struct" language="C++" prot="public">
+    <compoundname>BufState</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structBufState_1a64bc304f7be1ed80c1c6cff89b25fe85" prot="public" static="no" mutable="no">
+        <type>const SQChar *</type>
+        <definition>const SQChar* BufState::buf</definition>
+        <argsstring></argsstring>
+        <name>buf</name>
+        <qualifiedname>BufState::buf</qualifiedname>
+        <briefdescription>
+<para>ソースコードが格納されたバッファへのポインタ。 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByGemini.cpp" line="2615" column="18" bodyfile="squirrel3_squirrel_sqapiByGemini.cpp" bodystart="2615" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2626" endline="2632">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2644" endline="2650">sq_compilebuffer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structBufState_1ad50bf4968e9150b77a9a256c7d992794" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger BufState::ptr</definition>
+        <argsstring></argsstring>
+        <name>ptr</name>
+        <qualifiedname>BufState::ptr</qualifiedname>
+        <briefdescription>
+<para>バッファ内の現在の読み込み位置。 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByGemini.cpp" line="2616" column="15" bodyfile="squirrel3_squirrel_sqapiByGemini.cpp" bodystart="2616" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2626" endline="2632">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2644" endline="2650">sq_compilebuffer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structBufState_1a88d5163bf3b5e9826093972f4cd96790" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger BufState::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>BufState::size</qualifiedname>
+        <briefdescription>
+<para>バッファの総サイズ。 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByGemini.cpp" line="2617" column="15" bodyfile="squirrel3_squirrel_sqapiByGemini.cpp" bodystart="2617" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2626" endline="2632">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByGemini_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByGemini_8cpp" startline="2644" endline="2650">sq_compilebuffer</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para><computeroutput>sq_compilebuffer</computeroutput>関数がメモリバッファからソースコードを読み込む際に使用する状態を保持する構造体。 </para>
+    </briefdescription>
+    <detaileddescription>
+<para>この構造体は、<computeroutput>sq_compilebuffer</computeroutput> 関数が <computeroutput>sq_compile</computeroutput> と連携する際に、メモリ上のソースコードバッファをファイルのように見せかけるために使われます。 <computeroutput>sq_compile</computeroutput> は <computeroutput>SQLEXREADFUNC</computeroutput> 型の読み込み関数を要求するため、<computeroutput>buf_lexfeed</computeroutput> 関数がこの構造体を <computeroutput>SQUserPointer</computeroutput> として受け取り、バッファからの文字の読み進め状態を管理します。 </para>
+    </detaileddescription>
+    <location file="squirrel3_squirrel_sqapiByGemini.cpp" line="2614" column="1" bodyfile="squirrel3_squirrel_sqapiByGemini.cpp" bodystart="2614" bodyend="2618"/>
+    <listofallmembers>
+      <member refid="structBufState_1a64bc304f7be1ed80c1c6cff89b25fe85" prot="public" virt="non-virtual"><scope>BufState</scope><name>buf</name></member>
+      <member refid="structBufState_1ad50bf4968e9150b77a9a256c7d992794" prot="public" virt="non-virtual"><scope>BufState</scope><name>ptr</name></member>
+      <member refid="structBufState_1a88d5163bf3b5e9826093972f4cd96790" prot="public" virt="non-virtual"><scope>BufState</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

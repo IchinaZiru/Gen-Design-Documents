@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structSQExpState" kind="struct" language="C++" prot="public">
+    <compoundname>SQExpState</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structSQExpState_1afb7b63ae96a684b508e09b15a524dc27" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger SQExpState::etype</definition>
+        <argsstring></argsstring>
+        <name>etype</name>
+        <qualifiedname>SQExpState::etype</qualifiedname>
+        <briefdescription>
+<para>式の型。 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>EXPR, OBJECT, BASE, OUTER, LOCALのいずれかの値を取ります。 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="34" column="14" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="34" bodyend="-1"/>
+        <referencedby refid="classSQCompiler_1aeeeb5cd4a917c9f5dfd4b42f72dd0ade" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="632" endline="639">SQCompiler::BIN_EXP</referencedby>
+        <referencedby refid="classSQCompiler_1a02ff7d0e5d3694082d16f756a70e7ba3" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1651" endline="1670">SQCompiler::ClassStatement</referencedby>
+        <referencedby refid="classSQCompiler_1a1cd77fe06b545963e8f6a3d82e08b9ff" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1851" endline="1866">SQCompiler::DeleteExpr</referencedby>
+        <referencedby refid="classSQCompiler_1a95826410b90f6469aeaad4a2d16f2f2e" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="524" endline="606">SQCompiler::Expression</referencedby>
+        <referencedby refid="classSQCompiler_1a9a963e83277da03fe593cbda963767ae" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="945" endline="1108">SQCompiler::Factor</referencedby>
+        <referencedby refid="classSQCompiler_1a55b8835823bfc68018ef9cbcd08f3ccf" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="614" endline="622">SQCompiler::INVOKE_EXP</referencedby>
+        <referencedby refid="classSQCompiler_1adf83588a2b1f023234d9a166cb22548f" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="667" endline="690">SQCompiler::LogicalAndExp</referencedby>
+        <referencedby refid="classSQCompiler_1a78c393e142d7ed831b5230451fee588d" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="644" endline="662">SQCompiler::LogicalOrExp</referencedby>
+        <referencedby refid="classSQCompiler_1a43a11a449ea5738ac9522406f51190ea" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="839" endline="938">SQCompiler::PrefixedExpr</referencedby>
+        <referencedby refid="classSQCompiler_1a76b6ea1c1fae39f855fac7ac7d6f1aac" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1872" endline="1898">SQCompiler::PrefixIncDec</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structSQExpState_1aee7653b89b97f2f071709f97f9087f3a" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger SQExpState::epos</definition>
+        <argsstring></argsstring>
+        <name>epos</name>
+        <qualifiedname>SQExpState::epos</qualifiedname>
+        <briefdescription>
+<para>スタック上の式の位置。 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>OBJECT型とBASE型の場合は -1 になります。 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="39" column="14" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="39" bodyend="-1"/>
+        <referencedby refid="classSQCompiler_1a95826410b90f6469aeaad4a2d16f2f2e" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="524" endline="606">SQCompiler::Expression</referencedby>
+        <referencedby refid="classSQCompiler_1a9a963e83277da03fe593cbda963767ae" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="945" endline="1108">SQCompiler::Factor</referencedby>
+        <referencedby refid="classSQCompiler_1a55b8835823bfc68018ef9cbcd08f3ccf" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="614" endline="622">SQCompiler::INVOKE_EXP</referencedby>
+        <referencedby refid="classSQCompiler_1a43a11a449ea5738ac9522406f51190ea" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="839" endline="938">SQCompiler::PrefixedExpr</referencedby>
+        <referencedby refid="classSQCompiler_1a76b6ea1c1fae39f855fac7ac7d6f1aac" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1872" endline="1898">SQCompiler::PrefixIncDec</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structSQExpState_1a478197c3351f18be77bc3a274b4f5a37" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool SQExpState::donot_get</definition>
+        <argsstring></argsstring>
+        <name>donot_get</name>
+        <qualifiedname>SQExpState::donot_get</qualifiedname>
+        <briefdescription>
+<para>デリファレンスを抑制するフラグ。 </para>
+        </briefdescription>
+        <detaileddescription>
+<para>trueの場合、次の値のデリファレンスを行いません。 </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="44" column="14" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="44" bodyend="-1"/>
+        <referencedby refid="classSQCompiler_1a02ff7d0e5d3694082d16f756a70e7ba3" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1651" endline="1670">SQCompiler::ClassStatement</referencedby>
+        <referencedby refid="classSQCompiler_1a1cd77fe06b545963e8f6a3d82e08b9ff" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1851" endline="1866">SQCompiler::DeleteExpr</referencedby>
+        <referencedby refid="classSQCompiler_1a95826410b90f6469aeaad4a2d16f2f2e" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="524" endline="606">SQCompiler::Expression</referencedby>
+        <referencedby refid="classSQCompiler_1a55b8835823bfc68018ef9cbcd08f3ccf" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="614" endline="622">SQCompiler::INVOKE_EXP</referencedby>
+        <referencedby refid="classSQCompiler_1a5b81fac18b3e0c53d91df064172d52eb" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1165" endline="1178">SQCompiler::NeedGet</referencedby>
+        <referencedby refid="classSQCompiler_1a43a11a449ea5738ac9522406f51190ea" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="839" endline="938">SQCompiler::PrefixedExpr</referencedby>
+        <referencedby refid="classSQCompiler_1a76b6ea1c1fae39f855fac7ac7d6f1aac" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="1872" endline="1898">SQCompiler::PrefixIncDec</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>式の状態を管理する構造体。 </para>
+    </briefdescription>
+    <detaileddescription>
+<para>コンパイラが式を評価する際の、式の種類やスタック上の位置などの状態を保持します。 </para>
+    </detaileddescription>
+    <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="29" column="1" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="29" bodyend="45"/>
+    <listofallmembers>
+      <member refid="structSQExpState_1a478197c3351f18be77bc3a274b4f5a37" prot="public" virt="non-virtual"><scope>SQExpState</scope><name>donot_get</name></member>
+      <member refid="structSQExpState_1aee7653b89b97f2f071709f97f9087f3a" prot="public" virt="non-virtual"><scope>SQExpState</scope><name>epos</name></member>
+      <member refid="structSQExpState_1afb7b63ae96a684b508e09b15a524dc27" prot="public" virt="non-virtual"><scope>SQExpState</scope><name>etype</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

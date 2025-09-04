@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structSQScope" kind="struct" language="C++" prot="public">
+    <compoundname>SQScope</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structSQScope_1ac1606ef3c5ae85a47c099bdf31c47bec" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger SQScope::outers</definition>
+        <argsstring></argsstring>
+        <name>outers</name>
+        <qualifiedname>SQScope::outers</qualifiedname>
+        <briefdescription>
+<para>アウター変数の数 </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="57" column="15" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="57" bodyend="-1"/>
+        <referencedby refid="classSQCompiler_1a70b5da16126b868ed56de4dacc541c6e" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="144" endline="153">SQCompiler::SQCompiler</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structSQScope_1a763e7392af8c0c71b60da678740edc43" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger SQScope::stacksize</definition>
+        <argsstring></argsstring>
+        <name>stacksize</name>
+        <qualifiedname>SQScope::stacksize</qualifiedname>
+        <briefdescription>
+<para>スタックサイズ </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="58" column="15" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="58" bodyend="-1"/>
+        <referencedby refid="classSQCompiler_1a70b5da16126b868ed56de4dacc541c6e" compoundref="squirrel3__squirrel__sqcompiler__v1_8cpp" startline="144" endline="153">SQCompiler::SQCompiler</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>コンパイル時のスコープ情報を保持する構造体。 </para>
+    </briefdescription>
+    <detaileddescription>
+<para>現在のスコープのアウター変数の数とスタックサイズを管理します。 </para>
+    </detaileddescription>
+    <location file="squirrel3_squirrel_sqcompiler_v1.cpp" line="56" column="1" bodyfile="squirrel3_squirrel_sqcompiler_v1.cpp" bodystart="56" bodyend="59"/>
+    <listofallmembers>
+      <member refid="structSQScope_1ac1606ef3c5ae85a47c099bdf31c47bec" prot="public" virt="non-virtual"><scope>SQScope</scope><name>outers</name></member>
+      <member refid="structSQScope_1a763e7392af8c0c71b60da678740edc43" prot="public" virt="non-virtual"><scope>SQScope</scope><name>stacksize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

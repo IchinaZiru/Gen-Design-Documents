@@ -1,0 +1,7 @@
+<map id="str2num" name="str2num">
+<area shape="rect" id="Node000001" title="文字列を数値（浮動小数点数または整数）に変換します。" alt="" coords="252,31,328,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#acddbb9e614e1ba1f6c40b5f5522fb101" title="オブジェクトを浮動小数点数に変換するデフォルトデリゲート関数。" alt="" coords="14,5,195,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="238,39,195,33,196,28,239,34"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#a431de1a5b6691d8e84e917360f56ade9" title="オブジェクトを整数に変換するデフォルトデリゲート関数。" alt="" coords="5,55,204,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="239,53,203,57,202,52,238,47"/>
+</map>

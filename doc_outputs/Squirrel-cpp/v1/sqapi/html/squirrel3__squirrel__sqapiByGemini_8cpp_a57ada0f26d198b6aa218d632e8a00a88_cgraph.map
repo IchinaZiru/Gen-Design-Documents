@@ -1,0 +1,7 @@
+<map id="sq_getsize" name="sq_getsize">
+<area shape="rect" id="Node000001" title="指定されたインデックスのオブジェクトのサイズを取得します。" alt="" coords="5,5,96,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a6009870696cef6b1bcda62d6afba1583" title="予期しない型が指定された場合にエラーをスローします。" alt="" coords="144,5,292,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,15,130,15,130,21,96,21"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a1120339f46d18eddf68f7a7323937ddb" title="VMに文字列のエラーを設定し、エラー状態にします。" alt="" coords="340,5,452,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="292,15,327,15,327,21,292,21"/>
+</map>

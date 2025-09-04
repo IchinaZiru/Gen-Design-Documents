@@ -1,0 +1,8 @@
+<map id="sq_setfreevariable" name="sq_setfreevariable">
+<area shape="rect" id="Node000001" title="指定されたインデックスのクロージャの自由変数を設定します。" alt="" coords="5,31,148,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a6009870696cef6b1bcda62d6afba1583" title="予期しない型が指定された場合にエラーをスローします。" alt="" coords="196,5,344,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,31,182,27,183,32,149,37"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a1120339f46d18eddf68f7a7323937ddb" title="VMに文字列のエラーを設定し、エラー状態にします。" alt="" coords="392,31,504,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="148,41,378,41,378,46,148,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="345,26,379,31,378,36,344,31"/>
+</map>

@@ -1,0 +1,775 @@
+\doxysection{Bank\+\_\+\+System.\+cpp}
+\hypertarget{Bank__System_8cpp_source}{}\label{Bank__System_8cpp_source}\mbox{\hyperlink{Bank__System_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#include\ <iostream>}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00002}00002\ \textcolor{preprocessor}{\#include\ <fstream>}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00004}00004\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#include\ <iomanip>}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00007}00007\ \textcolor{keyword}{using\ namespace\ }std;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00008}\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{00008}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}}\ =\ \textcolor{stringliteral}{"{}Clients.txt"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00009}00009\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00010}00010\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{ShowMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00011}00011\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a545193b69fea90084006d3352e40b6fa}{ShowTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00013}\mbox{\hyperlink{structsClient}{00013}}\ \textcolor{keyword}{struct\ }\mbox{\hyperlink{structsClient}{sClient}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00014}00014\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00015}\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{00015}}\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00016}\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{00016}}\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00017}\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{00017}}\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00018}\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{00018}}\ \ \ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00019}\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{00019}}\ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00020}\mbox{\hyperlink{structsClient_a547ee4952017fd562f7fb60f01e76865}{00020}}\ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{structsClient_a547ee4952017fd562f7fb60f01e76865}{MarkForDelete}}\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00021}00021\ \};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00029}\mbox{\hyperlink{Bank__System_8cpp_aa9e62d8303527878176504e333cc318f}{00029}}\ vector<string>\ \mbox{\hyperlink{Bank__System_8cpp_aa9e62d8303527878176504e333cc318f}{SplitString}}(\textcolor{keywordtype}{string}\ S1,\ \textcolor{keywordtype}{string}\ Delim)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00030}00030\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00031}00031\ \ \ vector<string>\ vString;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00032}00032\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00033}00033\ \ \ \textcolor{keywordtype}{short}\ pos\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00034}00034\ \ \ \textcolor{keywordtype}{string}\ sWord;\ \textcolor{comment}{//\ define\ a\ string\ variable}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00035}00035\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00036}00036\ \ \ \textcolor{comment}{//\ use\ find()\ function\ to\ get\ the\ position\ of\ the\ delimiters}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00037}00037\ \ \ \textcolor{keywordflow}{while}\ ((pos\ =\ S1.find(Delim))\ !=\ std::string::npos)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00038}00038\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00039}00039\ \ \ \ \ sWord\ =\ S1.substr(0,\ pos);\ \textcolor{comment}{//\ store\ the\ word}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00040}00040\ \ \ \ \ \textcolor{keywordflow}{if}\ (sWord\ !=\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00041}00041\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00042}00042\ \ \ \ \ \ \ vString.push\_back(sWord);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00043}00043\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00045}00045\ \ \ \ \ S1.erase(0,\ pos\ +\ Delim.length());\ \textcolor{comment}{/*\ erase()\ until\ positon\ and\ move\ to\ next\ word.\ */}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00046}00046\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00048}00048\ \ \ \textcolor{keywordflow}{if}\ (S1\ !=\ \textcolor{stringliteral}{"{}"{}})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00049}00049\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00050}00050\ \ \ \ \ vString.push\_back(S1);\ \textcolor{comment}{//\ it\ adds\ last\ word\ of\ the\ string.}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00051}00051\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00052}00052\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00053}00053\ \ \ \textcolor{keywordflow}{return}\ vString;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00054}00054\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00055}00055\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00062}\mbox{\hyperlink{Bank__System_8cpp_a37e8e2e0847aec9a9b8f3ec9f0340de9}{00062}}\ \mbox{\hyperlink{structsClient}{sClient}}\ \mbox{\hyperlink{Bank__System_8cpp_a37e8e2e0847aec9a9b8f3ec9f0340de9}{ConvertLinetoRecord}}(\textcolor{keywordtype}{string}\ Line,\ \textcolor{keywordtype}{string}\ Seperator\ =\ \textcolor{stringliteral}{"{}\#//\#"{}})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00063}00063\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00064}00064\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00065}00065\ \ \ vector<string>\ vClientData;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00066}00066\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00067}00067\ \ \ vClientData\ =\ \mbox{\hyperlink{Bank__System_8cpp_aa9e62d8303527878176504e333cc318f}{SplitString}}(Line,\ Seperator);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00069}00069\ \ \ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}}\ =\ vClientData[0];}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00070}00070\ \ \ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}}\ =\ vClientData[1];}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00071}00071\ \ \ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}}\ =\ vClientData[2];}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00072}00072\ \ \ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}}\ =\ vClientData[3];}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00073}00073\ \ \ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}}\ =\ stod(vClientData[4]);\ \textcolor{comment}{//\ cast\ string\ to\ double}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00074}00074\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00075}00075\ \ \ \textcolor{keywordflow}{return}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00076}00076\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00077}00077\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00084}\mbox{\hyperlink{Bank__System_8cpp_a9f7641480ce98b89c09206f33a423f35}{00084}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{Bank__System_8cpp_a9f7641480ce98b89c09206f33a423f35}{ConvertRecordToLine}}(\mbox{\hyperlink{structsClient}{sClient}}\ Client,\ \textcolor{keywordtype}{string}\ Seperator\ =\ \textcolor{stringliteral}{"{}\#//\#"{}})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00085}00085\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00086}00086\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00087}00087\ \ \ \textcolor{keywordtype}{string}\ stClientRecord\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00088}00088\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00089}00089\ \ \ stClientRecord\ +=\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}}\ +\ Seperator;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00090}00090\ \ \ stClientRecord\ +=\ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}}\ +\ Seperator;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00091}00091\ \ \ stClientRecord\ +=\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}}\ +\ Seperator;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00092}00092\ \ \ stClientRecord\ +=\ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}}\ +\ Seperator;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00093}00093\ \ \ stClientRecord\ +=\ to\_string(Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00094}00094\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00095}00095\ \ \ \textcolor{keywordflow}{return}\ stClientRecord;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00096}00096\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00097}00097\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00104}\mbox{\hyperlink{Bank__System_8cpp_a065bc335eeb0c8ac78f67a555f462987}{00104}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_a065bc335eeb0c8ac78f67a555f462987}{ClientExistsByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ \textcolor{keywordtype}{string}\ FileName)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00105}00105\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00106}00106\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00107}00107\ \ \ vector<sClient>\ vClients;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00108}00108\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00109}00109\ \ \ fstream\ MyFile;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00110}00110\ \ \ MyFile.open(FileName,\ ios::in);\ \textcolor{comment}{//\ read\ Mode}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00112}00112\ \ \ \textcolor{keywordflow}{if}\ (MyFile.is\_open())}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00113}00113\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00114}00114\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00115}00115\ \ \ \ \ \textcolor{keywordtype}{string}\ Line;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00116}00116\ \ \ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00117}00117\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00118}00118\ \ \ \ \ \textcolor{keywordflow}{while}\ (getline(MyFile,\ Line))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00119}00119\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00120}00120\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00121}00121\ \ \ \ \ \ \ Client\ =\ \mbox{\hyperlink{Bank__System_8cpp_a37e8e2e0847aec9a9b8f3ec9f0340de9}{ConvertLinetoRecord}}(Line);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00122}00122\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}}\ ==\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00123}00123\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00124}00124\ \ \ \ \ \ \ \ \ MyFile.close();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00125}00125\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00126}00126\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00127}00127\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00128}00128\ \ \ \ \ \ \ vClients.push\_back(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00129}00129\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00131}00131\ \ \ \ \ MyFile.close();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00132}00132\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00133}00133\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00134}00134\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00135}00135\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00136}00136\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00141}\mbox{\hyperlink{Bank__System_8cpp_ad4acc95589ffe60cc1099c9fcf59e24d}{00141}}\ \mbox{\hyperlink{structsClient}{sClient}}\ \mbox{\hyperlink{Bank__System_8cpp_ad4acc95589ffe60cc1099c9fcf59e24d}{ReadNewClient}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00142}00142\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00143}00143\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00144}00144\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00145}00145\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ Account\ Number?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00146}00146\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00147}00147\ \ \ \textcolor{comment}{//\ Usage\ of\ std::ws\ will\ extract\ allthe\ whitespace\ character}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00148}00148\ \ \ getline(cin\ >>\ ws,\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00150}00150\ \ \ \textcolor{keywordflow}{while}\ (\mbox{\hyperlink{Bank__System_8cpp_a065bc335eeb0c8ac78f67a555f462987}{ClientExistsByAccountNumber}}(Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}},\ \mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}}))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00151}00151\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00152}00152\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ ["{}}\ <<\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}}\ <<\ \textcolor{stringliteral}{"{}]\ already\ exists,\ Enter\ another\ Account\ Number?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00153}00153\ \ \ \ \ getline(cin\ >>\ ws,\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00154}00154\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00155}00155\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00156}00156\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ PinCode?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00157}00157\ \ \ getline(cin,\ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00159}00159\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ Name?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00160}00160\ \ \ getline(cin,\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00161}00161\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00162}00162\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ Phone?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00163}00163\ \ \ getline(cin,\ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00165}00165\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ AccountBalance?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00166}00166\ \ \ cin\ >>\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00167}00167\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00168}00168\ \ \ \textcolor{keywordflow}{return}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00169}00169\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00170}00170\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00176}\mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{00176}}\ vector<sClient>\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\textcolor{keywordtype}{string}\ FileName)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00177}00177\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00178}00178\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00179}00179\ \ \ vector<sClient>\ vClients;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00181}00181\ \ \ fstream\ MyFile;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00182}00182\ \ \ MyFile.open(FileName,\ ios::in);\ \textcolor{comment}{//\ read\ Mode}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00183}00183\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00184}00184\ \ \ \textcolor{keywordflow}{if}\ (MyFile.is\_open())}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00185}00185\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00186}00186\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00187}00187\ \ \ \ \ \textcolor{keywordtype}{string}\ Line;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00188}00188\ \ \ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00190}00190\ \ \ \ \ \textcolor{keywordflow}{while}\ (getline(MyFile,\ Line))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00191}00191\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00192}00192\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00193}00193\ \ \ \ \ \ \ Client\ =\ \mbox{\hyperlink{Bank__System_8cpp_a37e8e2e0847aec9a9b8f3ec9f0340de9}{ConvertLinetoRecord}}(Line);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00194}00194\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00195}00195\ \ \ \ \ \ \ vClients.push\_back(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00196}00196\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00197}00197\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00198}00198\ \ \ \ \ MyFile.close();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00199}00199\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00200}00200\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00201}00201\ \ \ \textcolor{keywordflow}{return}\ vClients;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00202}00202\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00203}00203\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00207}\mbox{\hyperlink{Bank__System_8cpp_aac1d6ba2e858b7aa56fb51e25bc37a97}{00207}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_aac1d6ba2e858b7aa56fb51e25bc37a97}{PrintClientRecordLine}}(\mbox{\hyperlink{structsClient}{sClient}}\ Client)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00208}00208\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00209}00209\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00210}00210\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(15)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00211}00211\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(10)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00212}00212\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(40)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00213}00213\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(12)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00214}00214\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(12)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00215}00215\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00216}00216\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00220}\mbox{\hyperlink{Bank__System_8cpp_a033ba0aa12c28bd58d8e2762feb550d3}{00220}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a033ba0aa12c28bd58d8e2762feb550d3}{PrintClientRecordBalanceLine}}(\mbox{\hyperlink{structsClient}{sClient}}\ Client)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00221}00221\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00222}00222\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00223}00223\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(15)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00224}00224\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(40)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00225}00225\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ setw(12)\ <<\ left\ <<\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00226}00226\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00227}00227\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00231}\mbox{\hyperlink{Bank__System_8cpp_aecbe5280b42c828d9aa6a40fa141b096}{00231}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_aecbe5280b42c828d9aa6a40fa141b096}{ShowAllClientsScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00232}00232\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00234}00234\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00235}00235\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00236}00236\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)tClient\ List\ ("{}}\ <<\ vClients.size()\ <<\ \textcolor{stringliteral}{"{})\ Client(s)."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00237}00237\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00238}00238\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00240}00240\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00241}00241\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(15)\ <<\ \textcolor{stringliteral}{"{}Accout\ Number"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00242}00242\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(10)\ <<\ \textcolor{stringliteral}{"{}Pin\ Code"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00243}00243\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(40)\ <<\ \textcolor{stringliteral}{"{}Client\ Name"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00244}00244\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(12)\ <<\ \textcolor{stringliteral}{"{}Phone"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00245}00245\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(12)\ <<\ \textcolor{stringliteral}{"{}Balance"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00246}00246\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00247}00247\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00248}00248\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00249}00249\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00250}00250\ \ \ \textcolor{keywordflow}{if}\ (vClients.size()\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00251}00251\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)tNo\ Clients\ Available\ In\ the\ System!"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00252}00252\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00254}00254\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ Client\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00255}00255\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00256}00256\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00257}00257\ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_aac1d6ba2e858b7aa56fb51e25bc37a97}{PrintClientRecordLine}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00258}00258\ \ \ \ \ \ \ cout\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00259}00259\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00260}00260\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00261}00261\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00262}00262\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00263}00263\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00264}00264\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00265}00265\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00269}\mbox{\hyperlink{Bank__System_8cpp_afc9663b32b82046e0f54497b165e9329}{00269}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_afc9663b32b82046e0f54497b165e9329}{ShowTotalBalances}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00270}00270\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00271}00271\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00272}00272\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00273}00273\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00274}00274\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)tBalances\ List\ ("{}}\ <<\ vClients.size()\ <<\ \textcolor{stringliteral}{"{})\ Client(s)."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00275}00275\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00276}00276\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00277}00277\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00278}00278\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00279}00279\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(15)\ <<\ \textcolor{stringliteral}{"{}Accout\ Number"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00280}00280\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(40)\ <<\ \textcolor{stringliteral}{"{}Client\ Name"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00281}00281\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}|\ "{}}\ <<\ left\ <<\ setw(12)\ <<\ \textcolor{stringliteral}{"{}Balance"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00282}00282\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00283}00283\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00285}00285\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00286}00286\ \ \ \textcolor{keywordtype}{double}\ TotalBalances\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00287}00287\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00288}00288\ \ \ \textcolor{keywordflow}{if}\ (vClients.size()\ ==\ 0)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00289}00289\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)tNo\ Clients\ Available\ In\ the\ System!"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00290}00290\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00291}00291\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00292}00292\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ Client\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00293}00293\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00294}00294\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00295}00295\ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a033ba0aa12c28bd58d8e2762feb550d3}{PrintClientRecordBalanceLine}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00296}00296\ \ \ \ \ \ \ TotalBalances\ +=\ Client.AccountBalance;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00297}00297\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00298}00298\ \ \ \ \ \ \ cout\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00299}00299\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00300}00300\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00301}00301\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00302}00302\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\(\backslash\)n"{}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00303}00303\ \ \ \ \ \ \ \ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00304}00304\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)t\(\backslash\)t\ \ \ Total\ Balances\ =\ "{}}\ <<\ TotalBalances;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00305}00305\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00306}00306\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00310}\mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{00310}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(\mbox{\hyperlink{structsClient}{sClient}}\ Client)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00311}00311\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00312}00312\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nThe\ following\ are\ the\ client\ details:\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00313}00313\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00314}00314\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nAccout\ Number:\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00315}00315\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPin\ Code\ \ \ \ \ :\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00316}00316\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nName\ \ \ \ \ \ \ \ \ :\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00317}00317\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPhone\ \ \ \ \ \ \ \ :\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00318}00318\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nAccount\ Balance:\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00319}00319\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00320}00320\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00321}00321\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00329}\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{00329}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ vector<sClient>\ vClients,\ \mbox{\hyperlink{structsClient}{sClient}}\ \&Client)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00330}00330\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00331}00331\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00332}00332\ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ C\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00333}00333\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00334}00334\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00335}00335\ \ \ \ \ \textcolor{keywordflow}{if}\ (C.AccountNumber\ ==\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00336}00336\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00337}00337\ \ \ \ \ \ \ Client\ =\ C;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00338}00338\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00339}00339\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00340}00340\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00341}00341\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00342}00342\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00343}00343\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00349}\mbox{\hyperlink{Bank__System_8cpp_a399eaf5cc81b752b9fa0606fd550d54b}{00349}}\ \mbox{\hyperlink{structsClient}{sClient}}\ \mbox{\hyperlink{Bank__System_8cpp_a399eaf5cc81b752b9fa0606fd550d54b}{ChangeClientRecord}}(\textcolor{keywordtype}{string}\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00350}00350\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00351}00351\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00352}00352\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00353}00353\ \ \ Client.\mbox{\hyperlink{structsClient_a6718ee119efcca9b5722dafd5b422610}{AccountNumber}}\ =\ AccountNumber;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00354}00354\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00355}00355\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nEnter\ PinCode?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00356}00356\ \ \ getline(cin\ >>\ ws,\ Client.\mbox{\hyperlink{structsClient_aff6d24c63ee97f7cb6abe738174ce3ce}{PinCode}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00357}00357\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00358}00358\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ Name?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00359}00359\ \ \ getline(cin,\ Client.\mbox{\hyperlink{structsClient_ae7ea779d537e2dcfa89a9a71e886676d}{Name}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00360}00360\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00361}00361\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ Phone?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00362}00362\ \ \ getline(cin,\ Client.\mbox{\hyperlink{structsClient_a33017d1ac0323aaf9bd77fb3a7e51a7c}{Phone}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00363}00363\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00364}00364\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Enter\ AccountBalance?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00365}00365\ \ \ cin\ >>\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00366}00366\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00367}00367\ \ \ \textcolor{keywordflow}{return}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00368}00368\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00369}00369\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00376}\mbox{\hyperlink{Bank__System_8cpp_af1800f03db86caf07df8644b22c89f05}{00376}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_af1800f03db86caf07df8644b22c89f05}{MarkClientForDeleteByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ vector<sClient>\ \&vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00377}00377\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00378}00378\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00379}00379\ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ \&C\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00380}00380\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00381}00381\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00382}00382\ \ \ \ \ \textcolor{keywordflow}{if}\ (C.AccountNumber\ ==\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00383}00383\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00384}00384\ \ \ \ \ \ \ C.\mbox{\hyperlink{structsClient_a547ee4952017fd562f7fb60f01e76865}{MarkForDelete}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00385}00385\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00386}00386\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00387}00387\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00388}00388\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00389}00389\ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00390}00390\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00391}00391\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00398}\mbox{\hyperlink{Bank__System_8cpp_a50ccee11889f724e11e05edfd7247c0d}{00398}}\ vector<sClient>\ \mbox{\hyperlink{Bank__System_8cpp_a50ccee11889f724e11e05edfd7247c0d}{SaveCleintsDataToFile}}(\textcolor{keywordtype}{string}\ FileName,\ vector<sClient>\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00399}00399\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00400}00400\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00401}00401\ \ \ fstream\ MyFile;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00402}00402\ \ \ MyFile.open(FileName,\ ios::out);\ \textcolor{comment}{//\ overwrite}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00403}00403\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00404}00404\ \ \ \textcolor{keywordtype}{string}\ DataLine;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00405}00405\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00406}00406\ \ \ \textcolor{keywordflow}{if}\ (MyFile.is\_open())}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00407}00407\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00408}00408\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00409}00409\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ C\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00410}00410\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00411}00411\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00412}00412\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (C.MarkForDelete\ ==\ \textcolor{keyword}{false})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00413}00413\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00414}00414\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\ we\ only\ write\ records\ that\ are\ not\ marked\ for\ delete.}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00415}00415\ \ \ \ \ \ \ \ \ DataLine\ =\ \mbox{\hyperlink{Bank__System_8cpp_a9f7641480ce98b89c09206f33a423f35}{ConvertRecordToLine}}(C);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00416}00416\ \ \ \ \ \ \ \ \ MyFile\ <<\ DataLine\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00417}00417\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00418}00418\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00419}00419\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00420}00420\ \ \ \ \ MyFile.close();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00421}00421\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00422}00422\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00423}00423\ \ \ \textcolor{keywordflow}{return}\ vClients;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00424}00424\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00425}00425\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00447}\mbox{\hyperlink{Bank__System_8cpp_a74fc2218551882d4912748a9ac36770a}{00447}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a74fc2218551882d4912748a9ac36770a}{AddNewClient}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00448}00448\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00449}00449\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00450}00450\ \ \ Client\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad4acc95589ffe60cc1099c9fcf59e24d}{ReadNewClient}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00451}00451\ \ \ AddDataLineToFile(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}},\ \mbox{\hyperlink{Bank__System_8cpp_a9f7641480ce98b89c09206f33a423f35}{ConvertRecordToLine}}(Client));}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00452}00452\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00453}00453\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00457}\mbox{\hyperlink{Bank__System_8cpp_a4455971fb3acdfb53df71021b5b82b96}{00457}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a4455971fb3acdfb53df71021b5b82b96}{AddNewClients}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00458}00458\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00459}00459\ \ \ \textcolor{keywordtype}{char}\ AddMore\ =\ \textcolor{charliteral}{'Y'};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00460}00460\ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00461}00461\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00462}00462\ \ \ \ \ \textcolor{comment}{//\ system("{}cls"{});}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00463}00463\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Adding\ New\ Client:\(\backslash\)n\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00464}00464\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00465}00465\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a74fc2218551882d4912748a9ac36770a}{AddNewClient}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00466}00466\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ Added\ Successfully,\ do\ you\ want\ to\ add\ more\ clients?\ Y/N?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00467}00467\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00468}00468\ \ \ \ \ cin\ >>\ AddMore;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00469}00469\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00470}00470\ \ \ \}\ \textcolor{keywordflow}{while}\ (toupper(AddMore)\ ==\ \textcolor{charliteral}{'Y'});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00471}00471\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00472}00472\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00479}\mbox{\hyperlink{Bank__System_8cpp_a0cccd194bd08f8e66cd9ceee6825df42}{00479}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_a0cccd194bd08f8e66cd9ceee6825df42}{DeleteClientByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ vector<sClient>\ \&vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00480}00480\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00481}00481\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00482}00482\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00483}00483\ \ \ \textcolor{keywordtype}{char}\ Answer\ =\ \textcolor{charliteral}{'n'};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00484}00484\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00485}00485\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(AccountNumber,\ vClients,\ Client))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00486}00486\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00487}00487\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00488}00488\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00489}00489\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00490}00490\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nAre\ you\ sure\ you\ want\ delete\ this\ client?\ y/n\ ?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00491}00491\ \ \ \ \ cin\ >>\ Answer;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00492}00492\ \ \ \ \ \textcolor{keywordflow}{if}\ (Answer\ ==\ \textcolor{charliteral}{'y'}\ ||\ Answer\ ==\ \textcolor{charliteral}{'Y'})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00493}00493\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00494}00494\ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_af1800f03db86caf07df8644b22c89f05}{MarkClientForDeleteByAccountNumber}}(AccountNumber,\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00495}00495\ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50ccee11889f724e11e05edfd7247c0d}{SaveCleintsDataToFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}},\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00496}00496\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00497}00497\ \ \ \ \ \ \ \textcolor{comment}{//\ Refresh\ Clients}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00498}00498\ \ \ \ \ \ \ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00499}00499\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00500}00500\ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nClient\ Deleted\ Successfully."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00501}00501\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00502}00502\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00503}00503\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00504}00504\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00505}00505\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00506}00506\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ Account\ Number\ ("{}}\ <<\ AccountNumber\ <<\ \textcolor{stringliteral}{"{})\ is\ Not\ Found!"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00507}00507\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00508}00508\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00509}00509\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00510}00510\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00517}\mbox{\hyperlink{Bank__System_8cpp_a7ffe16c9f99bda92656c1e733daead0b}{00517}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_a7ffe16c9f99bda92656c1e733daead0b}{UpdateClientByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ vector<sClient>\ \&vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00518}00518\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00519}00519\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00520}00520\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00521}00521\ \ \ \textcolor{keywordtype}{char}\ Answer\ =\ \textcolor{charliteral}{'n'};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00522}00522\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00523}00523\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(AccountNumber,\ vClients,\ Client))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00524}00524\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00525}00525\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00526}00526\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00527}00527\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nAre\ you\ sure\ you\ want\ update\ this\ client?\ y/n\ ?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00528}00528\ \ \ \ \ cin\ >>\ Answer;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00529}00529\ \ \ \ \ \textcolor{keywordflow}{if}\ (Answer\ ==\ \textcolor{charliteral}{'y'}\ ||\ Answer\ ==\ \textcolor{charliteral}{'Y'})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00530}00530\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00531}00531\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00532}00532\ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ \&C\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00533}00533\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00534}00534\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (C.AccountNumber\ ==\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00535}00535\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00536}00536\ \ \ \ \ \ \ \ \ \ \ C\ =\ \mbox{\hyperlink{Bank__System_8cpp_a399eaf5cc81b752b9fa0606fd550d54b}{ChangeClientRecord}}(AccountNumber);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00537}00537\ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00538}00538\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00539}00539\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00540}00540\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00541}00541\ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50ccee11889f724e11e05edfd7247c0d}{SaveCleintsDataToFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}},\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00542}00542\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00543}00543\ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nClient\ Updated\ Successfully."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00544}00544\ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00545}00545\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00546}00546\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00547}00547\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00548}00548\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00549}00549\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ Account\ Number\ ("{}}\ <<\ AccountNumber\ <<\ \textcolor{stringliteral}{"{})\ is\ Not\ Found!"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00550}00550\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00551}00551\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00552}00552\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00553}00553\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00561}\mbox{\hyperlink{Bank__System_8cpp_a42a7c643f8202ec802a5745685534881}{00561}}\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{Bank__System_8cpp_a42a7c643f8202ec802a5745685534881}{DepositBalanceToClientByAccountNumber}}(\textcolor{keywordtype}{string}\ AccountNumber,\ \textcolor{keywordtype}{double}\ Amount,\ vector<sClient>\ \&vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00562}00562\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00563}00563\ \ \ \textcolor{keywordtype}{char}\ Answer\ =\ \textcolor{charliteral}{'n'};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00564}00564\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00565}00565\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nAre\ you\ sure\ you\ want\ perfrom\ this\ transaction?\ y/n\ ?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00566}00566\ \ \ cin\ >>\ Answer;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00567}00567\ \ \ \textcolor{keywordflow}{if}\ (Answer\ ==\ \textcolor{charliteral}{'y'}\ ||\ Answer\ ==\ \textcolor{charliteral}{'Y'})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00568}00568\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00569}00569\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00570}00570\ \ \ \ \ \textcolor{keywordflow}{for}\ (\mbox{\hyperlink{structsClient}{sClient}}\ \&C\ :\ vClients)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00571}00571\ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00572}00572\ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (C.AccountNumber\ ==\ AccountNumber)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00573}00573\ \ \ \ \ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00574}00574\ \ \ \ \ \ \ \ \ C.AccountBalance\ +=\ Amount;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00575}00575\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50ccee11889f724e11e05edfd7247c0d}{SaveCleintsDataToFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}},\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00576}00576\ \ \ \ \ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nDone\ Successfully.\ New\ balance\ is:\ "{}}\ <<\ C.AccountBalance;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00577}00577\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00578}00578\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00579}00579\ \ \ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00580}00580\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00581}00581\ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00582}00582\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00583}00583\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00584}00584\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00589}\mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{00589}}\ \textcolor{keywordtype}{string}\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00590}00590\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00591}00591\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \textcolor{stringliteral}{"{}"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00592}00592\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00593}00593\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPlease\ enter\ AccountNumber?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00594}00594\ \ \ cin\ >>\ AccountNumber;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00595}00595\ \ \ \textcolor{keywordflow}{return}\ AccountNumber;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00596}00596\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00597}00597\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00601}\mbox{\hyperlink{Bank__System_8cpp_a73144810a0e1ae5b5dabcf2bcde04574}{00601}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a73144810a0e1ae5b5dabcf2bcde04574}{ShowDeleteClientScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00602}00602\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00603}00603\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00604}00604\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tDelete\ Client\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00605}00605\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00606}00606\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00607}00607\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00608}00608\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00609}00609\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a0cccd194bd08f8e66cd9ceee6825df42}{DeleteClientByAccountNumber}}(AccountNumber,\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00610}00610\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00611}00611\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00615}\mbox{\hyperlink{Bank__System_8cpp_a51d6ce2f0b77ed740ba003d2d61f91e2}{00615}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a51d6ce2f0b77ed740ba003d2d61f91e2}{ShowUpdateClientScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00616}00616\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00617}00617\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00618}00618\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tUpdate\ Client\ Info\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00619}00619\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00620}00620\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00621}00621\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00622}00622\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00623}00623\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7ffe16c9f99bda92656c1e733daead0b}{UpdateClientByAccountNumber}}(AccountNumber,\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00624}00624\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00625}00625\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00629}\mbox{\hyperlink{Bank__System_8cpp_a91ddd43fbf1fec95e0adfda38c7f4fb1}{00629}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a91ddd43fbf1fec95e0adfda38c7f4fb1}{ShowAddNewClientsScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00630}00630\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00631}00631\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00632}00632\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tAdd\ New\ Clients\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00633}00633\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00634}00634\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00635}00635\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a4455971fb3acdfb53df71021b5b82b96}{AddNewClients}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00636}00636\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00637}00637\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00641}\mbox{\hyperlink{Bank__System_8cpp_a351f676a8f815491cadfb9246b7b66cd}{00641}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a351f676a8f815491cadfb9246b7b66cd}{ShowFindClientScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00642}00642\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00643}00643\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00644}00644\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tFind\ Client\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00645}00645\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00646}00646\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00647}00647\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00648}00648\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00649}00649\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00650}00650\ \ \ \textcolor{keywordflow}{if}\ (\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(AccountNumber,\ vClients,\ Client))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00651}00651\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00652}00652\ \ \ \textcolor{keywordflow}{else}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00653}00653\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ Account\ Number["{}}\ <<\ AccountNumber\ <<\ \textcolor{stringliteral}{"{}]\ is\ not\ found!"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00654}00654\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00655}00655\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00659}\mbox{\hyperlink{Bank__System_8cpp_a0027f4091596658aa7d0c69539b17e85}{00659}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a0027f4091596658aa7d0c69539b17e85}{ShowEndScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00660}00660\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00661}00661\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00662}00662\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tProgram\ Ends\ :-\/)"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00663}00663\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00664}00664\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\ \ -\/\ Author:\ Oussama\ Azzouz"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00665}00665\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00666}00666\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00670}\mbox{\hyperlink{Bank__System_8cpp_a4aa942796944b86a884a58b63140dbe7}{00670}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a4aa942796944b86a884a58b63140dbe7}{ShowDepositScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00671}00671\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00672}00672\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00673}00673\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tDeposit\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00674}00674\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00675}00675\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00676}00676\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00677}00677\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00678}00678\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00679}00679\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00680}00680\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00681}00681\ \ \ \textcolor{keywordflow}{while}\ (!\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(AccountNumber,\ vClients,\ Client))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00682}00682\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00683}00683\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ ["{}}\ <<\ AccountNumber\ <<\ \textcolor{stringliteral}{"{}]\ does\ not\ exist.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00684}00684\ \ \ \ \ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00685}00685\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00686}00686\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00687}00687\ \ \ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00688}00688\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00689}00689\ \ \ \textcolor{keywordtype}{double}\ Amount\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00690}00690\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPlease\ enter\ deposit\ amount?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00691}00691\ \ \ cin\ >>\ Amount;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00692}00692\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00693}00693\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a42a7c643f8202ec802a5745685534881}{DepositBalanceToClientByAccountNumber}}(AccountNumber,\ Amount,\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00694}00694\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00695}00695\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00699}\mbox{\hyperlink{Bank__System_8cpp_a073580979bce33ad45c206d2f1fc72d1}{00699}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a073580979bce33ad45c206d2f1fc72d1}{ShowWithDrawScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00700}00700\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00701}00701\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00702}00702\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)tWithdraw\ Screen"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00703}00703\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00704}00704\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00705}00705\ \ \ \mbox{\hyperlink{structsClient}{sClient}}\ Client;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00706}00706\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00707}00707\ \ \ vector<sClient>\ vClients\ =\ \mbox{\hyperlink{Bank__System_8cpp_ad99d195652a19541f80836d4dbbf7f59}{LoadCleintsDataFromFile}}(\mbox{\hyperlink{Bank__System_8cpp_a8c13ab6412d95ddb8449c16fe7f5e3ce}{ClientsFileName}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00708}00708\ \ \ \textcolor{keywordtype}{string}\ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00709}00709\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00710}00710\ \ \ \textcolor{keywordflow}{while}\ (!\mbox{\hyperlink{Bank__System_8cpp_a48a0cfcfea0d62c42f36df92c3b976ed}{FindClientByAccountNumber}}(AccountNumber,\ vClients,\ Client))}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00711}00711\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00712}00712\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nClient\ with\ ["{}}\ <<\ AccountNumber\ <<\ \textcolor{stringliteral}{"{}]\ does\ not\ exist.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00713}00713\ \ \ \ \ AccountNumber\ =\ \mbox{\hyperlink{Bank__System_8cpp_a206ec9506112ed1defc47e33cc103362}{ReadClientAccountNumber}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00714}00714\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00715}00715\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00716}00716\ \ \ \mbox{\hyperlink{Bank__System_8cpp_ae124ace8856102e48e1e27f68185265a}{PrintClientCard}}(Client);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00717}00717\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00718}00718\ \ \ \textcolor{keywordtype}{double}\ Amount\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00719}00719\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nPlease\ enter\ withdraw\ amount?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00720}00720\ \ \ cin\ >>\ Amount;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00721}00721\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00722}00722\ \ \ \textcolor{comment}{//\ Validate\ that\ the\ amount\ does\ not\ exceeds\ the\ balance}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00723}00723\ \ \ \textcolor{keywordflow}{while}\ (Amount\ >\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}})}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00724}00724\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00725}00725\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)nAmount\ Exceeds\ the\ balance,\ you\ can\ withdraw\ up\ to\ :\ "{}}\ <<\ Client.\mbox{\hyperlink{structsClient_a2680cb0bd1afe8073396bb99f2a2b51c}{AccountBalance}}\ <<\ endl;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00726}00726\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Please\ enter\ another\ amount?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00727}00727\ \ \ \ \ cin\ >>\ Amount;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00728}00728\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00729}00729\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00730}00730\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a42a7c643f8202ec802a5745685534881}{DepositBalanceToClientByAccountNumber}}(AccountNumber,\ Amount\ *\ -\/1,\ vClients);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00731}00731\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00732}00732\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00736}\mbox{\hyperlink{Bank__System_8cpp_a4c945f0307a0cd51648127ffc6e3f86b}{00736}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a4c945f0307a0cd51648127ffc6e3f86b}{ShowTotalBalancesScreen}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00737}00737\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00738}00738\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00739}00739\ \ \ \mbox{\hyperlink{Bank__System_8cpp_afc9663b32b82046e0f54497b165e9329}{ShowTotalBalances}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00740}00740\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00741}00741\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00742}\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637}{00742}}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637}{enTransactionsMenueOptions}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00743}00743\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00744}\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637aab23a32a86b36ad610ceac83d50886d2}{00744}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637aab23a32a86b36ad610ceac83d50886d2}{eDeposit}}\ =\ 1,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00745}\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a1c77095825b4326af4dd52074d8f9fd8}{00745}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a1c77095825b4326af4dd52074d8f9fd8}{eWithdraw}}\ =\ 2,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00746}\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a08b2a823bed271aecb6d6a47148983b0}{00746}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a08b2a823bed271aecb6d6a47148983b0}{eShowTotalBalance}}\ =\ 3,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00747}00747\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a5e2a8fb9f0ce56f478617ed7ad988664}{eShowMainMenue}}\ =\ 4}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00748}\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a5e2a8fb9f0ce56f478617ed7ad988664}{00748}}\ \};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00749}00749\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00750}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706}{00750}}\ \textcolor{keyword}{enum}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706}{enMainMenueOptions}}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00751}00751\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00752}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e32f134a2fbbba5170fd3067265015}{00752}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e32f134a2fbbba5170fd3067265015}{eListClients}}\ =\ 1,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00753}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706aab35066de6c8a2b17964e134190a8f1d}{00753}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706aab35066de6c8a2b17964e134190a8f1d}{eAddNewClient}}\ =\ 2,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00754}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a4cff0294b777443f886c7f59d431752b}{00754}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a4cff0294b777443f886c7f59d431752b}{eDeleteClient}}\ =\ 3,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00755}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e47965f2a816af67bdda8f5fe805c3}{00755}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e47965f2a816af67bdda8f5fe805c3}{eUpdateClient}}\ =\ 4,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00756}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706ab4a94183df995895c7215c6315261b97}{00756}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706ab4a94183df995895c7215c6315261b97}{eFindClient}}\ =\ 5,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00757}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a8ea67b44372d4e293884865b8b79837a}{00757}}\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a8ea67b44372d4e293884865b8b79837a}{eShowTransactionsMenue}}\ =\ 6,}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00758}00758\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706af2f1713ca51324f5000bf36d36bfd684}{eExit}}\ =\ 7}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00759}\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706af2f1713ca51324f5000bf36d36bfd684}{00759}}\ \};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00760}00760\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00764}\mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{00764}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00765}00765\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00766}00766\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nPress\ any\ key\ to\ go\ back\ to\ Main\ Menue..."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00767}00767\ \ \ system(\textcolor{stringliteral}{"{}pause>0"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00768}00768\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{ShowMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00769}00769\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00773}\mbox{\hyperlink{Bank__System_8cpp_a717a7aaecdf86cec3333e79de7ba5a29}{00773}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a717a7aaecdf86cec3333e79de7ba5a29}{GoBackToTransactionsMenue}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00774}00774\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00775}00775\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)n\(\backslash\)nPress\ any\ key\ to\ go\ back\ to\ Transactions\ Menue..."{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00776}00776\ \ \ system(\textcolor{stringliteral}{"{}pause>0"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00777}00777\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a545193b69fea90084006d3352e40b6fa}{ShowTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00778}00778\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00783}\mbox{\hyperlink{Bank__System_8cpp_a3a932b1dccaadc2cf6f18f77f9d48705}{00783}}\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{Bank__System_8cpp_a3a932b1dccaadc2cf6f18f77f9d48705}{ReadTransactionsMenueOption}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00784}00784\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00785}00785\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Choose\ what\ do\ you\ want\ to\ do?\ [1\ to\ 4]?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00786}00786\ \ \ \textcolor{keywordtype}{short}\ Choice\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00787}00787\ \ \ cin\ >>\ Choice;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00788}00788\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00789}00789\ \ \ \textcolor{keywordflow}{return}\ Choice;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00790}00790\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00791}00791\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00796}\mbox{\hyperlink{Bank__System_8cpp_ad185e1ff83d192fd135988e28895671a}{00796}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_ad185e1ff83d192fd135988e28895671a}{PerfromTranactionsMenueOption}}(\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637}{enTransactionsMenueOptions}}\ TransactionMenueOption)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00797}00797\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00798}00798\ \ \ \textcolor{keywordflow}{switch}\ (TransactionMenueOption)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00799}00799\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00800}00800\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637aab23a32a86b36ad610ceac83d50886d2}{enTransactionsMenueOptions::eDeposit}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00801}00801\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00802}00802\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00803}00803\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a4aa942796944b86a884a58b63140dbe7}{ShowDepositScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00804}00804\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a717a7aaecdf86cec3333e79de7ba5a29}{GoBackToTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00805}00805\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00806}00806\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00807}00807\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00808}00808\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a1c77095825b4326af4dd52074d8f9fd8}{enTransactionsMenueOptions::eWithdraw}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00809}00809\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00810}00810\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00811}00811\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a073580979bce33ad45c206d2f1fc72d1}{ShowWithDrawScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00812}00812\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a717a7aaecdf86cec3333e79de7ba5a29}{GoBackToTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00813}00813\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00814}00814\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00815}00815\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00816}00816\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a08b2a823bed271aecb6d6a47148983b0}{enTransactionsMenueOptions::eShowTotalBalance}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00817}00817\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00818}00818\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00819}00819\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a4c945f0307a0cd51648127ffc6e3f86b}{ShowTotalBalancesScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00820}00820\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a717a7aaecdf86cec3333e79de7ba5a29}{GoBackToTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00821}00821\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00822}00822\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00823}00823\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00824}00824\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637a5e2a8fb9f0ce56f478617ed7ad988664}{enTransactionsMenueOptions::eShowMainMenue}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00825}00825\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00826}00826\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00827}00827\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{ShowMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00828}00828\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00829}00829\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00830}00830\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00831}00831\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00835}\mbox{\hyperlink{Bank__System_8cpp_a545193b69fea90084006d3352e40b6fa}{00835}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a545193b69fea90084006d3352e40b6fa}{ShowTransactionsMenue}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00836}00836\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00837}00837\ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00838}00838\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00839}00839\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)tTransactions\ Menue\ Screen\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00840}00840\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00841}00841\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[1]\ Deposit.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00842}00842\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[2]\ Withdraw.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00843}00843\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[3]\ Total\ Balances.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00844}00844\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[4]\ Main\ Menue.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00845}00845\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00846}00846\ \ \ \mbox{\hyperlink{Bank__System_8cpp_ad185e1ff83d192fd135988e28895671a}{PerfromTranactionsMenueOption}}((\mbox{\hyperlink{Bank__System_8cpp_a72cd6b30391e0995d9b6e7a9f4608637}{enTransactionsMenueOptions}})\mbox{\hyperlink{Bank__System_8cpp_a3a932b1dccaadc2cf6f18f77f9d48705}{ReadTransactionsMenueOption}}());}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00847}00847\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00848}00848\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00853}\mbox{\hyperlink{Bank__System_8cpp_abf5937dcf90edf397c8920505e99f048}{00853}}\ \textcolor{keywordtype}{short}\ \mbox{\hyperlink{Bank__System_8cpp_abf5937dcf90edf397c8920505e99f048}{ReadMainMenueOption}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00854}00854\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00855}00855\ \ \ \textcolor{keywordtype}{short}\ Choice\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00856}00856\ \ \ \textcolor{keywordflow}{do}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00857}00857\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00858}00858\ \ \ \ \ cout\ <<\ \textcolor{stringliteral}{"{}Choose\ what\ do\ you\ want\ to\ do?\ [1\ to\ 7]?\ "{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00859}00859\ \ \ \ \ cin\ >>\ Choice;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00860}00860\ \ \ \}\ \textcolor{keywordflow}{while}\ (Choice\ <\ 1\ ||\ Choice\ >\ 7);}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00861}00861\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00862}00862\ \ \ \textcolor{keywordflow}{return}\ Choice;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00863}00863\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00864}00864\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00869}\mbox{\hyperlink{Bank__System_8cpp_a5324f310da7452efd82a68630542efd9}{00869}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a5324f310da7452efd82a68630542efd9}{PerfromMainMenueOption}}(\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706}{enMainMenueOptions}}\ MainMenueOption)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00870}00870\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00871}00871\ \ \ \textcolor{keywordflow}{switch}\ (MainMenueOption)}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00872}00872\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00873}00873\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e32f134a2fbbba5170fd3067265015}{enMainMenueOptions::eListClients}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00874}00874\ \ \ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00875}00875\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00876}00876\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_aecbe5280b42c828d9aa6a40fa141b096}{ShowAllClientsScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00877}00877\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00878}00878\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00879}00879\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00880}00880\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706aab35066de6c8a2b17964e134190a8f1d}{enMainMenueOptions::eAddNewClient}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00881}00881\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00882}00882\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a91ddd43fbf1fec95e0adfda38c7f4fb1}{ShowAddNewClientsScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00883}00883\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00884}00884\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00885}00885\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00886}00886\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a4cff0294b777443f886c7f59d431752b}{enMainMenueOptions::eDeleteClient}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00887}00887\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00888}00888\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a73144810a0e1ae5b5dabcf2bcde04574}{ShowDeleteClientScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00889}00889\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00890}00890\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00891}00891\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00892}00892\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a28e47965f2a816af67bdda8f5fe805c3}{enMainMenueOptions::eUpdateClient}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00893}00893\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00894}00894\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a51d6ce2f0b77ed740ba003d2d61f91e2}{ShowUpdateClientScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00895}00895\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00896}00896\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00897}00897\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00898}00898\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706ab4a94183df995895c7215c6315261b97}{enMainMenueOptions::eFindClient}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00899}00899\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00900}00900\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a351f676a8f815491cadfb9246b7b66cd}{ShowFindClientScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00901}00901\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a7e2579e087fe78eef5355eda98bf41c9}{GoBackToMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00902}00902\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00903}00903\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00904}00904\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706a8ea67b44372d4e293884865b8b79837a}{enMainMenueOptions::eShowTransactionsMenue}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00905}00905\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00906}00906\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a545193b69fea90084006d3352e40b6fa}{ShowTransactionsMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00907}00907\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00908}00908\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00909}00909\ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706af2f1713ca51324f5000bf36d36bfd684}{enMainMenueOptions::eExit}}:}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00910}00910\ \ \ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00911}00911\ \ \ \ \ \mbox{\hyperlink{Bank__System_8cpp_a0027f4091596658aa7d0c69539b17e85}{ShowEndScreen}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00912}00912\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00913}00913\ \ \ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00914}00914\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00915}00915\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00919}\mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{00919}}\ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{ShowMainMenue}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00920}00920\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00921}00921\ \ \ system(\textcolor{stringliteral}{"{}cls"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00922}00922\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00923}00923\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t\(\backslash\)tMain\ Menue\ Screen\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00924}00924\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00925}00925\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[1]\ Show\ Client\ List.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00926}00926\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[2]\ Add\ New\ Client.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00927}00927\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[3]\ Delete\ Client.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00928}00928\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[4]\ Update\ Client\ Info.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00929}00929\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[5]\ Find\ Client.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00930}00930\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[6]\ Transactions.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00931}00931\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}\(\backslash\)t[7]\ Exit.\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00932}00932\ \ \ cout\ <<\ \textcolor{stringliteral}{"{}===========================================\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00933}00933\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a5324f310da7452efd82a68630542efd9}{PerfromMainMenueOption}}((\mbox{\hyperlink{Bank__System_8cpp_a5c9521d30236ef29e698f5df867e2706}{enMainMenueOptions}})\mbox{\hyperlink{Bank__System_8cpp_abf5937dcf90edf397c8920505e99f048}{ReadMainMenueOption}}());}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00934}00934\ \}}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00935}00935\ }
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00940}\mbox{\hyperlink{Bank__System_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{00940}}\ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{Bank__System_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}}()}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00941}00941\ \{}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00942}00942\ \ \ \mbox{\hyperlink{Bank__System_8cpp_a50de73c57a4a139c15f4851ac1b58415}{ShowMainMenue}}();}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00943}00943\ \ \ system(\textcolor{stringliteral}{"{}pause>0"{}});}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00944}00944\ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{\Hypertarget{Bank__System_8cpp_source_l00945}00945\ \}}
+
+\end{DoxyCode}

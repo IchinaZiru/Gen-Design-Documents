@@ -1,0 +1,5 @@
+<map id="default_delegate_tofloat" name="default_delegate_tofloat">
+<area shape="rect" id="Node000001" title="オブジェクトを浮動小数点数に変換するデフォルトデリゲート関数。" alt="" coords="5,5,187,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#a84f97e17eb0a79b6d7eda2a22d530e0f" title="文字列を数値（浮動小数点数または整数）に変換します。" alt="" coords="235,5,311,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,15,221,15,221,21,187,21"/>
+</map>

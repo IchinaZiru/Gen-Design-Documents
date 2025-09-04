@@ -1,0 +1,9 @@
+<map id="sq_aux_invalidtype" name="sq_aux_invalidtype">
+<area shape="rect" id="Node000001" title="想定外のオブジェクト型が指定された場合のエラーを返す。" alt="" coords="196,55,344,80"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a57ada0f26d198b6aa218d632e8a00a88" title="指定インデックスのオブジェクトのサイズを取得する。" alt="" coords="31,5,122,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,54,122,32,123,27,207,49"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#adfd43ecffc7bba7fa00b1f3aa01c8446" title="テーブルまたはユーザーデータにデリゲートを設定する。" alt="" coords="16,55,137,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,70,138,70,138,65,182,65"/>
+<area shape="rect" id="Node000004" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a301468f6ca3289e281897b4cbfaaa960" title="クロージャの自由変数を設定する。" alt="" coords="5,104,148,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="207,86,128,106,127,101,206,81"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="SQCompiler::OptionalSemicolon" name="SQCompiler::OptionalSemicolon">
+<area shape="rect" id="Node000001" title="文末の任意で記述されるセミコロンを処理する。" alt="" coords="5,55,236,80"/>
+<area shape="rect" id="Node000002" href="$classSQCompiler.html#a101d3143a4a8b35f1b9dd270b670874e" title="コンパイルエラーを報告し、ロングジャンプでコンパイル処理を中断する。" alt="" coords="327,5,466,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="192,52,313,30,314,35,193,57"/>
+<area shape="rect" id="Node000003" href="$classSQCompiler.html#a360bb03322356a03b823dee3c5798391" title="現在のトークンが文の終わりを示しているか判定する。" alt="" coords="284,55,509,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="236,65,270,65,270,70,236,70"/>
+<area shape="rect" id="Node000004" href="$classSQCompiler.html#a487f759767eb1b0e74065a35021d704f" title="字句解析器を呼び出し、次のトークンを取得する。" alt="" coords="331,104,462,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="193,77,318,100,317,105,192,83"/>
+</map>

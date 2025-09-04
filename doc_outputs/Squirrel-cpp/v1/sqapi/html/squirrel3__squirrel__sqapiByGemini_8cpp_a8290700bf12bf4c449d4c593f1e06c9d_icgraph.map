@@ -1,0 +1,5 @@
+<map id="sq_gettop" name="sq_gettop">
+<area shape="rect" id="Node000001" title="スタック上の要素数を取得します。" alt="" coords="139,5,225,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a8c96d68880eac465d517d314f21e78a6" title="スタックトップを指定した位置に設定します。" alt="" coords="5,5,91,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="125,21,91,21,91,15,125,15"/>
+</map>

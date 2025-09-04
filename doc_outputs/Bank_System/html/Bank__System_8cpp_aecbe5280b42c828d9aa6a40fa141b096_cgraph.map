@@ -1,0 +1,11 @@
+<map id="ShowAllClientsScreen" name="ShowAllClientsScreen">
+<area shape="rect" id="Node000001" title="すべてのクライアントの画面を表示する" alt="" coords="5,31,168,56"/>
+<area shape="rect" id="Node000002" href="$Bank__System_8cpp.html#ad99d195652a19541f80836d4dbbf7f59" title="ファイルからクライアントのデータを読み込み、それをsClient型のベクタとして返す関数" alt="" coords="216,5,401,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="168,31,202,27,203,33,169,37"/>
+<area shape="rect" id="Node000005" href="$Bank__System_8cpp.html#aac1d6ba2e858b7aa56fb51e25bc37a97" title="クライアントのレコードを一行で出力する" alt="" coords="227,55,390,80"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="169,49,214,54,213,60,168,55"/>
+<area shape="rect" id="Node000003" href="$Bank__System_8cpp.html#a37e8e2e0847aec9a9b8f3ec9f0340de9" title="文字列をレコードに変換する関数" alt="" coords="449,5,608,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="402,15,436,15,436,21,402,21"/>
+<area shape="rect" id="Node000004" href="$Bank__System_8cpp.html#aa9e62d8303527878176504e333cc318f" title="文字列を指定した区切り文字で分割する" alt="" coords="656,5,745,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="608,15,642,15,642,21,608,21"/>
+</map>

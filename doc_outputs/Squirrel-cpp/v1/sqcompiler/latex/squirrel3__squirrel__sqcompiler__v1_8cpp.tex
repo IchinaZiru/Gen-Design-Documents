@@ -1,0 +1,1948 @@
+\doxysection{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp File Reference}
+\hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp}{}\label{squirrel3__squirrel__sqcompiler__v1_8cpp}\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+{\ttfamily \#include "{}sqpcheader.\+h"{}}\newline
+{\ttfamily \#include $<$stdarg.\+h$>$}\newline
+{\ttfamily \#include $<$setjmp.\+h$>$}\newline
+{\ttfamily \#include "{}sqopcodes.\+h"{}}\newline
+{\ttfamily \#include "{}sqstring.\+h"{}}\newline
+{\ttfamily \#include "{}sqfuncproto.\+h"{}}\newline
+{\ttfamily \#include "{}sqcompiler.\+h"{}}\newline
+{\ttfamily \#include "{}sqfuncstate.\+h"{}}\newline
+{\ttfamily \#include "{}sqlexer.\+h"{}}\newline
+{\ttfamily \#include "{}sqvm.\+h"{}}\newline
+{\ttfamily \#include "{}sqtable.\+h"{}}\newline
+Include dependency graph for squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{squirrel3__squirrel__sqcompiler__v1_8cpp__incl}
+\end{center}
+\end{figure}
+\doxysubsubsection*{Data Structures}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structSQExpState}{SQExp\+State}}
+\begin{DoxyCompactList}\small\item\em 式の状態を管理する構造体。 \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structSQScope}{SQScope}}
+\begin{DoxyCompactList}\small\item\em コンパイル時のスコープ情報を保持する構造体。 \end{DoxyCompactList}\item 
+class \mbox{\hyperlink{classSQCompiler}{SQCompiler}}
+\begin{DoxyCompactList}\small\item\em Squirrelスクリプトをバイトコードにコンパイルするクラス。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}}~1
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}~2
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}}~3
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}}~4
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}}~5
+\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7552f1c1e6de21647c7a224101820958}{MAX\+\_\+\+COMPILER\+\_\+\+ERROR\+\_\+\+LEN}}~256
+\begin{DoxyCompactList}\small\item\em コンパイラエラーメッセージの最大長。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\+\_\+\+SCOPE}}()
+\begin{DoxyCompactList}\small\item\em 新しいスコープを開始するためのマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_af7c3b84b4f986a1b01dfe3259290d556}{RESOLVE\+\_\+\+OUTERS}}()
+\begin{DoxyCompactList}\small\item\em アウター変数を解決するためのマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2b3ff2bb2a9df9700e94f090cac1424e}{END\+\_\+\+SCOPE\+\_\+\+NO\+\_\+\+CLOSE}}()
+\begin{DoxyCompactList}\small\item\em スコープを終了するマクロ（クローズ命令なし）。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\+\_\+\+SCOPE}}()
+\begin{DoxyCompactList}\small\item\em スコープを終了するマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}{BEGIN\+\_\+\+BREAKBLE\+\_\+\+BLOCK}}()
+\begin{DoxyCompactList}\small\item\em break/continueが可能なブロックを開始するためのマクロ。 \end{DoxyCompactList}\item 
+\#define \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}{END\+\_\+\+BREAKBLE\+\_\+\+BLOCK}}(continue\+\_\+target)
+\begin{DoxyCompactList}\small\item\em break/continueが可能なブロックを終了するためのマクロ。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a}{Compile}} (SQVM \texorpdfstring{$\ast$}{*}vm, SQLEXREADFUNC rg, SQUser\+Pointer up, const SQChar \texorpdfstring{$\ast$}{*}sourcename, SQObject\+Ptr \&out, bool raiseerror, bool lineinfo)
+\begin{DoxyCompactList}\small\item\em Squirrelスクリプトをコンパイルするグローバル関数。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!BASE@{BASE}}
+\index{BASE@{BASE}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{BASE}{BASE}}
+{\footnotesize\ttfamily \#define BASE~3}
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00021}{21}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!BEGIN\_BREAKBLE\_BLOCK@{BEGIN\_BREAKBLE\_BLOCK}}
+\index{BEGIN\_BREAKBLE\_BLOCK@{BEGIN\_BREAKBLE\_BLOCK}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{BEGIN\_BREAKBLE\_BLOCK}{BEGIN\_BREAKBLE\_BLOCK}}
+{\footnotesize\ttfamily \#define BEGIN\+\_\+\+BREAKBLE\+\_\+\+BLOCK(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ \_\_nbreaks\_\_=\_fs-\/>\_unresolvedbreaks.size();\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ \_\_ncontinues\_\_=\_fs-\/>\_unresolvedcontinues.size();\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.push\_back(0);\_fs-\/>\_continuetargets.push\_back(0);}
+
+\end{DoxyCode}
+
+
+break/continueが可能なブロックを開始するためのマクロ。 
+
+ループなどのブロックの開始時に、未解決のbreak/continueの数を保存し、 新しいbreak/continueターゲットをスタックに追加します。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00111}{111}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\_\_nbreaks\_\_=\_fs-\/>\_unresolvedbreaks.size()-\/\_\_nbreaks\_\_;\ \(\backslash\)}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_ncontinues\_\_=\_fs-\/>\_unresolvedcontinues.size()-\/\_\_ncontinues\_\_;\ \(\backslash\) }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_ncontinues\_\_>0)ResolveContinues(\_fs,\_\_ncontinues\_\_,continue\_target);\ \(\backslash\)}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_nbreaks\_\_>0)ResolveBreaks(\_fs,\_\_nbreaks\_\_);\ \(\backslash\)}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.pop\_back();\_fs-\/>\_continuetargets.pop\_back();\}}
+\DoxyCodeLine{00126\ }
+\DoxyCodeLine{00131\ class\ \mbox{\hyperlink{classSQCompiler}{SQCompiler}} }
+\DoxyCodeLine{00132\ \{}
+\DoxyCodeLine{00133\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00144\ \ \ \ \ \mbox{\hyperlink{classSQCompiler}{SQCompiler}}(SQVM\ *v,\ SQLEXREADFUNC\ rg,\ SQUserPointer\ up,\ \textcolor{keyword}{const}\ SQChar*\ sourcename,\ \textcolor{keywordtype}{bool}\ raiseerror,\ \textcolor{keywordtype}{bool}\ lineinfo) }
+\DoxyCodeLine{00145\ \ \ \ \ \{}
+\DoxyCodeLine{00146\ \ \ \ \ \ \ \ \ \_vm=v;}
+\DoxyCodeLine{00147\ \ \ \ \ \ \ \ \ \_lex.Init(\_ss(v),\ rg,\ up,ThrowError,\textcolor{keyword}{this});}
+\DoxyCodeLine{00148\ \ \ \ \ \ \ \ \ \_sourcename\ =\ SQString::Create(\_ss(v),\ sourcename);}
+\DoxyCodeLine{00149\ \ \ \ \ \ \ \ \ \_lineinfo\ =\ lineinfo;\_raiseerror\ =\ raiseerror;}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \_scope.outers\ =\ 0;}
+\DoxyCodeLine{00151\ \ \ \ \ \ \ \ \ \_scope.stacksize\ =\ 0;}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \_compilererror[0]\ =\ \_SC(\textcolor{charliteral}{'\(\backslash\)0'});}
+\DoxyCodeLine{00153\ \ \ \ \ \}}
+\DoxyCodeLine{00160\ \ \ \ \ \textcolor{keyword}{static}\ \textcolor{keywordtype}{void}\ ThrowError(\textcolor{keywordtype}{void}\ *ud,\ \textcolor{keyword}{const}\ SQChar\ *s)\ \{}
+\DoxyCodeLine{00161\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{classSQCompiler}{SQCompiler}}\ *c\ =\ (\mbox{\hyperlink{classSQCompiler}{SQCompiler}}\ *)ud;}
+\DoxyCodeLine{00162\ \ \ \ \ \ \ \ \ c-\/>\mbox{\hyperlink{classSQCompiler_a101d3143a4a8b35f1b9dd270b670874e}{Error}}(s);}
+\DoxyCodeLine{00163\ \ \ \ \ \}}
+\DoxyCodeLine{00171\ \ \ \ \ \textcolor{keywordtype}{void}\ Error(\textcolor{keyword}{const}\ SQChar\ *s,\ ...) }
+\DoxyCodeLine{00172\ \ \ \ \ \{}
+\DoxyCodeLine{00173\ \ \ \ \ \ \ \ \ va\_list\ vl;}
+\DoxyCodeLine{00174\ \ \ \ \ \ \ \ \ va\_start(vl,\ s);}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ scvsprintf(\_compilererror,\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7552f1c1e6de21647c7a224101820958}{MAX\_COMPILER\_ERROR\_LEN}},\ s,\ vl);}
+\DoxyCodeLine{00176\ \ \ \ \ \ \ \ \ va\_end(vl);}
+\DoxyCodeLine{00177\ \ \ \ \ \ \ \ \ longjmp(\_errorjmp,1);}
+\DoxyCodeLine{00178\ \ \ \ \ \}}
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{void}\ Lex()\{\ \_token\ =\ \_lex.Lex();\}}
+\DoxyCodeLine{00192\ \ \ \ \ SQObject\ Expect(SQInteger\ tok) }
+\DoxyCodeLine{00193\ \ \ \ \ \{}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ !=\ tok)\ \{}
+\DoxyCodeLine{00196\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_CONSTRUCTOR\ \&\&\ tok\ ==\ TK\_IDENTIFIER)\ \{}
+\DoxyCodeLine{00197\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//do\ nothing}}
+\DoxyCodeLine{00198\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00199\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ SQChar\ *etypename;}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tok\ >\ 255)\ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(tok)}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IDENTIFIER:}
+\DoxyCodeLine{00205\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ etypename\ =\ \_SC(\textcolor{stringliteral}{"{}IDENTIFIER"{}});}
+\DoxyCodeLine{00206\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00207\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_STRING\_LITERAL:}
+\DoxyCodeLine{00208\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ etypename\ =\ \_SC(\textcolor{stringliteral}{"{}STRING\_LITERAL"{}});}
+\DoxyCodeLine{00209\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ etypename\ =\ \_SC(\textcolor{stringliteral}{"{}INTEGER"{}});}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ etypename\ =\ \_SC(\textcolor{stringliteral}{"{}FLOAT"{}});}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ etypename\ =\ \_lex.Tok2Str(tok);}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}expected\ '\%s'"{}}),\ etypename);}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}expected\ '\%c'"{}}),\ tok);}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00224\ \ \ \ \ \ \ \ \ SQObjectPtr\ ret;}
+\DoxyCodeLine{00225\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(tok)}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IDENTIFIER:}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \_fs-\/>CreateString(\_lex.\_svalue);}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00230\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_STRING\_LITERAL:}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ \_fs-\/>CreateString(\_lex.\_svalue,\_lex.\_longstr.size()-\/1);}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ SQObjectPtr(\_lex.\_nvalue);}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:}
+\DoxyCodeLine{00237\ \ \ \ \ \ \ \ \ \ \ \ \ ret\ =\ SQObjectPtr(\_lex.\_fvalue);}
+\DoxyCodeLine{00238\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ ret;}
+\DoxyCodeLine{00242\ \ \ \ \ \}}
+\DoxyCodeLine{00248\ \ \ \ \ \textcolor{keywordtype}{bool}\ IsEndOfStatement()\ \{\ \textcolor{keywordflow}{return}\ ((\_lex.\_prevtoken\ ==\ \_SC(\textcolor{charliteral}{'\(\backslash\)n'}))\ ||\ (\_token\ ==\ SQUIRREL\_EOB)\ ||\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'\}'}))\ ||\ (\_token\ ==\ \_SC(\textcolor{charliteral}{';'})));\ \}}
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordtype}{void}\ OptionalSemicolon() }
+\DoxyCodeLine{00255\ \ \ \ \ \{}
+\DoxyCodeLine{00256\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{';'}))\ \{\ Lex();\ \textcolor{keywordflow}{return};\ \}}
+\DoxyCodeLine{00257\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!IsEndOfStatement())\ \{}
+\DoxyCodeLine{00258\ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}end\ of\ statement\ expected\ (;\ or\ lf)"{}}));}
+\DoxyCodeLine{00259\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00260\ \ \ \ \ \}}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{keywordtype}{void}\ MoveIfCurrentTargetIsLocal()\ \{}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ SQInteger\ trg\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00269\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>IsLocal(trg))\ \{}
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ \ \ \ \ trg\ =\ \_fs-\/>PopTarget();\ \textcolor{comment}{//pops\ the\ target\ and\ moves\ it}}
+\DoxyCodeLine{00271\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_MOVE,\ \_fs-\/>PushTarget(),\ trg);}
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00273\ \ \ \ \ \}}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a}{Compile}}(SQObjectPtr\ \&o) }
+\DoxyCodeLine{00281\ \ \ \ \ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ \_debugline\ =\ 1;}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ \_debugop\ =\ 0;}
+\DoxyCodeLine{00284\ }
+\DoxyCodeLine{00285\ \ \ \ \ \ \ \ \ SQFuncState\ funcstate(\_ss(\_vm),\ NULL,ThrowError,\textcolor{keyword}{this});}
+\DoxyCodeLine{00286\ \ \ \ \ \ \ \ \ funcstate.\_name\ =\ SQString::Create(\_ss(\_vm),\ \_SC(\textcolor{stringliteral}{"{}main"{}}));}
+\DoxyCodeLine{00287\ \ \ \ \ \ \ \ \ \_fs\ =\ \&funcstate;}
+\DoxyCodeLine{00288\ \ \ \ \ \ \ \ \ \_fs-\/>AddParameter(\_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}this"{}})));}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ \_fs-\/>AddParameter(\_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}vargv"{}})));}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ \_fs-\/>\_varparams\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ \_fs-\/>\_sourcename\ =\ \_sourcename;}
+\DoxyCodeLine{00292\ \ \ \ \ \ \ \ \ SQInteger\ stacksize\ =\ \_fs-\/>GetStackSize();}
+\DoxyCodeLine{00293\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(setjmp(\_errorjmp)\ ==\ 0)\ \{}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00295\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ >\ 0)\{}
+\DoxyCodeLine{00296\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{00297\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{'\}'})\ \&\&\ \_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{';'}))\ OptionalSemicolon();}
+\DoxyCodeLine{00298\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00299\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(stacksize);}
+\DoxyCodeLine{00300\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddLineInfos(\_lex.\_currentline,\ \_lineinfo,\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00301\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_RETURN,\ 0xFF);}
+\DoxyCodeLine{00302\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(0);}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ \ o\ =\_fs-\/>BuildProto();}
+\DoxyCodeLine{00304\ \textcolor{preprocessor}{\#ifdef\ \_DEBUG\_DUMP }}
+\DoxyCodeLine{00305\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>Dump(\_funcproto(o));}
+\DoxyCodeLine{00306\ \textcolor{preprocessor}{\#endif }}
+\DoxyCodeLine{00307\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00308\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00309\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_raiseerror\ \&\&\ \_ss(\_vm)-\/>\_compilererrorhandler)\ \{}
+\DoxyCodeLine{00310\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_ss(\_vm)-\/>\_compilererrorhandler(\_vm,\ \_compilererror,\ sq\_type(\_sourcename)\ ==\ OT\_STRING?\_stringval(\_sourcename):\_SC(\textcolor{stringliteral}{"{}unknown"{}}),}
+\DoxyCodeLine{00311\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_lex.\_currentline,\ \_lex.\_currentcolumn);}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00313\ \ \ \ \ \ \ \ \ \ \ \ \ \_vm-\/>\_lasterror\ =\ SQString::Create(\_ss(\_vm),\ \_compilererror,\ -\/1);}
+\DoxyCodeLine{00314\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00315\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00316\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00317\ \ \ \ \ \}}
+\DoxyCodeLine{00322\ \ \ \ \ \textcolor{keywordtype}{void}\ Statements() }
+\DoxyCodeLine{00323\ \ \ \ \ \{}
+\DoxyCodeLine{00324\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ !=\ \_SC(\textcolor{charliteral}{'\}'})\ \&\&\ \_token\ !=\ TK\_DEFAULT\ \&\&\ \_token\ !=\ TK\_CASE)\ \{}
+\DoxyCodeLine{00325\ \ \ \ \ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{00326\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{'\}'})\ \&\&\ \_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{';'}))\ OptionalSemicolon();}
+\DoxyCodeLine{00327\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00328\ \ \ \ \ \}}
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keywordtype}{void}\ Statement(\textcolor{keywordtype}{bool}\ closeframe\ =\ \textcolor{keyword}{true}) }
+\DoxyCodeLine{00335\ \ \ \ \ \{}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \_fs-\/>AddLineInfos(\_lex.\_currentline,\ \_lineinfo);}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\{}
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{';'}):\ \ Lex();\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IF:\ \ \ \ \ IfStatement();\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00340\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_WHILE:\ \ \ \ \ \ WhileStatement();\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DO:\ \ \ \ \ DoWhileStatement();\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00342\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FOR:\ \ \ \ \ \ \ \ ForStatement();\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FOREACH:\ \ \ \ ForEachStatement();\ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00344\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_SWITCH:\ SwitchStatement();\ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_LOCAL:\ \ \ \ \ \ LocalDeclStatement();\ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00346\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_RETURN:}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_YIELD:\ \{}
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ SQOpcode\ op;}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_RETURN)\ \{}
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ op\ =\ \_OP\_RETURN;}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00352\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ op\ =\ \_OP\_YIELD;}
+\DoxyCodeLine{00354\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_bgenerator\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00356\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00357\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!IsEndOfStatement())\ \{}
+\DoxyCodeLine{00358\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ retexp\ =\ \_fs-\/>GetCurrentPos()+1;}
+\DoxyCodeLine{00359\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CommaExpr();}
+\DoxyCodeLine{00360\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(op\ ==\ \_OP\_RETURN\ \&\&\ \_fs-\/>\_traps\ >\ 0)}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POPTRAP,\ \_fs-\/>\_traps,\ 0);}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_returnexp\ =\ retexp;}
+\DoxyCodeLine{00363\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\ 1,\ \_fs-\/>PopTarget(),\_fs-\/>GetStackSize());}
+\DoxyCodeLine{00364\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00365\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{00366\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(op\ ==\ \_OP\_RETURN\ \&\&\ \_fs-\/>\_traps\ >\ 0)}
+\DoxyCodeLine{00367\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POPTRAP,\ \_fs-\/>\_traps\ ,0);}
+\DoxyCodeLine{00368\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_returnexp\ =\ -\/1;}
+\DoxyCodeLine{00369\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\ 0xFF,0,\_fs-\/>GetStackSize());}
+\DoxyCodeLine{00370\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};\}}
+\DoxyCodeLine{00372\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_BREAK:}
+\DoxyCodeLine{00373\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_breaktargets.size()\ <=\ 0)Error(\_SC(\textcolor{stringliteral}{"{}'break'\ has\ to\ be\ in\ a\ loop\ block"{}}));}
+\DoxyCodeLine{00374\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_breaktargets.top()\ >\ 0)\{}
+\DoxyCodeLine{00375\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POPTRAP,\ \_fs-\/>\_breaktargets.top(),\ 0);}
+\DoxyCodeLine{00376\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00377\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_af7c3b84b4f986a1b01dfe3259290d556}{RESOLVE\_OUTERS}}();}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ -\/1234);}
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_unresolvedbreaks.push\_back(\_fs-\/>GetCurrentPos());}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00382\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CONTINUE:}
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_continuetargets.size()\ <=\ 0)Error(\_SC(\textcolor{stringliteral}{"{}'continue'\ has\ to\ be\ in\ a\ loop\ block"{}}));}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_continuetargets.top()\ >\ 0)\ \{}
+\DoxyCodeLine{00385\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POPTRAP,\ \_fs-\/>\_continuetargets.top(),\ 0);}
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00387\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_af7c3b84b4f986a1b01dfe3259290d556}{RESOLVE\_OUTERS}}();}
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ -\/1234);}
+\DoxyCodeLine{00389\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_unresolvedcontinues.push\_back(\_fs-\/>GetCurrentPos());}
+\DoxyCodeLine{00390\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00391\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00392\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FUNCTION:}
+\DoxyCodeLine{00393\ \ \ \ \ \ \ \ \ \ \ \ \ FunctionStatement();}
+\DoxyCodeLine{00394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00395\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CLASS:}
+\DoxyCodeLine{00396\ \ \ \ \ \ \ \ \ \ \ \ \ ClassStatement();}
+\DoxyCodeLine{00397\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00398\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_ENUM:}
+\DoxyCodeLine{00399\ \ \ \ \ \ \ \ \ \ \ \ \ EnumStatement();}
+\DoxyCodeLine{00400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00401\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'\{'}):\{}
+\DoxyCodeLine{00402\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{00403\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00404\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Statements();}
+\DoxyCodeLine{00405\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\}'}));}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(closeframe)\ \{}
+\DoxyCodeLine{00407\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{00408\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00409\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00410\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2b3ff2bb2a9df9700e94f090cac1424e}{END\_SCOPE\_NO\_CLOSE}}();}
+\DoxyCodeLine{00411\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00412\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00413\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_TRY:}
+\DoxyCodeLine{00415\ \ \ \ \ \ \ \ \ \ \ \ \ TryCatchStatement();}
+\DoxyCodeLine{00416\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_THROW:}
+\DoxyCodeLine{00418\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00419\ \ \ \ \ \ \ \ \ \ \ \ \ CommaExpr();}
+\DoxyCodeLine{00420\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_THROW,\ \_fs-\/>PopTarget());}
+\DoxyCodeLine{00421\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00422\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CONST:}
+\DoxyCodeLine{00423\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00424\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00425\ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ \textcolor{keywordtype}{id}\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{00426\ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\textcolor{charliteral}{'='});}
+\DoxyCodeLine{00427\ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ val\ =\ ExpectScalar();}
+\DoxyCodeLine{00428\ \ \ \ \ \ \ \ \ \ \ \ \ OptionalSemicolon();}
+\DoxyCodeLine{00429\ \ \ \ \ \ \ \ \ \ \ \ \ SQTable\ *enums\ =\ \_table(\_ss(\_vm)-\/>\_consts);}
+\DoxyCodeLine{00430\ \ \ \ \ \ \ \ \ \ \ \ \ SQObjectPtr\ strongid\ =\ id;}
+\DoxyCodeLine{00431\ \ \ \ \ \ \ \ \ \ \ \ \ enums-\/>NewSlot(strongid,SQObjectPtr(val));}
+\DoxyCodeLine{00432\ \ \ \ \ \ \ \ \ \ \ \ \ strongid.Null();}
+\DoxyCodeLine{00433\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00434\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00436\ \ \ \ \ \ \ \ \ \ \ \ \ CommaExpr();}
+\DoxyCodeLine{00437\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>DiscardTarget();}
+\DoxyCodeLine{00438\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//\_fs-\/>PopTarget();}}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00440\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00441\ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00442\ \ \ \ \ \}}
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{keywordtype}{void}\ EmitDerefOp(SQOpcode\ op) }
+\DoxyCodeLine{00449\ \ \ \ \ \{}
+\DoxyCodeLine{00450\ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00451\ \ \ \ \ \ \ \ \ SQInteger\ key\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00452\ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00453\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\_fs-\/>PushTarget(),src,key,val);}
+\DoxyCodeLine{00454\ \ \ \ \ \}}
+\DoxyCodeLine{00461\ \ \ \ \ \textcolor{keywordtype}{void}\ Emit2ArgsOP(SQOpcode\ op,\ SQInteger\ p3\ =\ 0) }
+\DoxyCodeLine{00462\ \ \ \ \ \{}
+\DoxyCodeLine{00463\ \ \ \ \ \ \ \ \ SQInteger\ p2\ =\ \_fs-\/>PopTarget();\ \textcolor{comment}{//src\ in\ OP\_GET}}
+\DoxyCodeLine{00464\ \ \ \ \ \ \ \ \ SQInteger\ p1\ =\ \_fs-\/>PopTarget();\ \textcolor{comment}{//key\ in\ OP\_GET}}
+\DoxyCodeLine{00465\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\_fs-\/>PushTarget(),\ p1,\ p2,\ p3);}
+\DoxyCodeLine{00466\ \ \ \ \ \}}
+\DoxyCodeLine{00474\ \ \ \ \ \textcolor{keywordtype}{void}\ EmitCompoundArith(SQInteger\ tok,\ SQInteger\ etype,\ SQInteger\ pos) }
+\DoxyCodeLine{00475\ \ \ \ \ \{}
+\DoxyCodeLine{00476\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Generate\ code\ depending\ on\ the\ expression\ type\ */}}
+\DoxyCodeLine{00477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(etype)\ \{}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}}:\{}
+\DoxyCodeLine{00479\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ p2\ =\ \_fs-\/>PopTarget();\ \textcolor{comment}{//src\ in\ OP\_GET}}
+\DoxyCodeLine{00480\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ p1\ =\ \_fs-\/>PopTarget();\ \textcolor{comment}{//key\ in\ OP\_GET}}
+\DoxyCodeLine{00481\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PushTarget(p1);}
+\DoxyCodeLine{00482\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//EmitCompArithLocal(tok,\ p1,\ p1,\ p2);}}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(ChooseArithOpByToken(tok),p1,\ p2,\ p1,\ 0);}
+\DoxyCodeLine{00484\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00485\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00486\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00487\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}:}
+\DoxyCodeLine{00488\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}}:}
+\DoxyCodeLine{00489\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00490\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ key\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00492\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00493\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ \_OP\_COMPARITH\ mixes\ dest\ obj\ and\ source\ val\ in\ the\ arg1\ */}}
+\DoxyCodeLine{00494\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_COMPARITH,\ \_fs-\/>PushTarget(),\ (src<<16)|val,\ key,\ ChooseCompArithCharByToken(tok));}
+\DoxyCodeLine{00495\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00496\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00497\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}}:}
+\DoxyCodeLine{00498\ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00500\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ tmp\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00501\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETOUTER,\ \ \ tmp,\ pos);}
+\DoxyCodeLine{00502\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(ChooseArithOpByToken(tok),\ tmp,\ val,\ tmp,\ 0);}
+\DoxyCodeLine{00503\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00504\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00505\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_SETOUTER,\ \_fs-\/>PushTarget(),\ pos,\ tmp);}
+\DoxyCodeLine{00506\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00508\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00509\ \ \ \ \ \}}
+\DoxyCodeLine{00515\ \ \ \ \ \textcolor{keywordtype}{void}\ CommaExpr() }
+\DoxyCodeLine{00516\ \ \ \ \ \{}
+\DoxyCodeLine{00517\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(Expression();\_token\ ==\ \textcolor{charliteral}{','};\_fs-\/>PopTarget(),\ Lex(),\ CommaExpr());}
+\DoxyCodeLine{00518\ \ \ \ \ \}}
+\DoxyCodeLine{00524\ \ \ \ \ \textcolor{keywordtype}{void}\ Expression() }
+\DoxyCodeLine{00525\ \ \ \ \ \{}
+\DoxyCodeLine{00526\ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ es\ =\ \_es;}
+\DoxyCodeLine{00527\ \ \ \ \ \ \ \ \ \_es.\mbox{\hyperlink{structSQExpState_afb7b63ae96a684b508e09b15a524dc27}{etype}}\ \ \ \ \ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00528\ \ \ \ \ \ \ \ \ \_es.epos\ \ \ \ \ \ =\ -\/1;}
+\DoxyCodeLine{00529\ \ \ \ \ \ \ \ \ \_es.donot\_get\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ LogicalOrExp();}
+\DoxyCodeLine{00531\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \ \{}
+\DoxyCodeLine{00532\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'='}):}
+\DoxyCodeLine{00533\ \ \ \ \ \ \ \ \ case\ TK\_NEWSLOT:}
+\DoxyCodeLine{00534\ \ \ \ \ \ \ \ \ case\ TK\_MINUSEQ:}
+\DoxyCodeLine{00535\ \ \ \ \ \ \ \ \ case\ TK\_PLUSEQ:}
+\DoxyCodeLine{00536\ \ \ \ \ \ \ \ \ case\ TK\_MULEQ:}
+\DoxyCodeLine{00537\ \ \ \ \ \ \ \ \ case\ TK\_DIVEQ:}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ case\ TK\_MODEQ:\{}
+\DoxyCodeLine{00539\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ op\ =\ \_token;}
+\DoxyCodeLine{00540\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ ds\ =\ \_es.etype;}
+\DoxyCodeLine{00541\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ pos\ =\ \_es.epos;}
+\DoxyCodeLine{00542\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(ds\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}})\ Error(\_SC(\textcolor{stringliteral}{"{}can't\ assign\ expression"{}}));}
+\DoxyCodeLine{00543\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(ds\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ Error(\_SC(\textcolor{stringliteral}{"{}'base'\ cannot\ be\ modified"{}}));}
+\DoxyCodeLine{00544\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expression();}
+\DoxyCodeLine{00545\ }
+\DoxyCodeLine{00546\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(op)\{}
+\DoxyCodeLine{00547\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_NEWSLOT:}
+\DoxyCodeLine{00548\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(ds\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}\ ||\ ds\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})}
+\DoxyCodeLine{00549\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EmitDerefOp(\_OP\_NEWSLOT);}
+\DoxyCodeLine{00550\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{comment}{//if\ \_derefstate\ !=\ DEREF\_NO\_DEREF\ \&\&\ DEREF\_FIELD\ so\ is\ the\ index\ of\ a\ local}}
+\DoxyCodeLine{00551\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}can't\ 'create'\ a\ local\ slot"{}}));}
+\DoxyCodeLine{00552\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00553\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'='}):\ \textcolor{comment}{//ASSIGN}}
+\DoxyCodeLine{00554\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ switch(ds)\ \{}
+\DoxyCodeLine{00555\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}}:}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00557\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00558\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ dst\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00559\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_MOVE,\ dst,\ src);}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00561\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00562\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}:}
+\DoxyCodeLine{00563\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}}:}
+\DoxyCodeLine{00564\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EmitDerefOp(\_OP\_SET);}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00566\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}}:}
+\DoxyCodeLine{00567\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00568\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00569\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ dst\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00570\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_SETOUTER,\ dst,\ pos,\ src);}
+\DoxyCodeLine{00571\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00573\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00574\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MINUSEQ:}
+\DoxyCodeLine{00575\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSEQ:}
+\DoxyCodeLine{00576\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MULEQ:}
+\DoxyCodeLine{00577\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DIVEQ:}
+\DoxyCodeLine{00578\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MODEQ:}
+\DoxyCodeLine{00579\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ EmitCompoundArith(op,\ ds,\ pos);}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00581\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00582\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00583\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00584\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'?'}):\ \{}
+\DoxyCodeLine{00585\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00586\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JZ,\ \_fs-\/>PopTarget());}
+\DoxyCodeLine{00587\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ jzpos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ trg\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00589\ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ first\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00591\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ first\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ first\_exp);}
+\DoxyCodeLine{00592\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ endfirstexp\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{00593\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ 0);}
+\DoxyCodeLine{00594\ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{':'}));}
+\DoxyCodeLine{00595\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{00597\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ second\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00598\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ second\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ second\_exp);}
+\DoxyCodeLine{00599\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jmppos,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ jmppos);}
+\DoxyCodeLine{00600\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jzpos,\ 1,\ endfirstexp\ -\/\ jzpos\ +\ 1);}
+\DoxyCodeLine{00601\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00602\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00603\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00604\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00605\ \ \ \ \ \ \ \ \ \_es\ =\ es;}
+\DoxyCodeLine{00606\ \ \ \ \ \}}
+\DoxyCodeLine{00614\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>\ \textcolor{keywordtype}{void}\ INVOKE\_EXP(T\ f) }
+\DoxyCodeLine{00615\ \ \ \ \ \{}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ es\ =\ \_es;}
+\DoxyCodeLine{00617\ \ \ \ \ \ \ \ \ \_es.\mbox{\hyperlink{structSQExpState_afb7b63ae96a684b508e09b15a524dc27}{etype}}\ \ \ \ \ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00618\ \ \ \ \ \ \ \ \ \_es.epos\ \ \ \ \ \ =\ -\/1;}
+\DoxyCodeLine{00619\ \ \ \ \ \ \ \ \ \_es.donot\_get\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00620\ \ \ \ \ \ \ \ \ (this-\/>*f)();}
+\DoxyCodeLine{00621\ \ \ \ \ \ \ \ \ \_es\ =\ es;}
+\DoxyCodeLine{00622\ \ \ \ \ \}}
+\DoxyCodeLine{00632\ \ \ \ \ \textcolor{keyword}{template}<\textcolor{keyword}{typename}\ T>\ \textcolor{keywordtype}{void}\ BIN\_EXP(SQOpcode\ op,\ T\ f,SQInteger\ op3\ =\ 0) }
+\DoxyCodeLine{00633\ \ \ \ \ \{}
+\DoxyCodeLine{00634\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ INVOKE\_EXP(f);}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ SQInteger\ op1\ =\ \_fs-\/>PopTarget();SQInteger\ op2\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00637\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\ \_fs-\/>PushTarget(),\ op1,\ op2,\ op3);}
+\DoxyCodeLine{00638\ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00639\ \ \ \ \ \}}
+\DoxyCodeLine{00644\ \ \ \ \ \textcolor{keywordtype}{void}\ LogicalOrExp() }
+\DoxyCodeLine{00645\ \ \ \ \ \{}
+\DoxyCodeLine{00646\ \ \ \ \ \ \ \ \ LogicalAndExp();}
+\DoxyCodeLine{00647\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_OR)\ \{}
+\DoxyCodeLine{00648\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ first\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00649\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ trg\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00650\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_OR,\ trg,\ 0,\ first\_exp,\ 0);}
+\DoxyCodeLine{00651\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ jpos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{00652\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ first\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ first\_exp);}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ INVOKE\_EXP(\&\mbox{\hyperlink{classSQCompiler_a78c393e142d7ed831b5230451fee588d}{SQCompiler::LogicalOrExp}});}
+\DoxyCodeLine{00654\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00655\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ second\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00656\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ second\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ second\_exp);}
+\DoxyCodeLine{00657\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00658\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jpos,\ 1,\ (\_fs-\/>GetCurrentPos()\ -\/\ jpos));}
+\DoxyCodeLine{00659\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00660\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00662\ \ \ \ \ \}}
+\DoxyCodeLine{00667\ \ \ \ \ \textcolor{keywordtype}{void}\ LogicalAndExp() }
+\DoxyCodeLine{00668\ \ \ \ \ \{}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ BitwiseOrExp();}
+\DoxyCodeLine{00670\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00671\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_AND:\ \{}
+\DoxyCodeLine{00672\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ first\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00673\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ trg\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00674\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_AND,\ trg,\ 0,\ first\_exp,\ 0);}
+\DoxyCodeLine{00675\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ jpos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{00676\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ first\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ first\_exp);}
+\DoxyCodeLine{00677\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ INVOKE\_EXP(\&\mbox{\hyperlink{classSQCompiler_adf83588a2b1f023234d9a166cb22548f}{SQCompiler::LogicalAndExp}});}
+\DoxyCodeLine{00678\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ second\_exp\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00680\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(trg\ !=\ second\_exp)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ trg,\ second\_exp);}
+\DoxyCodeLine{00681\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{00682\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jpos,\ 1,\ (\_fs-\/>GetCurrentPos()\ -\/\ jpos));}
+\DoxyCodeLine{00683\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00684\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00685\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00689\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00690\ \ \ \ \ \}}
+\DoxyCodeLine{00695\ \ \ \ \ \textcolor{keywordtype}{void}\ BitwiseOrExp() }
+\DoxyCodeLine{00696\ \ \ \ \ \{}
+\DoxyCodeLine{00697\ \ \ \ \ \ \ \ \ BitwiseXorExp();}
+\DoxyCodeLine{00698\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'|'}))}
+\DoxyCodeLine{00699\ \ \ \ \ \ \ \ \ \{BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_ad89842a1c23b6c61c7a65d4570d4eeed}{SQCompiler::BitwiseXorExp}},BW\_OR);}
+\DoxyCodeLine{00700\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00701\ \ \ \ \ \}}
+\DoxyCodeLine{00706\ \ \ \ \ \textcolor{keywordtype}{void}\ BitwiseXorExp() }
+\DoxyCodeLine{00707\ \ \ \ \ \{}
+\DoxyCodeLine{00708\ \ \ \ \ \ \ \ \ BitwiseAndExp();}
+\DoxyCodeLine{00709\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'\string^'}))}
+\DoxyCodeLine{00710\ \ \ \ \ \ \ \ \ \{BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_a5a1f6d4aa52e8bcefde3b231cf587380}{SQCompiler::BitwiseAndExp}},BW\_XOR);}
+\DoxyCodeLine{00711\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00712\ \ \ \ \ \}}
+\DoxyCodeLine{00717\ \ \ \ \ \textcolor{keywordtype}{void}\ BitwiseAndExp() }
+\DoxyCodeLine{00718\ \ \ \ \ \{}
+\DoxyCodeLine{00719\ \ \ \ \ \ \ \ \ EqExp();}
+\DoxyCodeLine{00720\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'\&'}))}
+\DoxyCodeLine{00721\ \ \ \ \ \ \ \ \ \{BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_a287696e418e3677a004f1a66b2da81e2}{SQCompiler::EqExp}},BW\_AND);}
+\DoxyCodeLine{00722\ \ \ \ \ \ \ \ \ \}\textcolor{keywordflow}{else}\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00723\ \ \ \ \ \}}
+\DoxyCodeLine{00728\ \ \ \ \ \textcolor{keywordtype}{void}\ EqExp() }
+\DoxyCodeLine{00729\ \ \ \ \ \{}
+\DoxyCodeLine{00730\ \ \ \ \ \ \ \ \ CompExp();}
+\DoxyCodeLine{00731\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00732\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_EQ:\ BIN\_EXP(\_OP\_EQ,\ \&\mbox{\hyperlink{classSQCompiler_a00b27cd6609f56579aef2c792424099c}{SQCompiler::CompExp}});\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00733\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_NE:\ BIN\_EXP(\_OP\_NE,\ \&\mbox{\hyperlink{classSQCompiler_a00b27cd6609f56579aef2c792424099c}{SQCompiler::CompExp}});\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_3WAYSCMP:\ BIN\_EXP(\_OP\_CMP,\ \&\mbox{\hyperlink{classSQCompiler_a00b27cd6609f56579aef2c792424099c}{SQCompiler::CompExp}},CMP\_3W);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00735\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00736\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00737\ \ \ \ \ \}}
+\DoxyCodeLine{00742\ \ \ \ \ \textcolor{keywordtype}{void}\ CompExp() }
+\DoxyCodeLine{00743\ \ \ \ \ \{}
+\DoxyCodeLine{00744\ \ \ \ \ \ \ \ \ ShiftExp();}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00746\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'>'}):\ BIN\_EXP(\_OP\_CMP,\ \&\mbox{\hyperlink{classSQCompiler}{SQCompiler}}::ShiftExp,CMP\_G);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00747\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'<'}):\ BIN\_EXP(\_OP\_CMP,\ \&\mbox{\hyperlink{classSQCompiler}{SQCompiler}}::ShiftExp,CMP\_L);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00748\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_GE:\ BIN\_EXP(\_OP\_CMP,\ \&\mbox{\hyperlink{classSQCompiler_a5bc5faa44288c58bd3beb3cd0feac35f}{SQCompiler::ShiftExp}},CMP\_GE);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00749\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_LE:\ BIN\_EXP(\_OP\_CMP,\ \&\mbox{\hyperlink{classSQCompiler_a5bc5faa44288c58bd3beb3cd0feac35f}{SQCompiler::ShiftExp}},CMP\_LE);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IN:\ BIN\_EXP(\_OP\_EXISTS,\ \&\mbox{\hyperlink{classSQCompiler_a5bc5faa44288c58bd3beb3cd0feac35f}{SQCompiler::ShiftExp}});\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00751\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INSTANCEOF:\ BIN\_EXP(\_OP\_INSTANCEOF,\ \&\mbox{\hyperlink{classSQCompiler_a5bc5faa44288c58bd3beb3cd0feac35f}{SQCompiler::ShiftExp}});\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00752\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00753\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00754\ \ \ \ \ \}}
+\DoxyCodeLine{00759\ \ \ \ \ \textcolor{keywordtype}{void}\ ShiftExp() }
+\DoxyCodeLine{00760\ \ \ \ \ \{}
+\DoxyCodeLine{00761\ \ \ \ \ \ \ \ \ PlusExp();}
+\DoxyCodeLine{00762\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_USHIFTR:\ BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_a136e932ec0a26f24694663ee1b183ea6}{SQCompiler::PlusExp}},BW\_USHIFTR);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_SHIFTL:\ BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_a136e932ec0a26f24694663ee1b183ea6}{SQCompiler::PlusExp}},BW\_SHIFTL);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00765\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_SHIFTR:\ BIN\_EXP(\_OP\_BITW,\ \&\mbox{\hyperlink{classSQCompiler_a136e932ec0a26f24694663ee1b183ea6}{SQCompiler::PlusExp}},BW\_SHIFTR);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00766\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00767\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00768\ \ \ \ \ \}}
+\DoxyCodeLine{00775\ \ \ \ \ SQOpcode\ ChooseArithOpByToken(SQInteger\ tok) }
+\DoxyCodeLine{00776\ \ \ \ \ \{}
+\DoxyCodeLine{00777\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(tok)\ \{}
+\DoxyCodeLine{00778\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSEQ:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'+'}:\ \textcolor{keywordflow}{return}\ \_OP\_ADD;}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MINUSEQ:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'-\/'}:\ \textcolor{keywordflow}{return}\ \_OP\_SUB;}
+\DoxyCodeLine{00780\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MULEQ:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'*'}:\ \textcolor{keywordflow}{return}\ \_OP\_MUL;}
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DIVEQ:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'/'}:\ \textcolor{keywordflow}{return}\ \_OP\_DIV;}
+\DoxyCodeLine{00782\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MODEQ:\ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'\%'}:\ \textcolor{keywordflow}{return}\ \_OP\_MOD;}
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ assert(0);}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_OP\_ADD;}
+\DoxyCodeLine{00786\ \ \ \ \ \}}
+\DoxyCodeLine{00793\ \ \ \ \ SQInteger\ ChooseCompArithCharByToken(SQInteger\ tok) }
+\DoxyCodeLine{00794\ \ \ \ \ \{}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ SQInteger\ oper;}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(tok)\{}
+\DoxyCodeLine{00797\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MINUSEQ:\ oper\ =\ \textcolor{charliteral}{'-\/'};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00798\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSEQ:\ oper\ =\ \textcolor{charliteral}{'+'};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00799\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MULEQ:\ oper\ =\ \textcolor{charliteral}{'*'};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DIVEQ:\ oper\ =\ \textcolor{charliteral}{'/'};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00801\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MODEQ:\ oper\ =\ \textcolor{charliteral}{'\%'};\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00802\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ oper\ =\ 0;\ \textcolor{comment}{//shut\ up\ compiler}}
+\DoxyCodeLine{00803\ \ \ \ \ \ \ \ \ \ \ \ \ assert(0);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00804\ \ \ \ \ \ \ \ \ \};}
+\DoxyCodeLine{00805\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ oper;}
+\DoxyCodeLine{00806\ \ \ \ \ \}}
+\DoxyCodeLine{00811\ \ \ \ \ \textcolor{keywordtype}{void}\ PlusExp() }
+\DoxyCodeLine{00812\ \ \ \ \ \{}
+\DoxyCodeLine{00813\ \ \ \ \ \ \ \ \ MultExp();}
+\DoxyCodeLine{00814\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00815\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'+'}):\ case\ \_SC(\textcolor{stringliteral}{'-\/'}):}
+\DoxyCodeLine{00816\ \ \ \ \ \ \ \ \ \ \ \ \ BIN\_EXP(ChooseArithOpByToken(\_token),\ \&\mbox{\hyperlink{classSQCompiler}{SQCompiler}}::MultExp);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00817\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00818\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00819\ \ \ \ \ \}}
+\DoxyCodeLine{00820\ }
+\DoxyCodeLine{00825\ \ \ \ \ \textcolor{keywordtype}{void}\ MultExp() }
+\DoxyCodeLine{00826\ \ \ \ \ \{}
+\DoxyCodeLine{00827\ \ \ \ \ \ \ \ \ PrefixedExpr();}
+\DoxyCodeLine{00828\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00829\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'*'}):\ case\ \_SC(\textcolor{stringliteral}{'/'}):\ case\ \_SC(\textcolor{stringliteral}{'\%'}):}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ \ \ \ \ BIN\_EXP(ChooseArithOpByToken(\_token),\ \&\mbox{\hyperlink{classSQCompiler}{SQCompiler}}::PrefixedExpr);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00831\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00832\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00833\ \ \ \ \ \}}
+\DoxyCodeLine{00839\ \ \ \ \ \textcolor{keywordtype}{void}\ PrefixedExpr() }
+\DoxyCodeLine{00840\ \ \ \ \ \{}
+\DoxyCodeLine{00841\ \ \ \ \ \ \ \ \ SQInteger\ pos\ =\ Factor();}
+\DoxyCodeLine{00842\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(;;)\ \{}
+\DoxyCodeLine{00843\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00844\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'.'}):}
+\DoxyCodeLine{00845\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ -\/1;}
+\DoxyCodeLine{00846\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00847\ }
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(Expect(TK\_IDENTIFIER)));}
+\DoxyCodeLine{00849\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ \{}
+\DoxyCodeLine{00850\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{00851\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00852\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00853\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ \ =\ pos;}
+\DoxyCodeLine{00854\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00855\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00856\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(NeedGet())\ \{}
+\DoxyCodeLine{00857\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{00858\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00859\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}};}
+\DoxyCodeLine{00860\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00861\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00862\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'['}):}
+\DoxyCodeLine{00863\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_lex.\_prevtoken\ ==\ \_SC(\textcolor{stringliteral}{'\(\backslash\)n'}))\ Error(\_SC(\textcolor{stringliteral}{"{}cannot\ break\ deref/or\ comma\ needed\ after\ [exp]=exp\ slot\ declaration"{}}));}
+\DoxyCodeLine{00864\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expression();\ Expect(\_SC(\textcolor{charliteral}{']'}));}
+\DoxyCodeLine{00865\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ -\/1;}
+\DoxyCodeLine{00866\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ \{}
+\DoxyCodeLine{00867\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{00868\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ pos\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00869\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00870\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ \ =\ pos;}
+\DoxyCodeLine{00871\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00872\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00873\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(NeedGet())\ \{}
+\DoxyCodeLine{00874\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{00875\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00876\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}};}
+\DoxyCodeLine{00877\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00878\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00879\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MINUSMINUS:}
+\DoxyCodeLine{00880\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSPLUS:}
+\DoxyCodeLine{00881\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00882\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(IsEndOfStatement())\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00883\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ diff\ =\ (\_token==TK\_MINUSMINUS)\ ?\ -\/1\ :\ 1;}
+\DoxyCodeLine{00884\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00885\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_es.etype)}
+\DoxyCodeLine{00886\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00887\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}}:\ Error(\_SC(\textcolor{stringliteral}{"{}can't\ '++'\ or\ '-\/-\/'\ an\ expression"{}}));\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00888\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}:}
+\DoxyCodeLine{00889\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}}:}
+\DoxyCodeLine{00890\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.donot\_get\ ==\ \textcolor{keyword}{true})\ \ \{\ Error(\_SC(\textcolor{stringliteral}{"{}can't\ '++'\ or\ '-\/-\/'\ an\ expression"{}}));\ \textcolor{keywordflow}{break};\ \}\ \textcolor{comment}{//mmh\ dor\ this\ make\ sense?}}
+\DoxyCodeLine{00891\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_PINC,\ diff);}
+\DoxyCodeLine{00892\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00893\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}}:\ \{}
+\DoxyCodeLine{00894\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00895\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_PINCL,\ \_fs-\/>PushTarget(),\ src,\ 0,\ diff);}
+\DoxyCodeLine{00896\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00897\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00898\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}}:\ \{}
+\DoxyCodeLine{00899\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ tmp1\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00900\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ tmp2\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00901\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETOUTER,\ tmp2,\ \_es.epos);}
+\DoxyCodeLine{00902\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_PINCL,\ \ \ \ tmp1,\ tmp2,\ 0,\ diff);}
+\DoxyCodeLine{00903\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_SETOUTER,\ tmp2,\ \_es.epos,\ tmp2);}
+\DoxyCodeLine{00904\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{00905\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00906\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00907\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00908\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00909\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00910\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'('}):}
+\DoxyCodeLine{00911\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ switch(\_es.etype)\ \{}
+\DoxyCodeLine{00912\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}:\ \{}
+\DoxyCodeLine{00913\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ key\ \ \ \ \ =\ \_fs-\/>PopTarget();\ \ \textcolor{comment}{/*\ location\ of\ the\ key\ */}}
+\DoxyCodeLine{00914\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ table\ \ \ =\ \_fs-\/>PopTarget();\ \ \textcolor{comment}{/*\ location\ of\ the\ object\ */}}
+\DoxyCodeLine{00915\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ closure\ =\ \_fs-\/>PushTarget();\ \textcolor{comment}{/*\ location\ for\ the\ closure\ */}}
+\DoxyCodeLine{00916\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ ttarget\ =\ \_fs-\/>PushTarget();\ \textcolor{comment}{/*\ location\ for\ 'this'\ pointer\ */}}
+\DoxyCodeLine{00917\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_PREPCALL,\ closure,\ key,\ table,\ ttarget);}
+\DoxyCodeLine{00918\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00919\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00920\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}}:}
+\DoxyCodeLine{00921\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Emit2ArgsOP(\_OP\_GET);}}
+\DoxyCodeLine{00922\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_MOVE,\ \_fs-\/>PushTarget(),\ 0);}
+\DoxyCodeLine{00923\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00924\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}}:}
+\DoxyCodeLine{00925\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETOUTER,\ \_fs-\/>PushTarget(),\ \_es.epos);}
+\DoxyCodeLine{00926\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_MOVE,\ \ \ \ \ \_fs-\/>PushTarget(),\ 0);}
+\DoxyCodeLine{00927\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00928\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{00929\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_MOVE,\ \_fs-\/>PushTarget(),\ 0);}
+\DoxyCodeLine{00930\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00931\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{00932\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00933\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ FunctionCallArgs();}
+\DoxyCodeLine{00934\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00935\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{00936\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00937\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00938\ \ \ \ \ \}}
+\DoxyCodeLine{00945\ \ \ \ \ SQInteger\ Factor() }
+\DoxyCodeLine{00946\ \ \ \ \ \{}
+\DoxyCodeLine{00947\ \ \ \ \ \ \ \ \ \textcolor{comment}{//\_es.etype\ =\ EXPR;}}
+\DoxyCodeLine{00948\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)}
+\DoxyCodeLine{00949\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00950\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_STRING\_LITERAL:}
+\DoxyCodeLine{00951\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\_fs-\/>CreateString(\_lex.\_svalue,\_lex.\_longstr.size()-\/1)));}
+\DoxyCodeLine{00952\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00953\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00954\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_BASE:}
+\DoxyCodeLine{00955\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00956\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETBASE,\ \_fs-\/>PushTarget());}
+\DoxyCodeLine{00957\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ \ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}};}
+\DoxyCodeLine{00958\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ \ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{00959\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (\_es.epos);}
+\DoxyCodeLine{00960\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00961\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IDENTIFIER:}
+\DoxyCodeLine{00962\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CONSTRUCTOR:}
+\DoxyCodeLine{00963\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_THIS:\{}
+\DoxyCodeLine{00964\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ id;}
+\DoxyCodeLine{00965\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ constant;}
+\DoxyCodeLine{00966\ }
+\DoxyCodeLine{00967\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{00968\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_IDENTIFIER:\ \ \textcolor{keywordtype}{id}\ =\ \_fs-\/>CreateString(\_lex.\_svalue);\ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00969\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_THIS:\ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ \_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}this"{}}),4);\ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00970\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CONSTRUCTOR:\ \textcolor{keywordtype}{id}\ =\ \_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}constructor"{}}),11);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00971\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00972\ }
+\DoxyCodeLine{00973\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ pos\ =\ -\/1;}
+\DoxyCodeLine{00974\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{00975\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}((pos\ =\ \_fs-\/>GetLocalVariable(\textcolor{keywordtype}{id}))\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00976\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Handle\ a\ local\ variable\ (includes\ 'this')\ */}}
+\DoxyCodeLine{00977\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PushTarget(pos);}
+\DoxyCodeLine{00978\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ \ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}};}
+\DoxyCodeLine{00979\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ \ =\ pos;}
+\DoxyCodeLine{00980\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00981\ }
+\DoxyCodeLine{00982\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}((pos\ =\ \_fs-\/>GetOuterVariable(\textcolor{keywordtype}{id}))\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00983\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Handle\ a\ free\ var\ */}}
+\DoxyCodeLine{00984\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(NeedGet())\ \{}
+\DoxyCodeLine{00985\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{00986\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETOUTER,\ \_es.epos,\ pos);}
+\DoxyCodeLine{00987\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ \_es.etype\ =\ EXPR;\ already\ default\ value\ */}}
+\DoxyCodeLine{00988\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00989\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00990\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}};}
+\DoxyCodeLine{00991\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ \ =\ pos;}
+\DoxyCodeLine{00992\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00993\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00994\ }
+\DoxyCodeLine{00995\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_fs-\/>IsConstant(\textcolor{keywordtype}{id},\ constant))\ \{}
+\DoxyCodeLine{00996\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Handle\ named\ constant\ */}}
+\DoxyCodeLine{00997\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObjectPtr\ constval;}
+\DoxyCodeLine{00998\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ \ \ \ constid;}
+\DoxyCodeLine{00999\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(sq\_type(constant)\ ==\ OT\_TABLE)\ \{}
+\DoxyCodeLine{01000\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\textcolor{charliteral}{'.'});}
+\DoxyCodeLine{01001\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ constid\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01002\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!\_table(constant)-\/>Get(constid,\ constval))\ \{}
+\DoxyCodeLine{01003\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ constval.Null();}
+\DoxyCodeLine{01004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}invalid\ constant\ [\%s.\%s]"{}}),\ \_stringval(\textcolor{keywordtype}{id}),\ \_stringval(constid));}
+\DoxyCodeLine{01005\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01006\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01007\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01008\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ constval\ =\ constant;}
+\DoxyCodeLine{01009\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01010\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{01011\ }
+\DoxyCodeLine{01012\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ generate\ direct\ or\ literal\ function\ depending\ on\ size\ */}}
+\DoxyCodeLine{01013\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObjectType\ ctype\ =\ sq\_type(constval);}
+\DoxyCodeLine{01014\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(ctype)\ \{}
+\DoxyCodeLine{01015\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_INTEGER:\ EmitLoadConstInt(\_integer(constval),\_es.epos);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01016\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_FLOAT:\ EmitLoadConstFloat(\_float(constval),\_es.epos);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01017\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ OT\_BOOL:\ \_fs-\/>AddInstruction(\_OP\_LOADBOOL,\ \_es.epos,\ \_integer(constval));\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01018\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ \_fs-\/>AddInstruction(\_OP\_LOAD,\_es.epos,\_fs-\/>GetConstant(constval));\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01019\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01020\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{01021\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01022\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01023\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{/*\ Handle\ a\ non-\/local\ variable,\ aka\ a\ field.\ Push\ the\ 'this'\ pointer\ on }}
+\DoxyCodeLine{01024\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ the\ virtual\ stack\ (always\ found\ in\ offset\ 0,\ so\ no\ instruction\ needs\ to }}
+\DoxyCodeLine{01025\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ be\ generated),\ and\ push\ the\ key\ next.\ Generate\ an\ \_OP\_LOAD\ instruction }}
+\DoxyCodeLine{01026\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ for\ the\ latter.\ If\ we\ are\ not\ using\ the\ variable\ as\ a\ dref\ expr,\ generate }}
+\DoxyCodeLine{01027\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ *\ the\ \_OP\_GET\ instruction. }}
+\DoxyCodeLine{01028\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ */}}
+\DoxyCodeLine{01029\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PushTarget(0);}
+\DoxyCodeLine{01030\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{01031\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(NeedGet())\ \{}
+\DoxyCodeLine{01032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{01033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}};}
+\DoxyCodeLine{01035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_es.epos;}
+\DoxyCodeLine{01037\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01038\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01039\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DOUBLE\_COLON:\ \ \textcolor{comment}{//\ "{}::"{}}}
+\DoxyCodeLine{01040\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADROOT,\ \_fs-\/>PushTarget());}
+\DoxyCodeLine{01041\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}};}
+\DoxyCodeLine{01042\ \ \ \ \ \ \ \ \ \ \ \ \ \_token\ =\ \_SC(\textcolor{charliteral}{'.'});\ \textcolor{comment}{/*\ hack:\ drop\ into\ PrefixExpr,\ case\ '.'*/}}
+\DoxyCodeLine{01043\ \ \ \ \ \ \ \ \ \ \ \ \ \_es.epos\ =\ -\/1;}
+\DoxyCodeLine{01044\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \_es.epos;}
+\DoxyCodeLine{01045\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01046\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_NULL:}
+\DoxyCodeLine{01047\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADNULLS,\ \_fs-\/>PushTarget(),1);}
+\DoxyCodeLine{01048\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01049\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01050\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:\ EmitLoadConstInt(\_lex.\_nvalue,-\/1);\ Lex();\ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01051\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:\ EmitLoadConstFloat(\_lex.\_fvalue,-\/1);\ Lex();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01052\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_TRUE:\ \textcolor{keywordflow}{case}\ TK\_FALSE:}
+\DoxyCodeLine{01053\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADBOOL,\ \_fs-\/>PushTarget(),\_token\ ==\ TK\_TRUE?1:0);}
+\DoxyCodeLine{01054\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01055\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01056\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'['}):\ \{}
+\DoxyCodeLine{01057\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWOBJ,\ \_fs-\/>PushTarget(),0,0,NOT\_ARRAY);}
+\DoxyCodeLine{01058\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ apos\ =\ \_fs-\/>GetCurrentPos(),key\ =\ 0;}
+\DoxyCodeLine{01059\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01060\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ !=\ \_SC(\textcolor{charliteral}{']'}))\ \{}
+\DoxyCodeLine{01061\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{01062\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{','}))\ Lex();}
+\DoxyCodeLine{01063\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01064\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ array\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01065\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_APPENDARRAY,\ array,\ val,\ AAT\_STACK);}
+\DoxyCodeLine{01066\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ key++;}
+\DoxyCodeLine{01067\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01068\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(apos,\ 1,\ key);}
+\DoxyCodeLine{01069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01070\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01071\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01072\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'\{'}):}
+\DoxyCodeLine{01073\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWOBJ,\ \_fs-\/>PushTarget(),0,NOT\_TABLE);}
+\DoxyCodeLine{01074\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();ParseTableOrClass(\_SC(\textcolor{charliteral}{','}),\_SC(\textcolor{charliteral}{'\}'}));}
+\DoxyCodeLine{01075\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01076\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FUNCTION:\ FunctionExp();\textcolor{keywordflow}{break};}
+\DoxyCodeLine{01077\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'@'}):\ FunctionExp(true);\textcolor{keywordflow}{break};}
+\DoxyCodeLine{01078\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CLASS:\ Lex();\ ClassExp();\textcolor{keywordflow}{break};}
+\DoxyCodeLine{01079\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'-\/'}):}
+\DoxyCodeLine{01080\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01081\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{01082\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:\ EmitLoadConstInt(-\/\_lex.\_nvalue,-\/1);\ Lex();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01083\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:\ EmitLoadConstFloat(-\/\_lex.\_fvalue,-\/1);\ Lex();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01084\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ UnaryOP(\_OP\_NEG);}
+\DoxyCodeLine{01085\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01086\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01087\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'!'}):\ Lex();\ UnaryOP(\_OP\_NOT);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01088\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'\string~'}):}
+\DoxyCodeLine{01089\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01090\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_INTEGER)\ \ \{\ EmitLoadConstInt(\string~\_lex.\_nvalue,-\/1);\ Lex();\ \textcolor{keywordflow}{break};\ \}}
+\DoxyCodeLine{01091\ \ \ \ \ \ \ \ \ \ \ \ \ UnaryOP(\_OP\_BWNOT);}
+\DoxyCodeLine{01092\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01093\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_TYPEOF\ :\ Lex()\ ;UnaryOP(\_OP\_TYPEOF);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01094\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_RESUME\ :\ Lex();\ UnaryOP(\_OP\_RESUME);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01095\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CLONE\ :\ Lex();\ UnaryOP(\_OP\_CLONE);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01096\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_RAWCALL:\ Lex();\ Expect(\textcolor{charliteral}{'('});\ FunctionCallArgs(\textcolor{keyword}{true});\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01097\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_MINUSMINUS\ :}
+\DoxyCodeLine{01098\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSPLUS\ :PrefixIncDec(\_token);\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01099\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_DELETE\ :\ DeleteExpr();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01100\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'('}):\ Lex();\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01101\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01102\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_\_\_LINE\_\_:\ EmitLoadConstInt(\_lex.\_currentline,-\/1);\ Lex();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01103\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_\_\_FILE\_\_:\ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\_sourcename));\ Lex();\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01104\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:\ Error(\_SC(\textcolor{stringliteral}{"{}expression\ expected"{}}));}
+\DoxyCodeLine{01105\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01106\ \ \ \ \ \ \ \ \ \_es.etype\ =\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}};}
+\DoxyCodeLine{01107\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ -\/1;}
+\DoxyCodeLine{01108\ \ \ \ \ \}}
+\DoxyCodeLine{01116\ \ \ \ \ \textcolor{keywordtype}{void}\ EmitLoadConstInt(SQInteger\ value,SQInteger\ target) }
+\DoxyCodeLine{01117\ \ \ \ \ \{}
+\DoxyCodeLine{01118\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(target\ <\ 0)\ \{}
+\DoxyCodeLine{01119\ \ \ \ \ \ \ \ \ \ \ \ \ target\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{01120\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01121\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(value\ <=\ INT\_MAX\ \&\&\ value\ >\ INT\_MIN)\ \{\ \textcolor{comment}{//does\ it\ fit\ in\ 32\ bits?}}
+\DoxyCodeLine{01122\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADINT,\ target,value);}
+\DoxyCodeLine{01123\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01124\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01125\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ target,\ \_fs-\/>GetNumericConstant(value));}
+\DoxyCodeLine{01126\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01127\ \ \ \ \ \}}
+\DoxyCodeLine{01135\ \ \ \ \ \textcolor{keywordtype}{void}\ EmitLoadConstFloat(SQFloat\ value,SQInteger\ target) }
+\DoxyCodeLine{01136\ \ \ \ \ \{}
+\DoxyCodeLine{01137\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(target\ <\ 0)\ \{}
+\DoxyCodeLine{01138\ \ \ \ \ \ \ \ \ \ \ \ \ target\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{01139\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01140\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\textcolor{keyword}{sizeof}(SQFloat)\ ==\ \textcolor{keyword}{sizeof}(SQInt32))\ \{}
+\DoxyCodeLine{01141\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADFLOAT,\ target,*((SQInt32\ *)\&value));}
+\DoxyCodeLine{01142\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01143\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01144\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ target,\ \_fs-\/>GetNumericConstant(value));}
+\DoxyCodeLine{01145\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01146\ \ \ \ \ \}}
+\DoxyCodeLine{01153\ \ \ \ \ \textcolor{keywordtype}{void}\ UnaryOP(SQOpcode\ op) }
+\DoxyCodeLine{01154\ \ \ \ \ \{}
+\DoxyCodeLine{01155\ \ \ \ \ \ \ \ \ PrefixedExpr();}
+\DoxyCodeLine{01156\ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01157\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(op,\ \_fs-\/>PushTarget(),\ src);}
+\DoxyCodeLine{01158\ \ \ \ \ \}}
+\DoxyCodeLine{01165\ \ \ \ \ \textcolor{keywordtype}{bool}\ NeedGet() }
+\DoxyCodeLine{01166\ \ \ \ \ \{}
+\DoxyCodeLine{01167\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{01168\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'='}):\ case\ \_SC(\textcolor{stringliteral}{'('}):\ case\ TK\_NEWSLOT:\ case\ TK\_MODEQ:\ case\ TK\_MULEQ:}
+\DoxyCodeLine{01169\ \ \ \ \ \ \ \ \ case\ TK\_DIVEQ:\ case\ TK\_MINUSEQ:\ case\ TK\_PLUSEQ:}
+\DoxyCodeLine{01170\ \ \ \ \ \ \ \ \ \ \ \ \ return\ false;}
+\DoxyCodeLine{01171\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_PLUSPLUS:\ \textcolor{keywordflow}{case}\ TK\_MINUSMINUS:}
+\DoxyCodeLine{01172\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (!IsEndOfStatement())\ \{}
+\DoxyCodeLine{01173\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01174\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01175\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01176\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01177\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ (!\_es.donot\_get\ ||\ (\ \_es.donot\_get\ \&\&\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'.'})\ ||\ \_token\ ==\ \_SC(\textcolor{charliteral}{'['}))));}
+\DoxyCodeLine{01178\ \ \ \ \ \}}
+\DoxyCodeLine{01186\ \ \ \ \ \textcolor{keywordtype}{void}\ FunctionCallArgs(\textcolor{keywordtype}{bool}\ rawcall\ =\ \textcolor{keyword}{false}) }
+\DoxyCodeLine{01187\ \ \ \ \ \{}
+\DoxyCodeLine{01188\ \ \ \ \ \ \ \ \ SQInteger\ nargs\ =\ 1;\textcolor{comment}{//this}}
+\DoxyCodeLine{01189\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ !=\ \_SC(\textcolor{charliteral}{')'}))\ \{}
+\DoxyCodeLine{01190\ \ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{01191\ \ \ \ \ \ \ \ \ \ \ \ \ \ MoveIfCurrentTargetIsLocal();}
+\DoxyCodeLine{01192\ \ \ \ \ \ \ \ \ \ \ \ \ \ nargs++;}
+\DoxyCodeLine{01193\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{','}))\{}
+\DoxyCodeLine{01194\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01195\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \textcolor{charliteral}{')'})\ Error(\_SC(\textcolor{stringliteral}{"{}expression\ expected,\ found\ ')'"{}}));}
+\DoxyCodeLine{01196\ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01197\ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01198\ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01199\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (rawcall)\ \{}
+\DoxyCodeLine{01200\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (nargs\ <\ 3)\ Error(\_SC(\textcolor{stringliteral}{"{}rawcall\ requires\ at\ least\ 2\ parameters\ (callee\ and\ this)"{}}));}
+\DoxyCodeLine{01201\ \ \ \ \ \ \ \ \ \ \ \ \ \ nargs\ -\/=\ 2;\ \textcolor{comment}{//removes\ callee\ and\ this\ from\ count}}
+\DoxyCodeLine{01202\ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01203\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(SQInteger\ i\ =\ 0;\ i\ <\ (nargs\ -\/\ 1);\ i++)\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01204\ \ \ \ \ \ \ \ \ \ SQInteger\ stackbase\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01205\ \ \ \ \ \ \ \ \ \ SQInteger\ closure\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01206\ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CALL,\ \_fs-\/>PushTarget(),\ closure,\ stackbase,\ nargs);}
+\DoxyCodeLine{01207\ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \textcolor{charliteral}{'\{'})}
+\DoxyCodeLine{01208\ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01209\ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ retval\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01210\ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ nkeys\ =\ 0;}
+\DoxyCodeLine{01211\ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01212\ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}\ (\_token\ !=\ \textcolor{charliteral}{'\}'})\ \{}
+\DoxyCodeLine{01213\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}\ (\_token)\ \{}
+\DoxyCodeLine{01214\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'['}):}
+\DoxyCodeLine{01215\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{']'}));}
+\DoxyCodeLine{01216\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'='}));\ Expression();}
+\DoxyCodeLine{01217\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01218\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01219\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(Expect(TK\_IDENTIFIER)));}
+\DoxyCodeLine{01220\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'='}));\ Expression();}
+\DoxyCodeLine{01221\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01222\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01223\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \textcolor{charliteral}{','})\ Lex();}
+\DoxyCodeLine{01224\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ nkeys++;}
+\DoxyCodeLine{01225\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01226\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ key\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01227\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_SET,\ 0xFF,\ retval,\ key,\ val);}
+\DoxyCodeLine{01228\ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01229\ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01230\ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01231\ \ \ \ \ \}}
+\DoxyCodeLine{01240\ \ \ \ \ \textcolor{keywordtype}{void}\ ParseTableOrClass(SQInteger\ separator,SQInteger\ terminator) }
+\DoxyCodeLine{01241\ \ \ \ \ \{}
+\DoxyCodeLine{01242\ \ \ \ \ \ \ \ \ SQInteger\ tpos\ =\ \_fs-\/>GetCurrentPos(),nkeys\ =\ 0;}
+\DoxyCodeLine{01243\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ !=\ terminator)\ \{}
+\DoxyCodeLine{01244\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ hasattrs\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01245\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ isstatic\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01246\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//check\ if\ is\ an\ attribute}}
+\DoxyCodeLine{01247\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(separator\ ==\ \textcolor{charliteral}{';'})\ \{}
+\DoxyCodeLine{01248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_ATTR\_OPEN)\ \{}
+\DoxyCodeLine{01249\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWOBJ,\ \_fs-\/>PushTarget(),0,NOT\_TABLE);\ Lex();}
+\DoxyCodeLine{01250\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ParseTableOrClass(\textcolor{charliteral}{','},TK\_ATTR\_CLOSE);}
+\DoxyCodeLine{01251\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ hasattrs\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01252\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01253\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_STATIC)\ \{}
+\DoxyCodeLine{01254\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ isstatic\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01255\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01256\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01257\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01258\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{01259\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FUNCTION:}
+\DoxyCodeLine{01260\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_CONSTRUCTOR:\{}
+\DoxyCodeLine{01261\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ tk\ =\ \_token;}
+\DoxyCodeLine{01262\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01263\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ \textcolor{keywordtype}{id}\ =\ tk\ ==\ TK\_FUNCTION\ ?\ Expect(TK\_IDENTIFIER)\ :\ \_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}constructor"{}}));}
+\DoxyCodeLine{01264\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{01265\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ boundtarget\ =\ 0xFF;}
+\DoxyCodeLine{01266\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'['}))\ \{}
+\DoxyCodeLine{01267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ boundtarget\ =\ ParseBindEnv();}
+\DoxyCodeLine{01268\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01269\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'('}));}
+\DoxyCodeLine{01270\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01271\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ CreateFunction(\textcolor{keywordtype}{id},\ boundtarget);}
+\DoxyCodeLine{01272\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSURE,\ \_fs-\/>PushTarget(),\ \_fs-\/>\_functions.size()\ -\/\ 1,\ boundtarget);}
+\DoxyCodeLine{01273\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01274\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01275\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \_SC(\textcolor{charliteral}{'['}):}
+\DoxyCodeLine{01276\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{']'}));}
+\DoxyCodeLine{01277\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'='}));\ Expression();}
+\DoxyCodeLine{01278\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01279\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_STRING\_LITERAL:\ \textcolor{comment}{//JSON}}
+\DoxyCodeLine{01280\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(separator\ ==\ \textcolor{charliteral}{','})\ \{\ \textcolor{comment}{//only\ works\ for\ tables}}
+\DoxyCodeLine{01281\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(Expect(TK\_STRING\_LITERAL)));}
+\DoxyCodeLine{01282\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{':'}));\ Expression();}
+\DoxyCodeLine{01283\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01284\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01285\ \ \ \ \ \ \ \ \ \ \ \ \ default\ :}
+\DoxyCodeLine{01286\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(Expect(TK\_IDENTIFIER)));}
+\DoxyCodeLine{01287\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'='}));\ Expression();}
+\DoxyCodeLine{01288\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01289\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ separator)\ Lex();\textcolor{comment}{//optional\ comma/semicolon}}
+\DoxyCodeLine{01290\ \ \ \ \ \ \ \ \ \ \ \ \ nkeys++;}
+\DoxyCodeLine{01291\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ val\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01292\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ key\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01293\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ attrs\ =\ hasattrs\ ?\ \_fs-\/>PopTarget():-\/1;}
+\DoxyCodeLine{01294\ \ \ \ \ \ \ \ \ \ \ \ \ ((void)attrs);}
+\DoxyCodeLine{01295\ \ \ \ \ \ \ \ \ \ \ \ \ assert((hasattrs\ \&\&\ (attrs\ ==\ key-\/1))\ ||\ !hasattrs);}
+\DoxyCodeLine{01296\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{char}\ flags\ =\ (hasattrs?NEW\_SLOT\_ATTRIBUTES\_FLAG:0)|(isstatic?NEW\_SLOT\_STATIC\_FLAG:0);}
+\DoxyCodeLine{01297\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ table\ =\ \_fs-\/>TopTarget();\ \textcolor{comment}{//<<BECAUSE\ OF\ THIS\ NO\ COMMON\ EMIT\ FUNC\ IS\ POSSIBLE}}
+\DoxyCodeLine{01298\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(separator\ ==\ \_SC(\textcolor{charliteral}{','}))\ \{\ \textcolor{comment}{//hack\ recognizes\ a\ table\ from\ the\ separator}}
+\DoxyCodeLine{01299\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWSLOT,\ 0xFF,\ table,\ key,\ val);}
+\DoxyCodeLine{01300\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01301\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01302\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWSLOTA,\ flags,\ table,\ key,\ val);\ \textcolor{comment}{//this\ for\ classes\ only\ as\ it\ invokes\ \_newmember}}
+\DoxyCodeLine{01303\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01304\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01305\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(separator\ ==\ \_SC(\textcolor{charliteral}{','}))\ \textcolor{comment}{//hack\ recognizes\ a\ table\ from\ the\ separator}}
+\DoxyCodeLine{01306\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(tpos,\ 1,\ nkeys);}
+\DoxyCodeLine{01307\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01308\ \ \ \ \ \}}
+\DoxyCodeLine{01314\ \ \ \ \ \textcolor{keywordtype}{void}\ LocalDeclStatement() }
+\DoxyCodeLine{01315\ \ \ \ \ \{}
+\DoxyCodeLine{01316\ \ \ \ \ \ \ \ \ SQObject\ varname;}
+\DoxyCodeLine{01317\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\ \_token\ ==\ TK\_FUNCTION)\ \{}
+\DoxyCodeLine{01319\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ boundtarget\ =\ 0xFF;}
+\DoxyCodeLine{01320\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01321\ \ \ \ \ \ \ \ \ \ \ \ \ varname\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'['}))\ \{}
+\DoxyCodeLine{01323\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ boundtarget\ =\ ParseBindEnv();}
+\DoxyCodeLine{01324\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01325\ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'('}));}
+\DoxyCodeLine{01326\ \ \ \ \ \ \ \ \ \ \ \ \ CreateFunction(varname,0xFF,\textcolor{keyword}{false});}
+\DoxyCodeLine{01327\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSURE,\ \_fs-\/>PushTarget(),\ \_fs-\/>\_functions.size()\ -\/\ 1,\ boundtarget);}
+\DoxyCodeLine{01328\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01329\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PushLocalVariable(varname);}
+\DoxyCodeLine{01330\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return};}
+\DoxyCodeLine{01331\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01332\ }
+\DoxyCodeLine{01333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{do}\ \{}
+\DoxyCodeLine{01334\ \ \ \ \ \ \ \ \ \ \ \ \ varname\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01335\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'='}))\ \{}
+\DoxyCodeLine{01336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expression();}
+\DoxyCodeLine{01337\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01338\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ dest\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{01339\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(dest\ !=\ src)\ \_fs-\/>AddInstruction(\_OP\_MOVE,\ dest,\ src);}
+\DoxyCodeLine{01340\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01341\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{01342\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADNULLS,\ \_fs-\/>PushTarget(),1);}
+\DoxyCodeLine{01343\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01344\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01345\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PushLocalVariable(varname);}
+\DoxyCodeLine{01346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{','}))\ Lex();\ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01347\ \ \ \ \ \ \ \ \ \}\ \textcolor{keywordflow}{while}(1);}
+\DoxyCodeLine{01348\ \ \ \ \ \}}
+\DoxyCodeLine{01353\ \ \ \ \ \textcolor{keywordtype}{void}\ IfBlock() }
+\DoxyCodeLine{01354\ \ \ \ \ \{}
+\DoxyCodeLine{01355\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'\{'}))}
+\DoxyCodeLine{01356\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01357\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01358\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01359\ \ \ \ \ \ \ \ \ \ \ \ \ Statements();}
+\DoxyCodeLine{01360\ \ \ \ \ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\}'}));}
+\DoxyCodeLine{01361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\textcolor{keyword}{true})\ \{}
+\DoxyCodeLine{01362\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01363\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01365\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2b3ff2bb2a9df9700e94f090cac1424e}{END\_SCOPE\_NO\_CLOSE}}();}
+\DoxyCodeLine{01366\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01367\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01368\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01369\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//BEGIN\_SCOPE();}}
+\DoxyCodeLine{01370\ \ \ \ \ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01371\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{'\}'})\ \&\&\ \_lex.\_prevtoken\ !=\ \_SC(\textcolor{charliteral}{';'}))\ OptionalSemicolon();}
+\DoxyCodeLine{01372\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//END\_SCOPE();}}
+\DoxyCodeLine{01373\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01374\ \ \ \ \ \}}
+\DoxyCodeLine{01380\ \ \ \ \ \textcolor{keywordtype}{void}\ IfStatement() }
+\DoxyCodeLine{01381\ \ \ \ \ \{}
+\DoxyCodeLine{01382\ \ \ \ \ \ \ \ \ SQInteger\ jmppos;}
+\DoxyCodeLine{01383\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ haselse\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01384\ \ \ \ \ \ \ \ \ Lex();\ Expect(\_SC(\textcolor{charliteral}{'('}));\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01385\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JZ,\ \_fs-\/>PopTarget());}
+\DoxyCodeLine{01386\ \ \ \ \ \ \ \ \ SQInteger\ jnepos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01387\ }
+\DoxyCodeLine{01388\ }
+\DoxyCodeLine{01389\ }
+\DoxyCodeLine{01390\ \ \ \ \ \ \ \ \ IfBlock();}
+\DoxyCodeLine{01391\ \ \ \ \ \ \ \ \ \textcolor{comment}{//}}
+\DoxyCodeLine{01392\ \ \ \ \ \ \ \ \ \textcolor{comment}{/*static\ int\ n\ =\ 0; }}
+\DoxyCodeLine{01393\ \textcolor{comment}{\ \ \ \ \ \ \ \ if\ (\_token\ !=\ \_SC('\}')\ \&\&\ \_token\ !=\ TK\_ELSE)\ \{ }}
+\DoxyCodeLine{01394\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ printf("{}IF\ \%d-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/!!!!!!!!!\(\backslash\)n"{},\ n); }}
+\DoxyCodeLine{01395\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ if\ (n\ ==\ 5) }}
+\DoxyCodeLine{01396\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \{ }}
+\DoxyCodeLine{01397\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ printf("{}asd"{}); }}
+\DoxyCodeLine{01398\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ \} }}
+\DoxyCodeLine{01399\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ n++; }}
+\DoxyCodeLine{01400\ \textcolor{comment}{\ \ \ \ \ \ \ \ \ \ \ \ //OptionalSemicolon(); }}
+\DoxyCodeLine{01401\ \textcolor{comment}{\ \ \ \ \ \ \ \ \}*/}}
+\DoxyCodeLine{01402\ }
+\DoxyCodeLine{01403\ }
+\DoxyCodeLine{01404\ \ \ \ \ \ \ \ \ SQInteger\ endifblock\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_ELSE)\{}
+\DoxyCodeLine{01406\ \ \ \ \ \ \ \ \ \ \ \ \ haselse\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01407\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//BEGIN\_SCOPE();}}
+\DoxyCodeLine{01408\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP);}
+\DoxyCodeLine{01409\ \ \ \ \ \ \ \ \ \ \ \ \ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01410\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01411\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//Statement();\ if(\_lex.\_prevtoken\ !=\ \_SC('\}'))\ OptionalSemicolon();}}
+\DoxyCodeLine{01412\ \ \ \ \ \ \ \ \ \ \ \ \ IfBlock();}
+\DoxyCodeLine{01413\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//END\_SCOPE();}}
+\DoxyCodeLine{01414\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jmppos,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ jmppos);}
+\DoxyCodeLine{01415\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01416\ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jnepos,\ 1,\ endifblock\ -\/\ jnepos\ +\ (haselse?1:0));}
+\DoxyCodeLine{01417\ \ \ \ \ \}}
+\DoxyCodeLine{01423\ \ \ \ \ \textcolor{keywordtype}{void}\ WhileStatement() }
+\DoxyCodeLine{01424\ \ \ \ \ \{}
+\DoxyCodeLine{01425\ \ \ \ \ \ \ \ \ SQInteger\ jzpos,\ jmppos;}
+\DoxyCodeLine{01426\ \ \ \ \ \ \ \ \ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01427\ \ \ \ \ \ \ \ \ Lex();\ Expect(\_SC(\textcolor{charliteral}{'('}));\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01428\ }
+\DoxyCodeLine{01429\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}{BEGIN\_BREAKBLE\_BLOCK}}();}
+\DoxyCodeLine{01430\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JZ,\ \_fs-\/>PopTarget());}
+\DoxyCodeLine{01431\ \ \ \ \ \ \ \ \ jzpos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01432\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01433\ }
+\DoxyCodeLine{01434\ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01435\ }
+\DoxyCodeLine{01436\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01437\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ jmppos\ -\/\ \_fs-\/>GetCurrentPos()\ -\/\ 1);}
+\DoxyCodeLine{01438\ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(jzpos,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ jzpos);}
+\DoxyCodeLine{01439\ }
+\DoxyCodeLine{01440\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}{END\_BREAKBLE\_BLOCK}}(jmppos);}
+\DoxyCodeLine{01441\ \ \ \ \ \}}
+\DoxyCodeLine{01446\ \ \ \ \ \textcolor{keywordtype}{void}\ DoWhileStatement() }
+\DoxyCodeLine{01447\ \ \ \ \ \{}
+\DoxyCodeLine{01448\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01449\ \ \ \ \ \ \ \ \ SQInteger\ jmptrg\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01450\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}{BEGIN\_BREAKBLE\_BLOCK}}()}
+\DoxyCodeLine{01451\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01452\ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01453\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01454\ \ \ \ \ \ \ \ \ Expect(TK\_WHILE);}
+\DoxyCodeLine{01455\ \ \ \ \ \ \ \ \ SQInteger\ continuetrg\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01456\ \ \ \ \ \ \ \ \ Expect(\_SC('('));\ CommaExpr();\ Expect(\_SC(')'));}
+\DoxyCodeLine{01457\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JZ,\ \_fs-\/>PopTarget(),\ 1);}
+\DoxyCodeLine{01458\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ jmptrg\ -\/\ \_fs-\/>GetCurrentPos()\ -\/\ 1);}
+\DoxyCodeLine{01459\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}{END\_BREAKBLE\_BLOCK}}(continuetrg);}
+\DoxyCodeLine{01460\ \ \ \ \ \}}
+\DoxyCodeLine{01466\ \ \ \ \ \textcolor{keywordtype}{void}\ ForStatement() }
+\DoxyCodeLine{01467\ \ \ \ \ \{}
+\DoxyCodeLine{01468\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01469\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01470\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'('}));}
+\DoxyCodeLine{01471\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_LOCAL)\ LocalDeclStatement();}
+\DoxyCodeLine{01472\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_token\ !=\ \_SC(\textcolor{charliteral}{';'}))\{}
+\DoxyCodeLine{01473\ \ \ \ \ \ \ \ \ \ \ \ \ CommaExpr();}
+\DoxyCodeLine{01474\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01475\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01476\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{';'}));}
+\DoxyCodeLine{01477\ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \ \ SQInteger\ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01479\ \ \ \ \ \ \ \ \ SQInteger\ jzpos\ =\ -\/1;}
+\DoxyCodeLine{01480\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ !=\ \_SC(\textcolor{charliteral}{';'}))\ \{\ CommaExpr();\ \_fs-\/>AddInstruction(\_OP\_JZ,\ \_fs-\/>PopTarget());\ jzpos\ =\ \_fs-\/>GetCurrentPos();\ \}}
+\DoxyCodeLine{01481\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{';'}));}
+\DoxyCodeLine{01482\ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{01483\ \ \ \ \ \ \ \ \ SQInteger\ expstart\ =\ \_fs-\/>GetCurrentPos()\ +\ 1;}
+\DoxyCodeLine{01484\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ !=\ \_SC(\textcolor{charliteral}{')'}))\ \{}
+\DoxyCodeLine{01485\ \ \ \ \ \ \ \ \ \ \ \ \ CommaExpr();}
+\DoxyCodeLine{01486\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01487\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01488\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01489\ \ \ \ \ \ \ \ \ \_fs-\/>SnoozeOpt();}
+\DoxyCodeLine{01490\ \ \ \ \ \ \ \ \ SQInteger\ expend\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01491\ \ \ \ \ \ \ \ \ SQInteger\ expsize\ =\ (expend\ -\/\ expstart)\ +\ 1;}
+\DoxyCodeLine{01492\ \ \ \ \ \ \ \ \ SQInstructionVec\ exp;}
+\DoxyCodeLine{01493\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(expsize\ >\ 0)\ \{}
+\DoxyCodeLine{01494\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(SQInteger\ i\ =\ 0;\ i\ <\ expsize;\ i++)}
+\DoxyCodeLine{01495\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ exp.push\_back(\_fs-\/>GetInstruction(expstart\ +\ i));}
+\DoxyCodeLine{01496\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopInstructions(expsize);}
+\DoxyCodeLine{01497\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01498\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}{BEGIN\_BREAKBLE\_BLOCK}}()}
+\DoxyCodeLine{01499\ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01500\ \ \ \ \ \ \ \ \ SQInteger\ continuetrg\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01501\ \ \ \ \ \ \ \ \ if(expsize\ >\ 0)\ \{}
+\DoxyCodeLine{01502\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(SQInteger\ i\ =\ 0;\ i\ <\ expsize;\ i++)}
+\DoxyCodeLine{01503\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(exp[i]);}
+\DoxyCodeLine{01504\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01505\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ jmppos\ -\/\ \_fs-\/>GetCurrentPos()\ -\/\ 1,\ 0);}
+\DoxyCodeLine{01506\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(jzpos>\ \ 0)\ \_fs-\/>SetInstructionParam(jzpos,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ jzpos);}
+\DoxyCodeLine{01507\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01508\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}{END\_BREAKBLE\_BLOCK}}(continuetrg);}
+\DoxyCodeLine{01509\ }
+\DoxyCodeLine{01510\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01511\ \ \ \ \ \}}
+\DoxyCodeLine{01516\ \ \ \ \ \textcolor{keywordtype}{void}\ ForEachStatement() }
+\DoxyCodeLine{01517\ \ \ \ \ \{}
+\DoxyCodeLine{01518\ \ \ \ \ \ \ \ \ SQObject\ idxname,\ valname;}
+\DoxyCodeLine{01519\ \ \ \ \ \ \ \ \ Lex();\ Expect(\_SC(\textcolor{charliteral}{'('}));\ valname\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01520\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{','}))\ \{}
+\DoxyCodeLine{01521\ \ \ \ \ \ \ \ \ \ \ \ \ idxname\ =\ valname;}
+\DoxyCodeLine{01522\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ valname\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01523\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01524\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\{}
+\DoxyCodeLine{01525\ \ \ \ \ \ \ \ \ \ \ \ \ idxname\ =\ \_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}@INDEX@"{}}));}
+\DoxyCodeLine{01526\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01527\ \ \ \ \ \ \ \ \ Expect(TK\_IN);}
+\DoxyCodeLine{01528\ }
+\DoxyCodeLine{01529\ \ \ \ \ \ \ \ \ \textcolor{comment}{//save\ the\ stack\ size}}
+\DoxyCodeLine{01530\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01531\ \ \ \ \ \ \ \ \ \textcolor{comment}{//put\ the\ table\ in\ the\ stack(evaluate\ the\ table\ expression)}}
+\DoxyCodeLine{01532\ \ \ \ \ \ \ \ \ Expression();\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01533\ \ \ \ \ \ \ \ \ SQInteger\ container\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01534\ \ \ \ \ \ \ \ \ \textcolor{comment}{//push\ the\ index\ local\ var}}
+\DoxyCodeLine{01535\ \ \ \ \ \ \ \ \ SQInteger\ indexpos\ =\ \_fs-\/>PushLocalVariable(idxname);}
+\DoxyCodeLine{01536\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADNULLS,\ indexpos,1);}
+\DoxyCodeLine{01537\ \ \ \ \ \ \ \ \ \textcolor{comment}{//push\ the\ value\ local\ var}}
+\DoxyCodeLine{01538\ \ \ \ \ \ \ \ \ SQInteger\ valuepos\ =\ \_fs-\/>PushLocalVariable(valname);}
+\DoxyCodeLine{01539\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADNULLS,\ valuepos,1);}
+\DoxyCodeLine{01540\ \ \ \ \ \ \ \ \ \textcolor{comment}{//push\ reference\ index}}
+\DoxyCodeLine{01541\ \ \ \ \ \ \ \ \ SQInteger\ itrpos\ =\ \_fs-\/>PushLocalVariable(\_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}@ITERATOR@"{}})));\ \textcolor{comment}{//use\ invalid\ id\ to\ make\ it\ inaccessible}}
+\DoxyCodeLine{01542\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOADNULLS,\ itrpos,1);}
+\DoxyCodeLine{01543\ \ \ \ \ \ \ \ \ SQInteger\ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01544\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_FOREACH,\ container,\ 0,\ indexpos);}
+\DoxyCodeLine{01545\ \ \ \ \ \ \ \ \ SQInteger\ foreachpos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01546\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POSTFOREACH,\ container,\ 0,\ indexpos);}
+\DoxyCodeLine{01547\ \ \ \ \ \ \ \ \ \textcolor{comment}{//generate\ the\ statement\ code}}
+\DoxyCodeLine{01548\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7b907f6aaa33ba7c361570a6dd204b6a}{BEGIN\_BREAKBLE\_BLOCK}}()}
+\DoxyCodeLine{01549\ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01550\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ jmppos\ -\/\ \_fs-\/>GetCurrentPos()\ -\/\ 1);}
+\DoxyCodeLine{01551\ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(foreachpos,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ foreachpos);}
+\DoxyCodeLine{01552\ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(foreachpos\ +\ 1,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ foreachpos);}
+\DoxyCodeLine{01553\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}{END\_BREAKBLE\_BLOCK}}(foreachpos\ -\/\ 1);}
+\DoxyCodeLine{01554\ \ \ \ \ \ \ \ \ \textcolor{comment}{//restore\ the\ local\ variable\ stack(remove\ index,val\ and\ ref\ idx)}}
+\DoxyCodeLine{01555\ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01556\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01557\ \ \ \ \ \}}
+\DoxyCodeLine{01563\ \ \ \ \ \textcolor{keywordtype}{void}\ SwitchStatement() }
+\DoxyCodeLine{01564\ \ \ \ \ \{}
+\DoxyCodeLine{01565\ \ \ \ \ \ \ \ \ Lex();\ Expect(\_SC(\textcolor{charliteral}{'('}));\ CommaExpr();\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01566\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\{'}));}
+\DoxyCodeLine{01567\ \ \ \ \ \ \ \ \ SQInteger\ expr\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01568\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ bfirst\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01569\ \ \ \ \ \ \ \ \ SQInteger\ tonextcondjmp\ =\ -\/1;}
+\DoxyCodeLine{01570\ \ \ \ \ \ \ \ \ SQInteger\ skipcondjmp\ =\ -\/1;}
+\DoxyCodeLine{01571\ \ \ \ \ \ \ \ \ SQInteger\ \_\_nbreaks\_\_\ =\ \_fs-\/>\_unresolvedbreaks.size();}
+\DoxyCodeLine{01572\ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.push\_back(0);}
+\DoxyCodeLine{01573\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ ==\ TK\_CASE)\ \{}
+\DoxyCodeLine{01574\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(!bfirst)\ \{}
+\DoxyCodeLine{01575\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ 0);}
+\DoxyCodeLine{01576\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ skipcondjmp\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01577\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(tonextcondjmp,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ tonextcondjmp);}
+\DoxyCodeLine{01578\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01579\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//condition}}
+\DoxyCodeLine{01580\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expression();\ Expect(\_SC(\textcolor{charliteral}{':'}));}
+\DoxyCodeLine{01581\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ trg\ =\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01582\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ eqtarget\ =\ trg;}
+\DoxyCodeLine{01583\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{bool}\ local\ =\ \_fs-\/>IsLocal(trg);}
+\DoxyCodeLine{01584\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(local)\ \{}
+\DoxyCodeLine{01585\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ eqtarget\ =\ \_fs-\/>PushTarget();\ \textcolor{comment}{//we\ need\ to\ allocate\ a\ extra\ reg}}
+\DoxyCodeLine{01586\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01587\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_EQ,\ eqtarget,\ trg,\ expr);}
+\DoxyCodeLine{01588\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JZ,\ eqtarget,\ 0);}
+\DoxyCodeLine{01589\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(local)\ \{}
+\DoxyCodeLine{01590\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01591\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01592\ }
+\DoxyCodeLine{01593\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//end\ condition}}
+\DoxyCodeLine{01594\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(skipcondjmp\ !=\ -\/1)\ \{}
+\DoxyCodeLine{01595\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(skipcondjmp,\ 1,\ (\_fs-\/>GetCurrentPos()\ -\/\ skipcondjmp));}
+\DoxyCodeLine{01596\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01597\ \ \ \ \ \ \ \ \ \ \ \ \ tonextcondjmp\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01598\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01599\ \ \ \ \ \ \ \ \ \ \ \ \ Statements();}
+\DoxyCodeLine{01600\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01601\ \ \ \ \ \ \ \ \ \ \ \ \ bfirst\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{01602\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01603\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(tonextcondjmp\ !=\ -\/1)}
+\DoxyCodeLine{01604\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(tonextcondjmp,\ 1,\ \_fs-\/>GetCurrentPos()\ -\/\ tonextcondjmp);}
+\DoxyCodeLine{01605\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_DEFAULT)\ \{}
+\DoxyCodeLine{01606\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expect(\_SC(\textcolor{charliteral}{':'}));}
+\DoxyCodeLine{01607\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01608\ \ \ \ \ \ \ \ \ \ \ \ \ Statements();}
+\DoxyCodeLine{01609\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01610\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01611\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\}'}));}
+\DoxyCodeLine{01612\ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01613\ \ \ \ \ \ \ \ \ \_\_nbreaks\_\_\ =\ \_fs-\/>\_unresolvedbreaks.size()\ -\/\ \_\_nbreaks\_\_;}
+\DoxyCodeLine{01614\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_\_nbreaks\_\_\ >\ 0)ResolveBreaks(\_fs,\ \_\_nbreaks\_\_);}
+\DoxyCodeLine{01615\ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.pop\_back();}
+\DoxyCodeLine{01616\ \ \ \ \ \}}
+\DoxyCodeLine{01622\ \ \ \ \ \textcolor{keywordtype}{void}\ FunctionStatement() }
+\DoxyCodeLine{01623\ \ \ \ \ \{}
+\DoxyCodeLine{01624\ \ \ \ \ \ \ \ \ SQObject\ id;}
+\DoxyCodeLine{01625\ \ \ \ \ \ \ \ \ Lex();\ \textcolor{keywordtype}{id}\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01626\ \ \ \ \ \ \ \ \ \_fs-\/>PushTarget(0);}
+\DoxyCodeLine{01627\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{01628\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_DOUBLE\_COLON)\ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{01629\ }
+\DoxyCodeLine{01630\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ ==\ TK\_DOUBLE\_COLON)\ \{}
+\DoxyCodeLine{01631\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01632\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{id}\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01633\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_LOAD,\ \_fs-\/>PushTarget(),\ \_fs-\/>GetConstant(\textcolor{keywordtype}{id}));}
+\DoxyCodeLine{01634\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_DOUBLE\_COLON)\ Emit2ArgsOP(\_OP\_GET);}
+\DoxyCodeLine{01635\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01636\ \ \ \ \ \ \ \ \ SQInteger\ boundtarget\ =\ 0xFF;}
+\DoxyCodeLine{01637\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'['}))\ \{}
+\DoxyCodeLine{01638\ \ \ \ \ \ \ \ \ \ \ \ \ boundtarget\ =\ ParseBindEnv();}
+\DoxyCodeLine{01639\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01640\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'('}));}
+\DoxyCodeLine{01641\ \ \ \ \ \ \ \ \ CreateFunction(\textcolor{keywordtype}{id},\ boundtarget);}
+\DoxyCodeLine{01642\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSURE,\ \_fs-\/>PushTarget(),\ \_fs-\/>\_functions.size()\ -\/\ 1,\ boundtarget);}
+\DoxyCodeLine{01643\ \ \ \ \ \ \ \ \ EmitDerefOp(\_OP\_NEWSLOT);}
+\DoxyCodeLine{01644\ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01645\ \ \ \ \ \}}
+\DoxyCodeLine{01651\ \ \ \ \ \textcolor{keywordtype}{void}\ ClassStatement() }
+\DoxyCodeLine{01652\ \ \ \ \ \{}
+\DoxyCodeLine{01653\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ es;}
+\DoxyCodeLine{01654\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01655\ \ \ \ \ \ \ \ \ es\ =\ \_es;}
+\DoxyCodeLine{01656\ \ \ \ \ \ \ \ \ \_es.\mbox{\hyperlink{structSQExpState_a478197c3351f18be77bc3a274b4f5a37}{donot\_get}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01657\ \ \ \ \ \ \ \ \ PrefixedExpr();}
+\DoxyCodeLine{01658\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}})\ \{}
+\DoxyCodeLine{01659\ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}invalid\ class\ name"{}}));}
+\DoxyCodeLine{01660\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01661\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_es.etype\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}\ ||\ \_es.etype\ ==\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ \{}
+\DoxyCodeLine{01662\ \ \ \ \ \ \ \ \ \ \ \ \ ClassExp();}
+\DoxyCodeLine{01663\ \ \ \ \ \ \ \ \ \ \ \ \ EmitDerefOp(\_OP\_NEWSLOT);}
+\DoxyCodeLine{01664\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01665\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01666\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01667\ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}cannot\ create\ a\ class\ in\ a\ local\ with\ the\ syntax(class\ <local>)"{}}));}
+\DoxyCodeLine{01668\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01669\ \ \ \ \ \ \ \ \ \_es\ =\ es;}
+\DoxyCodeLine{01670\ \ \ \ \ \}}
+\DoxyCodeLine{01676\ \ \ \ \ SQObject\ ExpectScalar() }
+\DoxyCodeLine{01677\ \ \ \ \ \{}
+\DoxyCodeLine{01678\ \ \ \ \ \ \ \ \ SQObject\ val;}
+\DoxyCodeLine{01679\ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_NULL;\ val.\_unVal.nInteger\ =\ 0;\ \textcolor{comment}{//shut\ up\ GCC\ 4.x}}
+\DoxyCodeLine{01680\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)\ \{}
+\DoxyCodeLine{01681\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:}
+\DoxyCodeLine{01682\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_INTEGER;}
+\DoxyCodeLine{01683\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.nInteger\ =\ \_lex.\_nvalue;}
+\DoxyCodeLine{01684\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01685\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:}
+\DoxyCodeLine{01686\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_FLOAT;}
+\DoxyCodeLine{01687\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.fFloat\ =\ \_lex.\_fvalue;}
+\DoxyCodeLine{01688\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01689\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_STRING\_LITERAL:}
+\DoxyCodeLine{01690\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ \_fs-\/>CreateString(\_lex.\_svalue,\_lex.\_longstr.size()-\/1);}
+\DoxyCodeLine{01691\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01692\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_TRUE:}
+\DoxyCodeLine{01693\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FALSE:}
+\DoxyCodeLine{01694\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_BOOL;}
+\DoxyCodeLine{01695\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.nInteger\ =\ \_token\ ==\ TK\_TRUE\ ?\ 1\ :\ 0;}
+\DoxyCodeLine{01696\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01697\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \textcolor{charliteral}{'-\/'}:}
+\DoxyCodeLine{01698\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01699\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{switch}(\_token)}
+\DoxyCodeLine{01700\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01701\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_INTEGER:}
+\DoxyCodeLine{01702\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_INTEGER;}
+\DoxyCodeLine{01703\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.nInteger\ =\ -\/\_lex.\_nvalue;}
+\DoxyCodeLine{01704\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01705\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ TK\_FLOAT:}
+\DoxyCodeLine{01706\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_FLOAT;}
+\DoxyCodeLine{01707\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.fFloat\ =\ -\/\_lex.\_fvalue;}
+\DoxyCodeLine{01708\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01709\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01710\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}scalar\ expected\ :\ integer,\ float"{}}));}
+\DoxyCodeLine{01711\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01712\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01713\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01714\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}scalar\ expected\ :\ integer,\ float,\ or\ string"{}}));}
+\DoxyCodeLine{01715\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01716\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01717\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ val;}
+\DoxyCodeLine{01718\ \ \ \ \ \}}
+\DoxyCodeLine{01724\ \ \ \ \ \textcolor{keywordtype}{void}\ EnumStatement() }
+\DoxyCodeLine{01725\ \ \ \ \ \{}
+\DoxyCodeLine{01726\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01727\ \ \ \ \ \ \ \ \ SQObject\ \textcolor{keywordtype}{id}\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01728\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\{'}));}
+\DoxyCodeLine{01729\ }
+\DoxyCodeLine{01730\ \ \ \ \ \ \ \ \ SQObject\ table\ =\ \_fs-\/>CreateTable();}
+\DoxyCodeLine{01731\ \ \ \ \ \ \ \ \ SQInteger\ nval\ =\ 0;}
+\DoxyCodeLine{01732\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token\ !=\ \_SC(\textcolor{charliteral}{'\}'}))\ \{}
+\DoxyCodeLine{01733\ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ key\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01734\ \ \ \ \ \ \ \ \ \ \ \ \ SQObject\ val;}
+\DoxyCodeLine{01735\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'='}))\ \{}
+\DoxyCodeLine{01736\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01737\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val\ =\ ExpectScalar();}
+\DoxyCodeLine{01738\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01739\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01740\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_type\ =\ OT\_INTEGER;}
+\DoxyCodeLine{01741\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ val.\_unVal.nInteger\ =\ nval++;}
+\DoxyCodeLine{01742\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01743\ \ \ \ \ \ \ \ \ \ \ \ \ \_table(table)-\/>NewSlot(SQObjectPtr(key),SQObjectPtr(val));}
+\DoxyCodeLine{01744\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \textcolor{charliteral}{','})\ Lex();}
+\DoxyCodeLine{01745\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01746\ \ \ \ \ \ \ \ \ SQTable\ *enums\ =\ \_table(\_ss(\_vm)-\/>\_consts);}
+\DoxyCodeLine{01747\ \ \ \ \ \ \ \ \ SQObjectPtr\ strongid\ =\ id;}
+\DoxyCodeLine{01748\ \ \ \ \ \ \ \ \ enums-\/>NewSlot(SQObjectPtr(strongid),SQObjectPtr(table));}
+\DoxyCodeLine{01749\ \ \ \ \ \ \ \ \ strongid.Null();}
+\DoxyCodeLine{01750\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01751\ \ \ \ \ \}}
+\DoxyCodeLine{01757\ \ \ \ \ \textcolor{keywordtype}{void}\ TryCatchStatement() }
+\DoxyCodeLine{01758\ \ \ \ \ \{}
+\DoxyCodeLine{01759\ \ \ \ \ \ \ \ \ SQObject\ exid;}
+\DoxyCodeLine{01760\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01761\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_PUSHTRAP,0,0);}
+\DoxyCodeLine{01762\ \ \ \ \ \ \ \ \ \_fs-\/>\_traps++;}
+\DoxyCodeLine{01763\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_breaktargets.size())\ \_fs-\/>\_breaktargets.top()++;}
+\DoxyCodeLine{01764\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_continuetargets.size())\ \_fs-\/>\_continuetargets.top()++;}
+\DoxyCodeLine{01765\ \ \ \ \ \ \ \ \ SQInteger\ trappos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01766\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01767\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01768\ \ \ \ \ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01769\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01770\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01771\ \ \ \ \ \ \ \ \ \_fs-\/>\_traps-\/-\/;}
+\DoxyCodeLine{01772\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_POPTRAP,\ 1,\ 0);}
+\DoxyCodeLine{01773\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_breaktargets.size())\ \_fs-\/>\_breaktargets.top()-\/-\/;}
+\DoxyCodeLine{01774\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>\_continuetargets.size())\ \_fs-\/>\_continuetargets.top()-\/-\/;}
+\DoxyCodeLine{01775\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_JMP,\ 0,\ 0);}
+\DoxyCodeLine{01776\ \ \ \ \ \ \ \ \ SQInteger\ jmppos\ =\ \_fs-\/>GetCurrentPos();}
+\DoxyCodeLine{01777\ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(trappos,\ 1,\ (\_fs-\/>GetCurrentPos()\ -\/\ trappos));}
+\DoxyCodeLine{01778\ \ \ \ \ \ \ \ \ Expect(TK\_CATCH);\ Expect(\_SC(\textcolor{charliteral}{'('}));\ exid\ =\ Expect(TK\_IDENTIFIER);\ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01779\ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01780\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}{BEGIN\_SCOPE}}();}
+\DoxyCodeLine{01781\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ ex\_target\ =\ \_fs-\/>PushLocalVariable(exid);}
+\DoxyCodeLine{01782\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParam(trappos,\ 0,\ ex\_target);}
+\DoxyCodeLine{01783\ \ \ \ \ \ \ \ \ \ \ \ \ Statement();}
+\DoxyCodeLine{01784\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetInstructionParams(jmppos,\ 0,\ (\_fs-\/>GetCurrentPos()\ -\/\ jmppos),\ 0);}
+\DoxyCodeLine{01785\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}{END\_SCOPE}}();}
+\DoxyCodeLine{01786\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01787\ \ \ \ \ \}}
+\DoxyCodeLine{01794\ \ \ \ \ SQInteger\ ParseBindEnv() }
+\DoxyCodeLine{01795\ \ \ \ \ \{}
+\DoxyCodeLine{01796\ \ \ \ \ \ \ \ \ SQInteger\ boundtarget;}
+\DoxyCodeLine{01797\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01798\ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{01799\ \ \ \ \ \ \ \ \ boundtarget\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01800\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{']'}));}
+\DoxyCodeLine{01801\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ boundtarget;}
+\DoxyCodeLine{01802\ \ \ \ \ \}}
+\DoxyCodeLine{01808\ \ \ \ \ \textcolor{keywordtype}{void}\ FunctionExp(\textcolor{keywordtype}{bool}\ lambda\ =\ \textcolor{keyword}{false}) }
+\DoxyCodeLine{01809\ \ \ \ \ \{}
+\DoxyCodeLine{01810\ \ \ \ \ \ \ \ \ Lex();\ }
+\DoxyCodeLine{01811\ \ \ \ \ \ \ \ \ SQInteger\ boundtarget\ =\ 0xFF;}
+\DoxyCodeLine{01812\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (\_token\ ==\ \_SC(\textcolor{charliteral}{'['}))\ \{}
+\DoxyCodeLine{01813\ \ \ \ \ \ \ \ \ \ \ \ \ boundtarget\ =\ ParseBindEnv();}
+\DoxyCodeLine{01814\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01815\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'('}));}
+\DoxyCodeLine{01816\ \ \ \ \ \ \ \ \ SQObjectPtr\ dummy;}
+\DoxyCodeLine{01817\ \ \ \ \ \ \ \ \ CreateFunction(dummy,\ boundtarget,\ lambda);}
+\DoxyCodeLine{01818\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSURE,\ \_fs-\/>PushTarget(),\ \_fs-\/>\_functions.size()\ -\/\ 1,\ boundtarget);}
+\DoxyCodeLine{01819\ \ \ \ \ \}}
+\DoxyCodeLine{01826\ \ \ \ \ \textcolor{keywordtype}{void}\ ClassExp() }
+\DoxyCodeLine{01827\ \ \ \ \ \{}
+\DoxyCodeLine{01828\ \ \ \ \ \ \ \ \ SQInteger\ base\ =\ -\/1;}
+\DoxyCodeLine{01829\ \ \ \ \ \ \ \ \ SQInteger\ attrs\ =\ -\/1;}
+\DoxyCodeLine{01830\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_EXTENDS)\ \{}
+\DoxyCodeLine{01831\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();\ Expression();}
+\DoxyCodeLine{01832\ \ \ \ \ \ \ \ \ \ \ \ \ base\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01833\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01834\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_ATTR\_OPEN)\ \{}
+\DoxyCodeLine{01835\ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01836\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWOBJ,\ \_fs-\/>PushTarget(),0,NOT\_TABLE);}
+\DoxyCodeLine{01837\ \ \ \ \ \ \ \ \ \ \ \ \ ParseTableOrClass(\_SC(\textcolor{charliteral}{','}),TK\_ATTR\_CLOSE);}
+\DoxyCodeLine{01838\ \ \ \ \ \ \ \ \ \ \ \ \ attrs\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01839\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01840\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{'\{'}));}
+\DoxyCodeLine{01841\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(attrs\ !=\ -\/1)\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01842\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(base\ !=\ -\/1)\ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01843\ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_NEWOBJ,\ \_fs-\/>PushTarget(),\ base,\ attrs,NOT\_CLASS);}
+\DoxyCodeLine{01844\ \ \ \ \ \ \ \ \ ParseTableOrClass(\_SC(\textcolor{charliteral}{';'}),\_SC(\textcolor{charliteral}{'\}'}));}
+\DoxyCodeLine{01845\ \ \ \ \ \}}
+\DoxyCodeLine{01851\ \ \ \ \ \textcolor{keywordtype}{void}\ DeleteExpr() }
+\DoxyCodeLine{01852\ \ \ \ \ \{}
+\DoxyCodeLine{01853\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ es;}
+\DoxyCodeLine{01854\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01855\ \ \ \ \ \ \ \ \ es\ =\ \_es;}
+\DoxyCodeLine{01856\ \ \ \ \ \ \ \ \ \_es.\mbox{\hyperlink{structSQExpState_a478197c3351f18be77bc3a274b4f5a37}{donot\_get}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01857\ \ \ \ \ \ \ \ \ PrefixedExpr();}
+\DoxyCodeLine{01858\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}})\ Error(\_SC(\textcolor{stringliteral}{"{}can't\ delete\ an\ expression"{}}));}
+\DoxyCodeLine{01859\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}\ ||\ \_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ \{}
+\DoxyCodeLine{01860\ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_DELETE);}
+\DoxyCodeLine{01861\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01862\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01863\ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}cannot\ delete\ an\ (outer)\ local"{}}));}
+\DoxyCodeLine{01864\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01865\ \ \ \ \ \ \ \ \ \_es\ =\ es;}
+\DoxyCodeLine{01866\ \ \ \ \ \}}
+\DoxyCodeLine{01872\ \ \ \ \ \textcolor{keywordtype}{void}\ PrefixIncDec(SQInteger\ token) }
+\DoxyCodeLine{01873\ \ \ \ \ \{}
+\DoxyCodeLine{01874\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ \ es;}
+\DoxyCodeLine{01875\ \ \ \ \ \ \ \ \ SQInteger\ diff\ =\ (token==TK\_MINUSMINUS)\ ?\ -\/1\ :\ 1;}
+\DoxyCodeLine{01876\ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01877\ \ \ \ \ \ \ \ \ es\ =\ \_es;}
+\DoxyCodeLine{01878\ \ \ \ \ \ \ \ \ \_es.\mbox{\hyperlink{structSQExpState_a478197c3351f18be77bc3a274b4f5a37}{donot\_get}}\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01879\ \ \ \ \ \ \ \ \ PrefixedExpr();}
+\DoxyCodeLine{01880\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}{EXPR}})\ \{}
+\DoxyCodeLine{01881\ \ \ \ \ \ \ \ \ \ \ \ \ Error(\_SC(\textcolor{stringliteral}{"{}can't\ '++'\ or\ '-\/-\/'\ an\ expression"{}}));}
+\DoxyCodeLine{01882\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01883\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}{OBJECT}}\ ||\ \_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a79bcfb6bde984f42d1124b068a509af7}{BASE}})\ \{}
+\DoxyCodeLine{01884\ \ \ \ \ \ \ \ \ \ \ \ \ Emit2ArgsOP(\_OP\_INC,\ diff);}
+\DoxyCodeLine{01885\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01886\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}{LOCAL}})\ \{}
+\DoxyCodeLine{01887\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ src\ =\ \_fs-\/>TopTarget();}
+\DoxyCodeLine{01888\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_INCL,\ src,\ src,\ 0,\ diff);}
+\DoxyCodeLine{01889\ }
+\DoxyCodeLine{01890\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01891\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_es.etype==\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}{OUTER}})\ \{}
+\DoxyCodeLine{01892\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ tmp\ =\ \_fs-\/>PushTarget();}
+\DoxyCodeLine{01893\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_GETOUTER,\ tmp,\ \_es.epos);}
+\DoxyCodeLine{01894\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_INCL,\ \ \ \ \ tmp,\ tmp,\ 0,\ diff);}
+\DoxyCodeLine{01895\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_SETOUTER,\ tmp,\ \_es.epos,\ tmp);}
+\DoxyCodeLine{01896\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01897\ \ \ \ \ \ \ \ \ \_es\ =\ es;}
+\DoxyCodeLine{01898\ \ \ \ \ \}}
+\DoxyCodeLine{01907\ \ \ \ \ \textcolor{keywordtype}{void}\ CreateFunction(SQObject\ \&name,SQInteger\ boundtarget,\textcolor{keywordtype}{bool}\ lambda\ =\ \textcolor{keyword}{false}) }
+\DoxyCodeLine{01908\ \ \ \ \ \{}
+\DoxyCodeLine{01909\ \ \ \ \ \ \ \ \ SQFuncState\ *funcstate\ =\ \_fs-\/>PushChildState(\_ss(\_vm));}
+\DoxyCodeLine{01910\ \ \ \ \ \ \ \ \ funcstate-\/>\_name\ =\ name;}
+\DoxyCodeLine{01911\ \ \ \ \ \ \ \ \ SQObject\ paramname;}
+\DoxyCodeLine{01912\ \ \ \ \ \ \ \ \ funcstate-\/>AddParameter(\_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}this"{}})));}
+\DoxyCodeLine{01913\ \ \ \ \ \ \ \ \ funcstate-\/>\_sourcename\ =\ \_sourcename;}
+\DoxyCodeLine{01914\ \ \ \ \ \ \ \ \ SQInteger\ defparams\ =\ 0;}
+\DoxyCodeLine{01915\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(\_token!=\_SC(\textcolor{charliteral}{')'}))\ \{}
+\DoxyCodeLine{01916\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ TK\_VARPARAMS)\ \{}
+\DoxyCodeLine{01917\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(defparams\ >\ 0)\ Error(\_SC(\textcolor{stringliteral}{"{}function\ with\ default\ parameters\ cannot\ have\ variable\ number\ of\ parameters"{}}));}
+\DoxyCodeLine{01918\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>AddParameter(\_fs-\/>CreateString(\_SC(\textcolor{stringliteral}{"{}vargv"{}})));}
+\DoxyCodeLine{01919\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>\_varparams\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{01920\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01921\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ !=\ \_SC(\textcolor{charliteral}{')'}))\ Error(\_SC(\textcolor{stringliteral}{"{}expected\ ')'"{}}));}
+\DoxyCodeLine{01922\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{01923\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01924\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01925\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ paramname\ =\ Expect(TK\_IDENTIFIER);}
+\DoxyCodeLine{01926\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>AddParameter(paramname);}
+\DoxyCodeLine{01927\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{'='}))\ \{}
+\DoxyCodeLine{01928\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Lex();}
+\DoxyCodeLine{01929\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{01930\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>AddDefaultParam(\_fs-\/>TopTarget());}
+\DoxyCodeLine{01931\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ defparams++;}
+\DoxyCodeLine{01932\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01933\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01934\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(defparams\ >\ 0)\ Error(\_SC(\textcolor{stringliteral}{"{}expected\ '='"{}}));}
+\DoxyCodeLine{01935\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01936\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_token\ ==\ \_SC(\textcolor{charliteral}{','}))\ Lex();}
+\DoxyCodeLine{01937\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \textcolor{keywordflow}{if}(\_token\ !=\ \_SC(\textcolor{charliteral}{')'}))\ Error(\_SC(\textcolor{stringliteral}{"{}expected\ ')'\ or\ ','"{}}));}
+\DoxyCodeLine{01938\ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01939\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01940\ \ \ \ \ \ \ \ \ Expect(\_SC(\textcolor{charliteral}{')'}));}
+\DoxyCodeLine{01941\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (boundtarget\ !=\ 0xFF)\ \{}
+\DoxyCodeLine{01942\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01943\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01944\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}(SQInteger\ n\ =\ 0;\ n\ <\ defparams;\ n++)\ \{}
+\DoxyCodeLine{01945\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>PopTarget();}
+\DoxyCodeLine{01946\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01947\ }
+\DoxyCodeLine{01948\ \ \ \ \ \ \ \ \ SQFuncState\ *currchunk\ =\ \_fs;}
+\DoxyCodeLine{01949\ \ \ \ \ \ \ \ \ \_fs\ =\ funcstate;}
+\DoxyCodeLine{01950\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(lambda)\ \{}
+\DoxyCodeLine{01951\ \ \ \ \ \ \ \ \ \ \ \ \ Expression();}
+\DoxyCodeLine{01952\ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_RETURN,\ 1,\ \_fs-\/>PopTarget());\}}
+\DoxyCodeLine{01953\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{01954\ \ \ \ \ \ \ \ \ \ \ \ \ Statement(\textcolor{keyword}{false});}
+\DoxyCodeLine{01955\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01956\ \ \ \ \ \ \ \ \ funcstate-\/>AddLineInfos(\_lex.\_prevtoken\ ==\ \_SC(\textcolor{charliteral}{'\(\backslash\)n'})?\_lex.\_lasttokenline:\_lex.\_currentline,\ \_lineinfo,\ true);}
+\DoxyCodeLine{01957\ \ \ \ \ \ \ \ \ funcstate-\/>AddInstruction(\_OP\_RETURN,\ -\/1);}
+\DoxyCodeLine{01958\ \ \ \ \ \ \ \ \ funcstate-\/>SetStackSize(0);}
+\DoxyCodeLine{01959\ }
+\DoxyCodeLine{01960\ \ \ \ \ \ \ \ \ SQFunctionProto\ *func\ =\ funcstate-\/>BuildProto();}
+\DoxyCodeLine{01961\ \textcolor{preprocessor}{\#ifdef\ \_DEBUG\_DUMP }}
+\DoxyCodeLine{01962\ \ \ \ \ \ \ \ \ funcstate-\/>Dump(func);}
+\DoxyCodeLine{01963\ \textcolor{preprocessor}{\#endif }}
+\DoxyCodeLine{01964\ \ \ \ \ \ \ \ \ \_fs\ =\ currchunk;}
+\DoxyCodeLine{01965\ \ \ \ \ \ \ \ \ \_fs-\/>\_functions.push\_back(func);}
+\DoxyCodeLine{01966\ \ \ \ \ \ \ \ \ \_fs-\/>PopChildState();}
+\DoxyCodeLine{01967\ \ \ \ \ \}}
+\DoxyCodeLine{01975\ \ \ \ \ \textcolor{keywordtype}{void}\ ResolveBreaks(SQFuncState\ *funcstate,\ SQInteger\ ntoresolve) }
+\DoxyCodeLine{01976\ \ \ \ \ \{}
+\DoxyCodeLine{01977\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(ntoresolve\ >\ 0)\ \{}
+\DoxyCodeLine{01978\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ pos\ =\ funcstate-\/>\_unresolvedbreaks.back();}
+\DoxyCodeLine{01979\ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>\_unresolvedbreaks.pop\_back();}
+\DoxyCodeLine{01980\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//set\ the\ jmp\ instruction}}
+\DoxyCodeLine{01981\ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>SetInstructionParams(pos,\ 0,\ funcstate-\/>GetCurrentPos()\ -\/\ pos,\ 0);}
+\DoxyCodeLine{01982\ \ \ \ \ \ \ \ \ \ \ \ \ ntoresolve-\/-\/;}
+\DoxyCodeLine{01983\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{01984\ \ \ \ \ \}}
+\DoxyCodeLine{01993\ \ \ \ \ \textcolor{keywordtype}{void}\ ResolveContinues(SQFuncState\ *funcstate,\ SQInteger\ ntoresolve,\ SQInteger\ targetpos) }
+\DoxyCodeLine{01994\ \ \ \ \ \{}
+\DoxyCodeLine{01995\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{while}(ntoresolve\ >\ 0)\ \{}
+\DoxyCodeLine{01996\ \ \ \ \ \ \ \ \ \ \ \ \ SQInteger\ pos\ =\ funcstate-\/>\_unresolvedcontinues.back();}
+\DoxyCodeLine{01997\ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>\_unresolvedcontinues.pop\_back();}
+\DoxyCodeLine{01998\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{comment}{//set\ the\ jmp\ instruction}}
+\DoxyCodeLine{01999\ \ \ \ \ \ \ \ \ \ \ \ \ funcstate-\/>SetInstructionParams(pos,\ 0,\ targetpos\ -\/\ pos,\ 0);}
+\DoxyCodeLine{02000\ \ \ \ \ \ \ \ \ \ \ \ \ ntoresolve-\/-\/;}
+\DoxyCodeLine{02001\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{02002\ \ \ \ \ \}}
+\DoxyCodeLine{02003\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{02004\ \ \ \ \ SQInteger\ \_token;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02005\ \ \ \ \ SQFuncState\ *\_fs;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02006\ \ \ \ \ SQObjectPtr\ \_sourcename;\ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02007\ \ \ \ \ SQLexer\ \_lex;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02008\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_lineinfo;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02009\ \ \ \ \ \textcolor{keywordtype}{bool}\ \_raiseerror;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02010\ \ \ \ \ SQInteger\ \_debugline;\ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02011\ \ \ \ \ SQInteger\ \_debugop;\ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02012\ \ \ \ \ \mbox{\hyperlink{structSQExpState}{SQExpState}}\ \ \ \_es;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02013\ \ \ \ \ \mbox{\hyperlink{structSQScope}{SQScope}}\ \_scope;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02014\ \ \ \ \ SQChar\ \_compilererror[\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7552f1c1e6de21647c7a224101820958}{MAX\_COMPILER\_ERROR\_LEN}}];\ }
+\DoxyCodeLine{02015\ \ \ \ \ jmp\_buf\ \_errorjmp;\ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02016\ \ \ \ \ SQVM\ *\_vm;\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{02017\ \};}
+\DoxyCodeLine{02018\ }
+\DoxyCodeLine{02031\ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a}{Compile}}(SQVM\ *vm,SQLEXREADFUNC\ rg,\ SQUserPointer\ up,\ \textcolor{keyword}{const}\ SQChar\ *sourcename,\ SQObjectPtr\ \&out,\ \textcolor{keywordtype}{bool}\ raiseerror,\ \textcolor{keywordtype}{bool}\ lineinfo) }
+\DoxyCodeLine{02032\ \{}
+\DoxyCodeLine{02033\ \ \ \ \ \mbox{\hyperlink{classSQCompiler}{SQCompiler}}\ p(vm,\ rg,\ up,\ sourcename,\ raiseerror,\ lineinfo);}
+\DoxyCodeLine{02034\ \ \ \ \ \textcolor{keywordflow}{return}\ p.Compile(out);}
+\DoxyCodeLine{02035\ \}}
+\DoxyCodeLine{02036\ }
+\DoxyCodeLine{02037\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a50d554805855ce11ed9373d27eda4b56} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!BEGIN\_SCOPE@{BEGIN\_SCOPE}}
+\index{BEGIN\_SCOPE@{BEGIN\_SCOPE}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{BEGIN\_SCOPE}{BEGIN\_SCOPE}}
+{\footnotesize\ttfamily \#define BEGIN\+\_\+\+SCOPE(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{structSQScope}{SQScope}}\ \_\_oldscope\_\_\ =\ \_scope;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope.\mbox{\hyperlink{structSQScope_ac1606ef3c5ae85a47c099bdf31c47bec}{outers}}\ =\ \_fs-\/>\_outers;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope.stacksize\ =\ \_fs-\/>GetStackSize();}
+
+\end{DoxyCode}
+
+
+新しいスコープを開始するためのマクロ。 
+
+現在のスコープ情報を保存し、新しいスコープのスタックサイズとアウター変数の数を初期化します。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00065}{65}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a2d8f18ace84575905881bd3531461914} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!END\_BREAKBLE\_BLOCK@{END\_BREAKBLE\_BLOCK}}
+\index{END\_BREAKBLE\_BLOCK@{END\_BREAKBLE\_BLOCK}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{END\_BREAKBLE\_BLOCK}{END\_BREAKBLE\_BLOCK}}
+{\footnotesize\ttfamily \#define END\+\_\+\+BREAKBLE\+\_\+\+BLOCK(\begin{DoxyParamCaption}\item[{}]{continue\+\_\+target }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\_\_nbreaks\_\_=\_fs-\/>\_unresolvedbreaks.size()-\/\_\_nbreaks\_\_;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_ncontinues\_\_=\_fs-\/>\_unresolvedcontinues.size()-\/\_\_ncontinues\_\_;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_ncontinues\_\_>0)ResolveContinues(\_fs,\_\_ncontinues\_\_,continue\_target);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_nbreaks\_\_>0)ResolveBreaks(\_fs,\_\_nbreaks\_\_);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.pop\_back();\_fs-\/>\_continuetargets.pop\_back();\}}
+
+\end{DoxyCode}
+
+
+break/continueが可能なブロックを終了するためのマクロ。 
+
+ブロック内で追加された未解決のbreakおよびcontinueを解決します。 その後、break/continueターゲットをスタックからポップします。 
+\begin{DoxyParams}{Parameters}
+{\em continue\+\_\+target} & continue文のジャンプ先となる命令の位置。 \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00121}{121}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00121\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\_\_nbreaks\_\_=\_fs-\/>\_unresolvedbreaks.size()-\/\_\_nbreaks\_\_;\ \(\backslash\)}
+\DoxyCodeLine{00122\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_\_ncontinues\_\_=\_fs-\/>\_unresolvedcontinues.size()-\/\_\_ncontinues\_\_;\ \(\backslash\) }
+\DoxyCodeLine{00123\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_ncontinues\_\_>0)ResolveContinues(\_fs,\_\_ncontinues\_\_,continue\_target);\ \(\backslash\)}
+\DoxyCodeLine{00124\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_\_nbreaks\_\_>0)ResolveBreaks(\_fs,\_\_nbreaks\_\_);\ \(\backslash\)}
+\DoxyCodeLine{00125\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>\_breaktargets.pop\_back();\_fs-\/>\_continuetargets.pop\_back();\}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a8e78340fdfbd037bb666dfa4e23afa22} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!END\_SCOPE@{END\_SCOPE}}
+\index{END\_SCOPE@{END\_SCOPE}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{END\_SCOPE}{END\_SCOPE}}
+{\footnotesize\ttfamily \#define END\+\_\+\+SCOPE(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ SQInteger\ oldouters\ =\ \_fs-\/>\_outers;\(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_fs-\/>GetStackSize()\ !=\ \_scope.stacksize)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(oldouters\ !=\ \_fs-\/>\_outers)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSE,0,\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope\ =\ \_\_oldscope\_\_;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+スコープを終了するマクロ。 
+
+スタックサイズをスコープ開始時の状態に戻します。 スコープ内でアウター変数の数が変化した場合は、クローズ命令(\+\_\+\+OP\+\_\+\+CLOSE)を生成します。 最後にスコープ情報を復元します。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00096}{96}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \ SQInteger\ oldouters\ =\ \_fs-\/>\_outers;\(\backslash\) }
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_fs-\/>GetStackSize()\ !=\ \_scope.stacksize)\ \{\ \(\backslash\)}
+\DoxyCodeLine{00098\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(\_scope.stacksize);\ \(\backslash\) }
+\DoxyCodeLine{00099\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(oldouters\ !=\ \_fs-\/>\_outers)\ \{\ \(\backslash\)}
+\DoxyCodeLine{00100\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSE,0,\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00102\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00103\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope\ =\ \_\_oldscope\_\_;\ \(\backslash\)}
+\DoxyCodeLine{00104\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a2b3ff2bb2a9df9700e94f090cac1424e}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a2b3ff2bb2a9df9700e94f090cac1424e} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!END\_SCOPE\_NO\_CLOSE@{END\_SCOPE\_NO\_CLOSE}}
+\index{END\_SCOPE\_NO\_CLOSE@{END\_SCOPE\_NO\_CLOSE}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{END\_SCOPE\_NO\_CLOSE}{END\_SCOPE\_NO\_CLOSE}}
+{\footnotesize\ttfamily \#define END\+\_\+\+SCOPE\+\_\+\+NO\+\_\+\+CLOSE(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \textcolor{keywordflow}{if}(\_fs-\/>GetStackSize()\ !=\ \_scope.stacksize)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope\ =\ \_\_oldscope\_\_;\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+スコープを終了するマクロ（クローズ命令なし）。 
+
+スタックサイズをスコープ開始時の状態に戻し、スコープ情報を復元します。 アウター変数の解決（クローズ命令の生成）は行いません。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00084}{84}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \ \textcolor{keywordflow}{if}(\_fs-\/>GetStackSize()\ !=\ \_scope.stacksize)\ \{\ \(\backslash\)}
+\DoxyCodeLine{00085\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>SetStackSize(\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00087\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_scope\ =\ \_\_oldscope\_\_;\ \(\backslash\)}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a3102a3792f55f3ad5ff10f5fe3a6ce79} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!EXPR@{EXPR}}
+\index{EXPR@{EXPR}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{EXPR}{EXPR}}
+{\footnotesize\ttfamily \#define EXPR~1}
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00019}{19}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a3758dd5d300a594312c95bc393378df0} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!LOCAL@{LOCAL}}
+\index{LOCAL@{LOCAL}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{LOCAL}{LOCAL}}
+{\footnotesize\ttfamily \#define LOCAL~4}
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00022}{22}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a7552f1c1e6de21647c7a224101820958}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a7552f1c1e6de21647c7a224101820958} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!MAX\_COMPILER\_ERROR\_LEN@{MAX\_COMPILER\_ERROR\_LEN}}
+\index{MAX\_COMPILER\_ERROR\_LEN@{MAX\_COMPILER\_ERROR\_LEN}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{MAX\_COMPILER\_ERROR\_LEN}{MAX\_COMPILER\_ERROR\_LEN}}
+{\footnotesize\ttfamily \#define MAX\+\_\+\+COMPILER\+\_\+\+ERROR\+\_\+\+LEN~256}
+
+
+
+コンパイラエラーメッセージの最大長。 
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00050}{50}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a312b1bb7bc37ad2b371ca636c9da2e39} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!OBJECT@{OBJECT}}
+\index{OBJECT@{OBJECT}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{OBJECT}{OBJECT}}
+{\footnotesize\ttfamily \#define OBJECT~2}
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00020}{20}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a1a48ea48f9e533b4556ae095d87edf1c} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!OUTER@{OUTER}}
+\index{OUTER@{OUTER}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{OUTER}{OUTER}}
+{\footnotesize\ttfamily \#define OUTER~5}
+
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00023}{23}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_af7c3b84b4f986a1b01dfe3259290d556}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_af7c3b84b4f986a1b01dfe3259290d556} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!RESOLVE\_OUTERS@{RESOLVE\_OUTERS}}
+\index{RESOLVE\_OUTERS@{RESOLVE\_OUTERS}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{RESOLVE\_OUTERS}{RESOLVE\_OUTERS}}
+{\footnotesize\ttfamily \#define RESOLVE\+\_\+\+OUTERS(\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+{\bfseries Value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}(\_fs-\/>GetStackSize()\ !=\ \_scope.stacksize)\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_fs-\/>CountOuters(\_scope.stacksize))\ \{\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSE,0,\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+アウター変数を解決するためのマクロ。 
+
+現在のスコープを抜ける際に、必要であればクローズ命令(\+\_\+\+OP\+\_\+\+CLOSE)を追加します。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00073}{73}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00073\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{\ \(\backslash\) }
+\DoxyCodeLine{00074\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ if(\_fs-\/>CountOuters(\_scope.stacksize))\ \{\ \(\backslash\)}
+\DoxyCodeLine{00075\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \_fs-\/>AddInstruction(\_OP\_CLOSE,0,\_scope.stacksize);\ \(\backslash\)}
+\DoxyCodeLine{00076\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}\ \(\backslash\)}
+\DoxyCodeLine{00077\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a}\label{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a} 
+\index{squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}!Compile@{Compile}}
+\index{Compile@{Compile}!squirrel3\_squirrel\_sqcompiler\_v1.cpp@{squirrel3\_squirrel\_sqcompiler\_v1.cpp}}
+\doxysubsubsection{\texorpdfstring{Compile()}{Compile()}}
+{\footnotesize\ttfamily bool Compile (\begin{DoxyParamCaption}\item[{SQVM \texorpdfstring{$\ast$}{*}}]{vm,  }\item[{SQLEXREADFUNC}]{rg,  }\item[{SQUser\+Pointer}]{up,  }\item[{const SQChar \texorpdfstring{$\ast$}{*}}]{sourcename,  }\item[{SQObject\+Ptr \&}]{out,  }\item[{bool}]{raiseerror,  }\item[{bool}]{lineinfo }\end{DoxyParamCaption})}
+
+
+
+Squirrelスクリプトをコンパイルするグローバル関数。 
+
+SQCompilerクラスのラッパーとして機能します。 
+\begin{DoxyParams}[1]{Parameters}
+ & {\em vm} & 関連付けられる\+Squirrel VMへのポインタ。 \\
+\hline
+ & {\em rg} & 字句解析器がソースコードを読み込むための関数ポインタ。 \\
+\hline
+ & {\em up} & rg関数に渡されるユーザーポインタ。 \\
+\hline
+ & {\em sourcename} & コンパイル対象のソース名。 \\
+\hline
+\mbox{\texttt{ out}}  & {\em out} & コンパイル結果として生成された関数プロトタイプの格納先。 \\
+\hline
+ & {\em raiseerror} & エラー発生時にエラーハンドラを呼び出すかどうか。 \\
+\hline
+ & {\em lineinfo} & バイトコードに行情報を含めるかどうか。 \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+コンパイルが成功した場合はtrue、失敗した場合はfalse。 
+\end{DoxyReturn}
+
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l02031}{2031}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{02032\ \{}
+\DoxyCodeLine{02033\ \ \ \ \ \mbox{\hyperlink{classSQCompiler}{SQCompiler}}\ p(vm,\ rg,\ up,\ sourcename,\ raiseerror,\ lineinfo);}
+\DoxyCodeLine{02034\ \ \ \ \ \textcolor{keywordflow}{return}\ p.Compile(out);}
+\DoxyCodeLine{02035\ \}}
+
+\end{DoxyCode}
+
+
+References \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00280}{SQCompiler\+::\+Compile()}}.
+
+Here is the call graph for this function\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{squirrel3__squirrel__sqcompiler__v1_8cpp_a7efa63cefc29340c682fc0d25eb2139a_cgraph}
+\end{center}
+\end{figure}

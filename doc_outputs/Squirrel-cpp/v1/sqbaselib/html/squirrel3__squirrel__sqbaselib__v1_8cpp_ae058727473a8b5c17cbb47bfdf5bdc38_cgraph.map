@@ -1,0 +1,5 @@
+<map id="array_map" name="array_map">
+<area shape="rect" id="Node000001" title="配列の各要素を変換（マップ）し、新しい配列を返します。" alt="" coords="5,5,97,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#aed925b1fb84786a529cdf71af277c8e3" title="配列の各要素に関数を適用し、結果を別の配列に格納するヘルパー関数。" alt="" coords="145,5,252,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="98,15,132,15,132,21,98,21"/>
+</map>

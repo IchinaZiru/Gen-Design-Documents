@@ -1,0 +1,95 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}File Index}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}File List}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {2}File Documentation}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}squirrel3\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}squirrel\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}sqbaselib\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}v1.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}cpp File Reference}{3}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Macro Definition Documentation}{7}{subsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.1.1}STRING\_TOFUNCZ}{7}{subsubsection.2.1.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.1.2}TABLE\_TO\_ARRAY\_FUNC}{8}{subsubsection.2.1.1.2}%
+\contentsline {subsection}{\numberline {2.1.2}Function Documentation}{9}{subsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.2.1}\_\_getcallstackinfos()}{9}{subsubsection.2.1.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.2.2}\_\_map\_array()}{10}{subsubsection.2.1.2.2}%
+\contentsline {subsubsection}{\numberline {2.1.2.3}\_closure\_acall()}{11}{subsubsection.2.1.2.3}%
+\contentsline {subsubsection}{\numberline {2.1.2.4}\_hsort()}{12}{subsubsection.2.1.2.4}%
+\contentsline {subsubsection}{\numberline {2.1.2.5}\_hsort\_sift\_down()}{13}{subsubsection.2.1.2.5}%
+\contentsline {subsubsection}{\numberline {2.1.2.6}\_sort\_compare()}{15}{subsubsection.2.1.2.6}%
+\contentsline {subsubsection}{\numberline {2.1.2.7}array\_append()}{16}{subsubsection.2.1.2.7}%
+\contentsline {subsubsection}{\numberline {2.1.2.8}array\_apply()}{16}{subsubsection.2.1.2.8}%
+\contentsline {subsubsection}{\numberline {2.1.2.9}array\_extend()}{17}{subsubsection.2.1.2.9}%
+\contentsline {subsubsection}{\numberline {2.1.2.10}array\_filter()}{17}{subsubsection.2.1.2.10}%
+\contentsline {subsubsection}{\numberline {2.1.2.11}array\_find()}{18}{subsubsection.2.1.2.11}%
+\contentsline {subsubsection}{\numberline {2.1.2.12}array\_insert()}{19}{subsubsection.2.1.2.12}%
+\contentsline {subsubsection}{\numberline {2.1.2.13}array\_map()}{19}{subsubsection.2.1.2.13}%
+\contentsline {subsubsection}{\numberline {2.1.2.14}array\_pop()}{20}{subsubsection.2.1.2.14}%
+\contentsline {subsubsection}{\numberline {2.1.2.15}array\_reduce()}{20}{subsubsection.2.1.2.15}%
+\contentsline {subsubsection}{\numberline {2.1.2.16}array\_remove()}{21}{subsubsection.2.1.2.16}%
+\contentsline {subsubsection}{\numberline {2.1.2.17}array\_resize()}{21}{subsubsection.2.1.2.17}%
+\contentsline {subsubsection}{\numberline {2.1.2.18}array\_reverse()}{22}{subsubsection.2.1.2.18}%
+\contentsline {subsubsection}{\numberline {2.1.2.19}array\_slice()}{22}{subsubsection.2.1.2.19}%
+\contentsline {subsubsection}{\numberline {2.1.2.20}array\_sort()}{23}{subsubsection.2.1.2.20}%
+\contentsline {subsubsection}{\numberline {2.1.2.21}array\_top()}{24}{subsubsection.2.1.2.21}%
+\contentsline {subsubsection}{\numberline {2.1.2.22}base\_array()}{24}{subsubsection.2.1.2.22}%
+\contentsline {subsubsection}{\numberline {2.1.2.23}base\_assert()}{25}{subsubsection.2.1.2.23}%
+\contentsline {subsubsection}{\numberline {2.1.2.24}base\_callee()}{26}{subsubsection.2.1.2.24}%
+\contentsline {subsubsection}{\numberline {2.1.2.25}base\_collectgarbage()}{26}{subsubsection.2.1.2.25}%
+\contentsline {subsubsection}{\numberline {2.1.2.26}base\_compilestring()}{26}{subsubsection.2.1.2.26}%
+\contentsline {subsubsection}{\numberline {2.1.2.27}base\_dummy()}{27}{subsubsection.2.1.2.27}%
+\contentsline {subsubsection}{\numberline {2.1.2.28}base\_enabledebuginfo()}{27}{subsubsection.2.1.2.28}%
+\contentsline {subsubsection}{\numberline {2.1.2.29}base\_error()}{28}{subsubsection.2.1.2.29}%
+\contentsline {subsubsection}{\numberline {2.1.2.30}base\_getconsttable()}{28}{subsubsection.2.1.2.30}%
+\contentsline {subsubsection}{\numberline {2.1.2.31}base\_getroottable()}{29}{subsubsection.2.1.2.31}%
+\contentsline {subsubsection}{\numberline {2.1.2.32}base\_getstackinfos()}{29}{subsubsection.2.1.2.32}%
+\contentsline {subsubsection}{\numberline {2.1.2.33}base\_newthread()}{30}{subsubsection.2.1.2.33}%
+\contentsline {subsubsection}{\numberline {2.1.2.34}base\_print()}{30}{subsubsection.2.1.2.34}%
+\contentsline {subsubsection}{\numberline {2.1.2.35}base\_resurectureachable()}{31}{subsubsection.2.1.2.35}%
+\contentsline {subsubsection}{\numberline {2.1.2.36}base\_setconsttable()}{31}{subsubsection.2.1.2.36}%
+\contentsline {subsubsection}{\numberline {2.1.2.37}base\_setdebughook()}{32}{subsubsection.2.1.2.37}%
+\contentsline {subsubsection}{\numberline {2.1.2.38}base\_seterrorhandler()}{32}{subsubsection.2.1.2.38}%
+\contentsline {subsubsection}{\numberline {2.1.2.39}base\_setroottable()}{33}{subsubsection.2.1.2.39}%
+\contentsline {subsubsection}{\numberline {2.1.2.40}base\_suspend()}{33}{subsubsection.2.1.2.40}%
+\contentsline {subsubsection}{\numberline {2.1.2.41}base\_type()}{34}{subsubsection.2.1.2.41}%
+\contentsline {subsubsection}{\numberline {2.1.2.42}class\_getattributes()}{34}{subsubsection.2.1.2.42}%
+\contentsline {subsubsection}{\numberline {2.1.2.43}class\_getbase()}{35}{subsubsection.2.1.2.43}%
+\contentsline {subsubsection}{\numberline {2.1.2.44}class\_instance()}{35}{subsubsection.2.1.2.44}%
+\contentsline {subsubsection}{\numberline {2.1.2.45}class\_newmember()}{35}{subsubsection.2.1.2.45}%
+\contentsline {subsubsection}{\numberline {2.1.2.46}class\_rawnewmember()}{36}{subsubsection.2.1.2.46}%
+\contentsline {subsubsection}{\numberline {2.1.2.47}class\_setattributes()}{36}{subsubsection.2.1.2.47}%
+\contentsline {subsubsection}{\numberline {2.1.2.48}closure\_acall()}{37}{subsubsection.2.1.2.48}%
+\contentsline {subsubsection}{\numberline {2.1.2.49}closure\_bindenv()}{38}{subsubsection.2.1.2.49}%
+\contentsline {subsubsection}{\numberline {2.1.2.50}closure\_call()}{38}{subsubsection.2.1.2.50}%
+\contentsline {subsubsection}{\numberline {2.1.2.51}closure\_getinfos()}{38}{subsubsection.2.1.2.51}%
+\contentsline {subsubsection}{\numberline {2.1.2.52}closure\_getroot()}{39}{subsubsection.2.1.2.52}%
+\contentsline {subsubsection}{\numberline {2.1.2.53}closure\_pacall()}{40}{subsubsection.2.1.2.53}%
+\contentsline {subsubsection}{\numberline {2.1.2.54}closure\_pcall()}{41}{subsubsection.2.1.2.54}%
+\contentsline {subsubsection}{\numberline {2.1.2.55}closure\_setroot()}{41}{subsubsection.2.1.2.55}%
+\contentsline {subsubsection}{\numberline {2.1.2.56}container\_rawexists()}{41}{subsubsection.2.1.2.56}%
+\contentsline {subsubsection}{\numberline {2.1.2.57}container\_rawget()}{42}{subsubsection.2.1.2.57}%
+\contentsline {subsubsection}{\numberline {2.1.2.58}container\_rawset()}{42}{subsubsection.2.1.2.58}%
+\contentsline {subsubsection}{\numberline {2.1.2.59}default\_delegate\_len()}{43}{subsubsection.2.1.2.59}%
+\contentsline {subsubsection}{\numberline {2.1.2.60}default\_delegate\_tofloat()}{43}{subsubsection.2.1.2.60}%
+\contentsline {subsubsection}{\numberline {2.1.2.61}default\_delegate\_tointeger()}{44}{subsubsection.2.1.2.61}%
+\contentsline {subsubsection}{\numberline {2.1.2.62}default\_delegate\_tostring()}{45}{subsubsection.2.1.2.62}%
+\contentsline {subsubsection}{\numberline {2.1.2.63}generator\_getstatus()}{46}{subsubsection.2.1.2.63}%
+\contentsline {subsubsection}{\numberline {2.1.2.64}get\_slice\_params()}{46}{subsubsection.2.1.2.64}%
+\contentsline {subsubsection}{\numberline {2.1.2.65}instance\_getclass()}{47}{subsubsection.2.1.2.65}%
+\contentsline {subsubsection}{\numberline {2.1.2.66}number\_delegate\_tochar()}{48}{subsubsection.2.1.2.66}%
+\contentsline {subsubsection}{\numberline {2.1.2.67}obj\_clear()}{48}{subsubsection.2.1.2.67}%
+\contentsline {subsubsection}{\numberline {2.1.2.68}obj\_delegate\_weakref()}{48}{subsubsection.2.1.2.68}%
+\contentsline {subsubsection}{\numberline {2.1.2.69}sq\_base\_register()}{49}{subsubsection.2.1.2.69}%
+\contentsline {subsubsection}{\numberline {2.1.2.70}str2num()}{49}{subsubsection.2.1.2.70}%
+\contentsline {subsubsection}{\numberline {2.1.2.71}string\_find()}{51}{subsubsection.2.1.2.71}%
+\contentsline {subsubsection}{\numberline {2.1.2.72}string\_slice()}{51}{subsubsection.2.1.2.72}%
+\contentsline {subsubsection}{\numberline {2.1.2.73}table\_filter()}{52}{subsubsection.2.1.2.73}%
+\contentsline {subsubsection}{\numberline {2.1.2.74}table\_getdelegate()}{53}{subsubsection.2.1.2.74}%
+\contentsline {subsubsection}{\numberline {2.1.2.75}table\_map()}{53}{subsubsection.2.1.2.75}%
+\contentsline {subsubsection}{\numberline {2.1.2.76}table\_rawdelete()}{54}{subsubsection.2.1.2.76}%
+\contentsline {subsubsection}{\numberline {2.1.2.77}table\_setdelegate()}{54}{subsubsection.2.1.2.77}%
+\contentsline {subsubsection}{\numberline {2.1.2.78}thread\_call()}{55}{subsubsection.2.1.2.78}%
+\contentsline {subsubsection}{\numberline {2.1.2.79}thread\_getstackinfos()}{55}{subsubsection.2.1.2.79}%
+\contentsline {subsubsection}{\numberline {2.1.2.80}thread\_getstatus()}{56}{subsubsection.2.1.2.80}%
+\contentsline {subsubsection}{\numberline {2.1.2.81}thread\_wakeup()}{57}{subsubsection.2.1.2.81}%
+\contentsline {subsubsection}{\numberline {2.1.2.82}thread\_wakeupthrow()}{58}{subsubsection.2.1.2.82}%
+\contentsline {subsubsection}{\numberline {2.1.2.83}weakref\_ref()}{58}{subsubsection.2.1.2.83}%
+\contentsline {subsection}{\numberline {2.1.3}Variable Documentation}{59}{subsection.2.1.3}%
+\contentsline {subsubsection}{\numberline {2.1.3.1}base\_funcs}{59}{subsubsection.2.1.3.1}%
+\contentsline {section}{\numberline {2.2}squirrel3\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}squirrel\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}sqbaselib\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}v1.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}cpp}{60}{section.2.2}%

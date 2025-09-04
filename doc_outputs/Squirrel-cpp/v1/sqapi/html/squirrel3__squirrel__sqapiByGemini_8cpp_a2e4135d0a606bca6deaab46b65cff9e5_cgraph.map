@@ -1,0 +1,5 @@
+<map id="sq_getclosureinfo" name="sq_getclosureinfo">
+<area shape="rect" id="Node000001" title="クロージャに関する情報（パラメータ数、自由変数の数）を取得します。" alt="" coords="5,5,143,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a1120339f46d18eddf68f7a7323937ddb" title="VMに文字列のエラーを設定し、エラー状態にします。" alt="" coords="191,5,303,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,15,177,15,177,21,143,21"/>
+</map>

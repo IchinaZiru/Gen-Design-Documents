@@ -1,0 +1,7 @@
+<map id="SQCompiler::ExpectScalar" name="SQCompiler::ExpectScalar">
+<area shape="rect" id="Node000001" title="スカラー値(整数、浮動小数点数、文字列、真偽値)を期待し、解析します。" alt="" coords="5,31,196,56"/>
+<area shape="rect" id="Node000002" href="$classSQCompiler.html#a101d3143a4a8b35f1b9dd270b670874e" title="コンパイルエラーを報告し、ロングジャンプでコンパイル処理を中断する。" alt="" coords="244,5,383,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,29,230,25,231,30,197,35"/>
+<area shape="rect" id="Node000003" href="$classSQCompiler.html#a487f759767eb1b0e74065a35021d704f" title="字句解析器を呼び出し、次のトークンを取得する。" alt="" coords="248,55,379,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,51,234,56,234,61,196,57"/>
+</map>

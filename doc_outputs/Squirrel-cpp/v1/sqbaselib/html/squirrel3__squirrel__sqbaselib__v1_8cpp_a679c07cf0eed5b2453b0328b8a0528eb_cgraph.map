@@ -1,0 +1,5 @@
+<map id="thread_getstackinfos" name="thread_getstackinfos">
+<area shape="rect" id="Node000001" title="指定されたスレッドのコールスタック情報を取得します。" alt="" coords="5,5,164,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#aa28acc17dd028bcf72f719570fe4bee8" title="指定されたレベルのコールスタック情報を取得します。" alt="" coords="212,5,359,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,15,198,15,198,21,164,21"/>
+</map>

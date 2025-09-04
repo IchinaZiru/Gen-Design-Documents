@@ -1,0 +1,7 @@
+<map id="_closure_acall" name="_closure_acall">
+<area shape="rect" id="Node000001" title="配列を引数リストとしてクロージャを呼び出すヘルパー関数。" alt="" coords="168,31,283,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#adf89f5095cdf50d432ba77de83f2a9f1" title="配列を引数リストとしてクロージャを呼び出します。" alt="" coords="9,5,116,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,35,116,29,117,24,155,30"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#a2ffb7f5cb9edd82bdb32a7c4779d6ff9" title="配列を引数リストとしてクロージャを保護付きで呼び出します。" alt="" coords="5,55,120,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="154,56,121,62,120,56,154,51"/>
+</map>

@@ -1,0 +1,87 @@
+\doxysection{SQExp\+State Struct Reference}
+\hypertarget{structSQExpState}{}\label{structSQExpState}\index{SQExpState@{SQExpState}}
+
+
+式の状態を管理する構造体。  
+
+
+\doxysubsubsection*{Data Fields}
+\begin{DoxyCompactItemize}
+\item 
+SQInteger \mbox{\hyperlink{structSQExpState_afb7b63ae96a684b508e09b15a524dc27}{etype}}
+\begin{DoxyCompactList}\small\item\em 式の型。 \end{DoxyCompactList}\item 
+SQInteger \mbox{\hyperlink{structSQExpState_aee7653b89b97f2f071709f97f9087f3a}{epos}}
+\begin{DoxyCompactList}\small\item\em スタック上の式の位置。 \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{structSQExpState_a478197c3351f18be77bc3a274b4f5a37}{donot\+\_\+get}}
+\begin{DoxyCompactList}\small\item\em デリファレンスを抑制するフラグ。 \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+式の状態を管理する構造体。 
+
+コンパイラが式を評価する際の、式の種類やスタック上の位置などの状態を保持します。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00029}{29}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+
+\doxysubsection{Field Documentation}
+\Hypertarget{structSQExpState_a478197c3351f18be77bc3a274b4f5a37}\label{structSQExpState_a478197c3351f18be77bc3a274b4f5a37} 
+\index{SQExpState@{SQExpState}!donot\_get@{donot\_get}}
+\index{donot\_get@{donot\_get}!SQExpState@{SQExpState}}
+\doxysubsubsection{\texorpdfstring{donot\_get}{donot\_get}}
+{\footnotesize\ttfamily bool SQExp\+State\+::donot\+\_\+get}
+
+
+
+デリファレンスを抑制するフラグ。 
+
+trueの場合、次の値のデリファレンスを行いません。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00044}{44}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+
+Referenced by \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01651}{SQCompiler\+::\+Class\+Statement()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01851}{SQCompiler\+::\+Delete\+Expr()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00524}{SQCompiler\+::\+Expression()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00614}{SQCompiler\+::\+INVOKE\+\_\+\+EXP()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01165}{SQCompiler\+::\+Need\+Get()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00839}{SQCompiler\+::\+Prefixed\+Expr()}}, and \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01872}{SQCompiler\+::\+Prefix\+Inc\+Dec()}}.
+
+\Hypertarget{structSQExpState_aee7653b89b97f2f071709f97f9087f3a}\label{structSQExpState_aee7653b89b97f2f071709f97f9087f3a} 
+\index{SQExpState@{SQExpState}!epos@{epos}}
+\index{epos@{epos}!SQExpState@{SQExpState}}
+\doxysubsubsection{\texorpdfstring{epos}{epos}}
+{\footnotesize\ttfamily SQInteger SQExp\+State\+::epos}
+
+
+
+スタック上の式の位置。 
+
+OBJECT型と\+BASE型の場合は -\/1 になります。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00039}{39}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+
+Referenced by \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00524}{SQCompiler\+::\+Expression()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00945}{SQCompiler\+::\+Factor()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00614}{SQCompiler\+::\+INVOKE\+\_\+\+EXP()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00839}{SQCompiler\+::\+Prefixed\+Expr()}}, and \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01872}{SQCompiler\+::\+Prefix\+Inc\+Dec()}}.
+
+\Hypertarget{structSQExpState_afb7b63ae96a684b508e09b15a524dc27}\label{structSQExpState_afb7b63ae96a684b508e09b15a524dc27} 
+\index{SQExpState@{SQExpState}!etype@{etype}}
+\index{etype@{etype}!SQExpState@{SQExpState}}
+\doxysubsubsection{\texorpdfstring{etype}{etype}}
+{\footnotesize\ttfamily SQInteger SQExp\+State\+::etype}
+
+
+
+式の型。 
+
+EXPR, OBJECT, BASE, OUTER, LOCALのいずれかの値を取ります。 
+
+Definition at line \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00034}{34}} of file \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}.
+
+
+
+Referenced by \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00632}{SQCompiler\+::\+BIN\+\_\+\+EXP()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01651}{SQCompiler\+::\+Class\+Statement()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01851}{SQCompiler\+::\+Delete\+Expr()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00524}{SQCompiler\+::\+Expression()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00945}{SQCompiler\+::\+Factor()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00614}{SQCompiler\+::\+INVOKE\+\_\+\+EXP()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00667}{SQCompiler\+::\+Logical\+And\+Exp()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00644}{SQCompiler\+::\+Logical\+Or\+Exp()}}, \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l00839}{SQCompiler\+::\+Prefixed\+Expr()}}, and \mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp_source_l01872}{SQCompiler\+::\+Prefix\+Inc\+Dec()}}.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{squirrel3__squirrel__sqcompiler__v1_8cpp}{squirrel3\+\_\+squirrel\+\_\+sqcompiler\+\_\+v1.\+cpp}}\end{DoxyCompactItemize}

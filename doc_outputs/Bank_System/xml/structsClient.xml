@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structsClient" kind="struct" language="C++" prot="public">
+    <compoundname>sClient</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structsClient_1a6718ee119efcca9b5722dafd5b422610" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string sClient::AccountNumber</definition>
+        <argsstring></argsstring>
+        <name>AccountNumber</name>
+        <qualifiedname>sClient::AccountNumber</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="15" column="10" bodyfile="Bank_System.cpp" bodystart="15" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1a399eaf5cc81b752b9fa0606fd550d54b" compoundref="Bank__System_8cpp" startline="349" endline="368">ChangeClientRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a065bc335eeb0c8ac78f67a555f462987" compoundref="Bank__System_8cpp" startline="104" endline="135">ClientExistsByAccountNumber</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a37e8e2e0847aec9a9b8f3ec9f0340de9" compoundref="Bank__System_8cpp" startline="62" endline="76">ConvertLinetoRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a9f7641480ce98b89c09206f33a423f35" compoundref="Bank__System_8cpp" startline="84" endline="96">ConvertRecordToLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ae124ace8856102e48e1e27f68185265a" compoundref="Bank__System_8cpp" startline="310" endline="320">PrintClientCard</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a033ba0aa12c28bd58d8e2762feb550d3" compoundref="Bank__System_8cpp" startline="220" endline="226">PrintClientRecordBalanceLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1aac1d6ba2e858b7aa56fb51e25bc37a97" compoundref="Bank__System_8cpp" startline="207" endline="215">PrintClientRecordLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ad4acc95589ffe60cc1099c9fcf59e24d" compoundref="Bank__System_8cpp" startline="141" endline="169">ReadNewClient</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsClient_1aff6d24c63ee97f7cb6abe738174ce3ce" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string sClient::PinCode</definition>
+        <argsstring></argsstring>
+        <name>PinCode</name>
+        <qualifiedname>sClient::PinCode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="16" column="10" bodyfile="Bank_System.cpp" bodystart="16" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1a399eaf5cc81b752b9fa0606fd550d54b" compoundref="Bank__System_8cpp" startline="349" endline="368">ChangeClientRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a37e8e2e0847aec9a9b8f3ec9f0340de9" compoundref="Bank__System_8cpp" startline="62" endline="76">ConvertLinetoRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a9f7641480ce98b89c09206f33a423f35" compoundref="Bank__System_8cpp" startline="84" endline="96">ConvertRecordToLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ae124ace8856102e48e1e27f68185265a" compoundref="Bank__System_8cpp" startline="310" endline="320">PrintClientCard</referencedby>
+        <referencedby refid="Bank__System_8cpp_1aac1d6ba2e858b7aa56fb51e25bc37a97" compoundref="Bank__System_8cpp" startline="207" endline="215">PrintClientRecordLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ad4acc95589ffe60cc1099c9fcf59e24d" compoundref="Bank__System_8cpp" startline="141" endline="169">ReadNewClient</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsClient_1ae7ea779d537e2dcfa89a9a71e886676d" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string sClient::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>sClient::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="17" column="10" bodyfile="Bank_System.cpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1a399eaf5cc81b752b9fa0606fd550d54b" compoundref="Bank__System_8cpp" startline="349" endline="368">ChangeClientRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a37e8e2e0847aec9a9b8f3ec9f0340de9" compoundref="Bank__System_8cpp" startline="62" endline="76">ConvertLinetoRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a9f7641480ce98b89c09206f33a423f35" compoundref="Bank__System_8cpp" startline="84" endline="96">ConvertRecordToLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ae124ace8856102e48e1e27f68185265a" compoundref="Bank__System_8cpp" startline="310" endline="320">PrintClientCard</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a033ba0aa12c28bd58d8e2762feb550d3" compoundref="Bank__System_8cpp" startline="220" endline="226">PrintClientRecordBalanceLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1aac1d6ba2e858b7aa56fb51e25bc37a97" compoundref="Bank__System_8cpp" startline="207" endline="215">PrintClientRecordLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ad4acc95589ffe60cc1099c9fcf59e24d" compoundref="Bank__System_8cpp" startline="141" endline="169">ReadNewClient</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsClient_1a33017d1ac0323aaf9bd77fb3a7e51a7c" prot="public" static="no" mutable="no">
+        <type>string</type>
+        <definition>string sClient::Phone</definition>
+        <argsstring></argsstring>
+        <name>Phone</name>
+        <qualifiedname>sClient::Phone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="18" column="10" bodyfile="Bank_System.cpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1a399eaf5cc81b752b9fa0606fd550d54b" compoundref="Bank__System_8cpp" startline="349" endline="368">ChangeClientRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a37e8e2e0847aec9a9b8f3ec9f0340de9" compoundref="Bank__System_8cpp" startline="62" endline="76">ConvertLinetoRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a9f7641480ce98b89c09206f33a423f35" compoundref="Bank__System_8cpp" startline="84" endline="96">ConvertRecordToLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ae124ace8856102e48e1e27f68185265a" compoundref="Bank__System_8cpp" startline="310" endline="320">PrintClientCard</referencedby>
+        <referencedby refid="Bank__System_8cpp_1aac1d6ba2e858b7aa56fb51e25bc37a97" compoundref="Bank__System_8cpp" startline="207" endline="215">PrintClientRecordLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ad4acc95589ffe60cc1099c9fcf59e24d" compoundref="Bank__System_8cpp" startline="141" endline="169">ReadNewClient</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsClient_1a2680cb0bd1afe8073396bb99f2a2b51c" prot="public" static="no" mutable="no">
+        <type>double</type>
+        <definition>double sClient::AccountBalance</definition>
+        <argsstring></argsstring>
+        <name>AccountBalance</name>
+        <qualifiedname>sClient::AccountBalance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="19" column="10" bodyfile="Bank_System.cpp" bodystart="19" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1a399eaf5cc81b752b9fa0606fd550d54b" compoundref="Bank__System_8cpp" startline="349" endline="368">ChangeClientRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a37e8e2e0847aec9a9b8f3ec9f0340de9" compoundref="Bank__System_8cpp" startline="62" endline="76">ConvertLinetoRecord</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a9f7641480ce98b89c09206f33a423f35" compoundref="Bank__System_8cpp" startline="84" endline="96">ConvertRecordToLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ae124ace8856102e48e1e27f68185265a" compoundref="Bank__System_8cpp" startline="310" endline="320">PrintClientCard</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a033ba0aa12c28bd58d8e2762feb550d3" compoundref="Bank__System_8cpp" startline="220" endline="226">PrintClientRecordBalanceLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1aac1d6ba2e858b7aa56fb51e25bc37a97" compoundref="Bank__System_8cpp" startline="207" endline="215">PrintClientRecordLine</referencedby>
+        <referencedby refid="Bank__System_8cpp_1ad4acc95589ffe60cc1099c9fcf59e24d" compoundref="Bank__System_8cpp" startline="141" endline="169">ReadNewClient</referencedby>
+        <referencedby refid="Bank__System_8cpp_1a073580979bce33ad45c206d2f1fc72d1" compoundref="Bank__System_8cpp" startline="699" endline="731">ShowWithDrawScreen</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structsClient_1a547ee4952017fd562f7fb60f01e76865" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool sClient::MarkForDelete</definition>
+        <argsstring></argsstring>
+        <name>MarkForDelete</name>
+        <qualifiedname>sClient::MarkForDelete</qualifiedname>
+        <initializer>= false</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Bank_System.cpp" line="20" column="8" bodyfile="Bank_System.cpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="Bank__System_8cpp_1af1800f03db86caf07df8644b22c89f05" compoundref="Bank__System_8cpp" startline="376" endline="390">MarkClientForDeleteByAccountNumber</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Bank_System.cpp" line="13" column="1" bodyfile="Bank_System.cpp" bodystart="14" bodyend="21"/>
+    <listofallmembers>
+      <member refid="structsClient_1a2680cb0bd1afe8073396bb99f2a2b51c" prot="public" virt="non-virtual"><scope>sClient</scope><name>AccountBalance</name></member>
+      <member refid="structsClient_1a6718ee119efcca9b5722dafd5b422610" prot="public" virt="non-virtual"><scope>sClient</scope><name>AccountNumber</name></member>
+      <member refid="structsClient_1a547ee4952017fd562f7fb60f01e76865" prot="public" virt="non-virtual"><scope>sClient</scope><name>MarkForDelete</name></member>
+      <member refid="structsClient_1ae7ea779d537e2dcfa89a9a71e886676d" prot="public" virt="non-virtual"><scope>sClient</scope><name>Name</name></member>
+      <member refid="structsClient_1a33017d1ac0323aaf9bd77fb3a7e51a7c" prot="public" virt="non-virtual"><scope>sClient</scope><name>Phone</name></member>
+      <member refid="structsClient_1aff6d24c63ee97f7cb6abe738174ce3ce" prot="public" virt="non-virtual"><scope>sClient</scope><name>PinCode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

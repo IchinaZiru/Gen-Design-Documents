@@ -1,0 +1,62 @@
+\@ifundefined {etoctocstyle}{\let \etoc@startlocaltoc \@gobble \let \etoc@settocdepth \@gobble \let \etoc@depthtag \@gobble \let \etoc@setlocaltop \@gobble }{}
+\contentsline {chapter}{\numberline {1}Data Structure Index}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Data Structures}{1}{section.1.1}%
+\contentsline {chapter}{\numberline {2}File Index}{3}{chapter.2}%
+\contentsline {section}{\numberline {2.1}File List}{3}{section.2.1}%
+\contentsline {chapter}{\numberline {3}Data Structure Documentation}{5}{chapter.3}%
+\contentsline {section}{\numberline {3.1}s\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}Client Struct Reference}{5}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Detailed Description}{5}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Field Documentation}{5}{subsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.2.1}AccountBalance}{5}{subsubsection.3.1.2.1}%
+\contentsline {subsubsection}{\numberline {3.1.2.2}AccountNumber}{5}{subsubsection.3.1.2.2}%
+\contentsline {subsubsection}{\numberline {3.1.2.3}MarkForDelete}{6}{subsubsection.3.1.2.3}%
+\contentsline {subsubsection}{\numberline {3.1.2.4}Name}{6}{subsubsection.3.1.2.4}%
+\contentsline {subsubsection}{\numberline {3.1.2.5}Phone}{6}{subsubsection.3.1.2.5}%
+\contentsline {subsubsection}{\numberline {3.1.2.6}PinCode}{6}{subsubsection.3.1.2.6}%
+\contentsline {chapter}{\numberline {4}File Documentation}{7}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Bank\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}System.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}cpp File Reference}{7}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Enumeration Type Documentation}{9}{subsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.1}enMainMenueOptions}{9}{subsubsection.4.1.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.2}enTransactionsMenueOptions}{10}{subsubsection.4.1.1.2}%
+\contentsline {subsection}{\numberline {4.1.2}Function Documentation}{10}{subsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.1}AddNewClient()}{10}{subsubsection.4.1.2.1}%
+\contentsline {subsubsection}{\numberline {4.1.2.2}AddNewClients()}{11}{subsubsection.4.1.2.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.3}ChangeClientRecord()}{12}{subsubsection.4.1.2.3}%
+\contentsline {subsubsection}{\numberline {4.1.2.4}ClientExistsByAccountNumber()}{13}{subsubsection.4.1.2.4}%
+\contentsline {subsubsection}{\numberline {4.1.2.5}ConvertLinetoRecord()}{14}{subsubsection.4.1.2.5}%
+\contentsline {subsubsection}{\numberline {4.1.2.6}ConvertRecordToLine()}{15}{subsubsection.4.1.2.6}%
+\contentsline {subsubsection}{\numberline {4.1.2.7}DeleteClientByAccountNumber()}{16}{subsubsection.4.1.2.7}%
+\contentsline {subsubsection}{\numberline {4.1.2.8}DepositBalanceToClientByAccountNumber()}{17}{subsubsection.4.1.2.8}%
+\contentsline {subsubsection}{\numberline {4.1.2.9}FindClientByAccountNumber()}{18}{subsubsection.4.1.2.9}%
+\contentsline {subsubsection}{\numberline {4.1.2.10}GoBackToMainMenue()}{19}{subsubsection.4.1.2.10}%
+\contentsline {subsubsection}{\numberline {4.1.2.11}GoBackToTransactionsMenue()}{20}{subsubsection.4.1.2.11}%
+\contentsline {subsubsection}{\numberline {4.1.2.12}LoadCleintsDataFromFile()}{21}{subsubsection.4.1.2.12}%
+\contentsline {subsubsection}{\numberline {4.1.2.13}main()}{22}{subsubsection.4.1.2.13}%
+\contentsline {subsubsection}{\numberline {4.1.2.14}MarkClientForDeleteByAccountNumber()}{23}{subsubsection.4.1.2.14}%
+\contentsline {subsubsection}{\numberline {4.1.2.15}PerfromMainMenueOption()}{23}{subsubsection.4.1.2.15}%
+\contentsline {subsubsection}{\numberline {4.1.2.16}PerfromTranactionsMenueOption()}{25}{subsubsection.4.1.2.16}%
+\contentsline {subsubsection}{\numberline {4.1.2.17}PrintClientCard()}{26}{subsubsection.4.1.2.17}%
+\contentsline {subsubsection}{\numberline {4.1.2.18}PrintClientRecordBalanceLine()}{27}{subsubsection.4.1.2.18}%
+\contentsline {subsubsection}{\numberline {4.1.2.19}PrintClientRecordLine()}{28}{subsubsection.4.1.2.19}%
+\contentsline {subsubsection}{\numberline {4.1.2.20}ReadClientAccountNumber()}{28}{subsubsection.4.1.2.20}%
+\contentsline {subsubsection}{\numberline {4.1.2.21}ReadMainMenueOption()}{29}{subsubsection.4.1.2.21}%
+\contentsline {subsubsection}{\numberline {4.1.2.22}ReadNewClient()}{30}{subsubsection.4.1.2.22}%
+\contentsline {subsubsection}{\numberline {4.1.2.23}ReadTransactionsMenueOption()}{31}{subsubsection.4.1.2.23}%
+\contentsline {subsubsection}{\numberline {4.1.2.24}SaveCleintsDataToFile()}{31}{subsubsection.4.1.2.24}%
+\contentsline {subsubsection}{\numberline {4.1.2.25}ShowAddNewClientsScreen()}{32}{subsubsection.4.1.2.25}%
+\contentsline {subsubsection}{\numberline {4.1.2.26}ShowAllClientsScreen()}{33}{subsubsection.4.1.2.26}%
+\contentsline {subsubsection}{\numberline {4.1.2.27}ShowDeleteClientScreen()}{34}{subsubsection.4.1.2.27}%
+\contentsline {subsubsection}{\numberline {4.1.2.28}ShowDepositScreen()}{35}{subsubsection.4.1.2.28}%
+\contentsline {subsubsection}{\numberline {4.1.2.29}ShowEndScreen()}{36}{subsubsection.4.1.2.29}%
+\contentsline {subsubsection}{\numberline {4.1.2.30}ShowFindClientScreen()}{37}{subsubsection.4.1.2.30}%
+\contentsline {subsubsection}{\numberline {4.1.2.31}ShowMainMenue()}{38}{subsubsection.4.1.2.31}%
+\contentsline {subsubsection}{\numberline {4.1.2.32}ShowTotalBalances()}{39}{subsubsection.4.1.2.32}%
+\contentsline {subsubsection}{\numberline {4.1.2.33}ShowTotalBalancesScreen()}{40}{subsubsection.4.1.2.33}%
+\contentsline {subsubsection}{\numberline {4.1.2.34}ShowTransactionsMenue()}{40}{subsubsection.4.1.2.34}%
+\contentsline {subsubsection}{\numberline {4.1.2.35}ShowUpdateClientScreen()}{41}{subsubsection.4.1.2.35}%
+\contentsline {subsubsection}{\numberline {4.1.2.36}ShowWithDrawScreen()}{42}{subsubsection.4.1.2.36}%
+\contentsline {subsubsection}{\numberline {4.1.2.37}SplitString()}{43}{subsubsection.4.1.2.37}%
+\contentsline {subsubsection}{\numberline {4.1.2.38}UpdateClientByAccountNumber()}{44}{subsubsection.4.1.2.38}%
+\contentsline {subsection}{\numberline {4.1.3}Variable Documentation}{45}{subsection.4.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.3.1}ClientsFileName}{45}{subsubsection.4.1.3.1}%
+\contentsline {section}{\numberline {4.2}Bank\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\_\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}System.\discretionary {\mbox {\scriptsize $\hookleftarrow $}}{}{}cpp}{46}{section.4.2}%

@@ -1,0 +1,20 @@
+<map id="ShowTotalBalancesScreen" name="ShowTotalBalancesScreen">
+<area shape="rect" id="Node000001" title="すべてのクライアントの画面を表示する" alt="" coords="1169,55,1360,80"/>
+<area shape="rect" id="Node000002" href="$Bank__System_8cpp.html#ad185e1ff83d192fd135988e28895671a" title="トランザクションメニューオプションを実行する関数" alt="" coords="887,55,1121,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="1156,70,1122,70,1122,65,1156,65"/>
+<area shape="rect" id="Node000003" href="$Bank__System_8cpp.html#a545193b69fea90084006d3352e40b6fa" title="すべてのクライアントの画面を表示する" alt="" coords="656,55,839,80"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="873,70,839,70,839,65,873,65"/>
+<area shape="rect" id="Node000004" href="$Bank__System_8cpp.html#a717a7aaecdf86cec3333e79de7ba5a29" title="すべてのクライアントの画面を表示する" alt="" coords="397,5,608,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="670,55,566,33,567,28,671,49"/>
+<area shape="rect" id="Node000005" href="$Bank__System_8cpp.html#a5324f310da7452efd82a68630542efd9" title="メインメニューオプションを実行する関数" alt="" coords="406,55,599,80"/>
+<area shape="poly" id="edge5_Node000003_Node000005" title=" " alt="" coords="642,70,599,70,599,65,642,65"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="622,21,839,39,929,52,929,57,838,45,621,27"/>
+<area shape="rect" id="Node000006" href="$Bank__System_8cpp.html#a50de73c57a4a139c15f4851ac1b58415" title="すべてのクライアントの画面を表示する" alt="" coords="216,105,349,131"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="434,86,339,108,338,103,433,81"/>
+<area shape="poly" id="edge10_Node000006_Node000002" title=" " alt="" coords="363,114,578,108,838,90,931,77,932,83,839,95,578,113,364,120"/>
+<area shape="rect" id="Node000007" href="$Bank__System_8cpp.html#a7e2579e087fe78eef5355eda98bf41c9" title="すべてのクライアントの画面を表示する" alt="" coords="5,56,168,81"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="218,105,137,84,139,79,219,99"/>
+<area shape="rect" id="Node000008" href="$Bank__System_8cpp.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title="メイン関数" alt="" coords="59,105,114,131"/>
+<area shape="poly" id="edge9_Node000006_Node000008" title=" " alt="" coords="202,121,114,121,114,115,202,115"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="182,66,406,65,406,70,182,71"/>
+</map>

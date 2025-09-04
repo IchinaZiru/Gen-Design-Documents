@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.8" xml:lang="en-US">
+  <compounddef id="structBufState" kind="struct" language="C++" prot="public">
+    <compoundname>BufState</compoundname>
+    <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="structBufState_1a64bc304f7be1ed80c1c6cff89b25fe85" prot="public" static="no" mutable="no">
+        <type>const SQChar *</type>
+        <definition>const SQChar* BufState::buf</definition>
+        <argsstring></argsstring>
+        <name>buf</name>
+        <qualifiedname>BufState::buf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByOpenAI.cpp" line="3283" column="18" bodyfile="squirrel3_squirrel_sqapiByOpenAI.cpp" bodystart="3283" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3298" endline="3304">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3321" endline="3327">sq_compilebuffer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structBufState_1ad50bf4968e9150b77a9a256c7d992794" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger BufState::ptr</definition>
+        <argsstring></argsstring>
+        <name>ptr</name>
+        <qualifiedname>BufState::ptr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByOpenAI.cpp" line="3284" column="15" bodyfile="squirrel3_squirrel_sqapiByOpenAI.cpp" bodystart="3284" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3298" endline="3304">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3321" endline="3327">sq_compilebuffer</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="structBufState_1a88d5163bf3b5e9826093972f4cd96790" prot="public" static="no" mutable="no">
+        <type>SQInteger</type>
+        <definition>SQInteger BufState::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>BufState::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="squirrel3_squirrel_sqapiByOpenAI.cpp" line="3285" column="15" bodyfile="squirrel3_squirrel_sqapiByOpenAI.cpp" bodystart="3285" bodyend="-1"/>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1aaf03c4ce8d9da70a003c81e1eb443b01" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3298" endline="3304">buf_lexfeed</referencedby>
+        <referencedby refid="squirrel3__squirrel__sqapiByOpenAI_8cpp_1ae01f22ac86b7d1d013d2edabce068ef1" compoundref="squirrel3__squirrel__sqapiByOpenAI_8cpp" startline="3321" endline="3327">sq_compilebuffer</referencedby>
+      </memberdef>
+    </sectiondef>
+    <briefdescription>
+<para>バッファの状態を保持する構造体。 </para>
+    </briefdescription>
+    <detaileddescription>
+<para>スクリプトバッファを解析する際に使用する読み込み位置などの情報を保持する。 <computeroutput>buf</computeroutput> は読み込む文字列、<computeroutput>ptr</computeroutput> は現在位置、<computeroutput>size</computeroutput> はバッファサイズを示す。 </para>
+    </detaileddescription>
+    <location file="squirrel3_squirrel_sqapiByOpenAI.cpp" line="3282" column="1" bodyfile="squirrel3_squirrel_sqapiByOpenAI.cpp" bodystart="3282" bodyend="3286"/>
+    <listofallmembers>
+      <member refid="structBufState_1a64bc304f7be1ed80c1c6cff89b25fe85" prot="public" virt="non-virtual"><scope>BufState</scope><name>buf</name></member>
+      <member refid="structBufState_1ad50bf4968e9150b77a9a256c7d992794" prot="public" virt="non-virtual"><scope>BufState</scope><name>ptr</name></member>
+      <member refid="structBufState_1a88d5163bf3b5e9826093972f4cd96790" prot="public" virt="non-virtual"><scope>BufState</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,5 @@
+<map id="string_slice" name="string_slice">
+<area shape="rect" id="Node000001" title="文字列の一部を切り出した新しい文字列（スライス）を返します。" alt="" coords="5,5,101,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqbaselib__v1_8cpp.html#a272ae65be9941996d47502eba2e8ff06" title="スライス操作のパラメータを取得します。" alt="" coords="149,5,285,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,15,135,15,135,21,102,21"/>
+</map>

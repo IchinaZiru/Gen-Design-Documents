@@ -1,0 +1,7 @@
+<map id="sq_setbyhandle" name="sq_setbyhandle">
+<area shape="rect" id="Node000001" title="メンバーハンドルを使用して、クラスまたはインスタンスのメンバーに値を設定します。" alt="" coords="5,5,129,31"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a46133ed63b8890a535fde2f0608da01b" title="メンバーハンドルを使用して、クラスまたはインスタンスのメンバー値へのポインタを取得します。(内部使用向け)" alt="" coords="177,5,343,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,15,164,15,164,21,130,21"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByGemini_8cpp.html#a1120339f46d18eddf68f7a7323937ddb" title="VMに文字列のエラーを設定し、エラー状態にします。" alt="" coords="391,5,503,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="343,15,377,15,377,21,343,21"/>
+</map>

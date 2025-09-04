@@ -1,0 +1,8 @@
+<map id="sq_setdelegate" name="sq_setdelegate">
+<area shape="rect" id="Node000001" title="テーブルまたはユーザーデータにデリゲートを設定する。" alt="" coords="5,31,127,56"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a6009870696cef6b1bcda62d6afba1583" title="想定外のオブジェクト型が指定された場合のエラーを返す。" alt="" coords="175,5,323,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,32,160,28,161,33,127,38"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a1120339f46d18eddf68f7a7323937ddb" title="エラーメッセージを設定してエラーを発生させる。" alt="" coords="371,31,483,56"/>
+<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="127,41,357,41,357,46,127,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="323,26,358,31,357,36,322,31"/>
+</map>

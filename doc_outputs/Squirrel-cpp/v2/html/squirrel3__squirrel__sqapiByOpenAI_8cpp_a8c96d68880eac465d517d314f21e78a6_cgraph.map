@@ -1,0 +1,9 @@
+<map id="sq_settop" name="sq_settop">
+<area shape="rect" id="Node000001" title="スタックのトップを新しい位置に設定する。" alt="" coords="5,55,91,80"/>
+<area shape="rect" id="Node000002" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a8290700bf12bf4c449d4c593f1e06c9d" title="スタック上の現在のトップインデックスを取得する。" alt="" coords="145,5,231,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,52,137,33,139,38,86,57"/>
+<area shape="rect" id="Node000003" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#ae253f5195092f031ffe02abd771778fe" title="スタックのトップから指定数の要素をポップする。" alt="" coords="154,55,222,80"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="91,65,140,65,140,70,91,70"/>
+<area shape="rect" id="Node000004" href="$squirrel3__squirrel__sqapiByOpenAI_8cpp.html#a377738cef835bf0914f6eae2a2ab7b00" title="スタックに null 値をプッシュする。" alt="" coords="139,104,237,129"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="86,78,139,97,137,102,84,83"/>
+</map>

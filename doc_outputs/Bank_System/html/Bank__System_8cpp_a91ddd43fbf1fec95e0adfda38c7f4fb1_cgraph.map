@@ -1,0 +1,17 @@
+<map id="ShowAddNewClientsScreen" name="ShowAddNewClientsScreen">
+<area shape="rect" id="Node000001" title="すべてのクライアントの画面を表示する" alt="" coords="5,31,205,56"/>
+<area shape="rect" id="Node000002" href="$Bank__System_8cpp.html#a4455971fb3acdfb53df71021b5b82b96" title="すべてのクライアントの画面を表示する" alt="" coords="253,31,375,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="205,41,239,41,239,46,205,46"/>
+<area shape="rect" id="Node000003" href="$Bank__System_8cpp.html#a74fc2218551882d4912748a9ac36770a" title="ファイルにデータ行を追加する" alt="" coords="423,31,537,56"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="375,41,409,41,409,46,375,46"/>
+<area shape="rect" id="Node000004" href="$Bank__System_8cpp.html#a9f7641480ce98b89c09206f33a423f35" title="クライアントのレコードを一行の文字列に変換する" alt="" coords="585,5,744,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="537,33,571,28,572,33,538,38"/>
+<area shape="rect" id="Node000005" href="$Bank__System_8cpp.html#ad4acc95589ffe60cc1099c9fcf59e24d" title="新規クライアントを読み込む" alt="" coords="603,55,726,80"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="538,48,590,55,589,60,537,53"/>
+<area shape="rect" id="Node000006" href="$Bank__System_8cpp.html#a065bc335eeb0c8ac78f67a555f462987" title="アカウント番号に基づいてクライアントが存在するかどうかを確認する関数" alt="" coords="792,55,1012,80"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="726,65,778,65,778,70,726,70"/>
+<area shape="rect" id="Node000007" href="$Bank__System_8cpp.html#a37e8e2e0847aec9a9b8f3ec9f0340de9" title="文字列をレコードに変換する関数" alt="" coords="1060,55,1219,80"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="1012,65,1046,65,1046,70,1012,70"/>
+<area shape="rect" id="Node000008" href="$Bank__System_8cpp.html#aa9e62d8303527878176504e333cc318f" title="文字列を指定した区切り文字で分割する" alt="" coords="1267,55,1356,80"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1219,65,1253,65,1253,70,1219,70"/>
+</map>
